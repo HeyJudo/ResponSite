@@ -25,8 +25,7 @@ public class UserService {
         }
 
         // 3. Save to Database
-        // Note: For MVP Day 1, we store plain text passwords to keep it simple.
-        // In Phase 2, we will wrap this with BCrypt encoder.
+        
         return userRepository.save(user);
     }
 

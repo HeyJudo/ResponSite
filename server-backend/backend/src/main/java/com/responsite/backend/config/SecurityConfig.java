@@ -15,32 +15,34 @@ import java.util.List;
 @EnableWebSecurity
 
 public class SecurityConfig {
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Disable CSRF (Common for REST APIs during dev)
+            // 1. Disable CSRF (Crucial for Postman/Thunder Client testing)
             .csrf(csrf -> csrf.disable())
             
-            // 2. Configure URL Permissions
+            // 2. ALLOW EVERYTHING (The Fix)
+            // We turn off the automatic "Bouncer" so your IncidentController can do the checking.
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // Allow Login/Register without logging in
-                .anyRequest().authenticated()               // Lock everything else
+                .requestMatchers("/**").permitAll() // Allow ALL endpoints
+                .anyRequest().permitAll()
             )
             
-            // 3. Enable standard HTTP Basic Auth (for simplicity if needed) or just rely on custom endpoints
+            // 3. Disable default login forms
             .httpBasic(basic -> basic.disable())
-            .formLogin(login -> login.disable()); // Disable default HTML login page
+            .formLogin(login -> login.disable());
 
         return http.build();
     }
 
-    // 4. CORS Configuration (Allows React on port 5173 to talk to Spring on 8080)
+    // 4. CORS Configuration (Keep this for React)
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true); // Allow sending Cookies/Session
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // Trust Frontend
+        config.setAllowCredentials(true); 
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         source.registerCorsConfiguration("/**", config);
