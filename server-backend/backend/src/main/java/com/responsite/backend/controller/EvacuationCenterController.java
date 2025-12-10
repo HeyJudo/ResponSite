@@ -17,7 +17,7 @@ public class EvacuationCenterController {
     @Autowired
     private EvacuationCenterService service;
 
-    // ✅ ADDED THIS: Helper to get the logged-in user
+    //Helper to get the logged-in user
     private User getSessionUser(HttpSession session) {
         return (User) session.getAttribute("user");
     }
@@ -42,7 +42,6 @@ public class EvacuationCenterController {
     // 3. Update Status (SECURE - Login Required)
     @PutMapping("/{id}/status")
     public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestParam String status, HttpSession session) {
-        // ✅ ADDED THIS BLOCK
         User user = getSessionUser(session);
         if (user == null || "RESIDENT".equals(user.getRole())) {
             return ResponseEntity.status(403).body("Access Denied: Staff only");
@@ -58,7 +57,6 @@ public class EvacuationCenterController {
     // 4. Delete (SECURE - Login Required)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id, HttpSession session) {
-        // ✅ ADDED THIS BLOCK
         User user = getSessionUser(session);
         if (user == null || "RESIDENT".equals(user.getRole())) {
             return ResponseEntity.status(403).body("Access Denied: Staff only");
