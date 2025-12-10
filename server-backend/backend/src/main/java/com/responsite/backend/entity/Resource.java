@@ -16,4 +16,5 @@ public class Resource {
     private String unit; // packs, boxes
     private String location; // Warehouse A
     private String status; // AVAILABLE, LOW_STOCK
+    private int reorderLevel;  // Added for stock management
 }
