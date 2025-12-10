@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "evacuation_centers")
 public class EvacuationCenter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,5 +14,12 @@ public class EvacuationCenter {
     private String name;
     private String location;
     private int capacity;
-    private String status; // OPEN, CLOSED
+    private String status; // OPEN, CLOSED, FULL 
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.status == null) {
+            this.status = "CLOSED";
+        }
+    }
 }
