@@ -33,7 +33,6 @@ public class IncidentController {
     // 2. GET ALL (Staff Only - ideally)
     @GetMapping
     public ResponseEntity<?> getAll(HttpSession session) {
-        // In Phase 2, we check: if (user.getRole() != "STAFF") return 403;
         return ResponseEntity.ok(incidentService.getAllIncidents());
     }
 
@@ -52,6 +51,31 @@ public class IncidentController {
     public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestParam String status) {
         try {
             return ResponseEntity.ok(incidentService.updateStatus(id, status));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    // 5. CANCEL (Resident)
+    // Usage: PUT /api/incidents/1/cancel
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<?> cancel(@PathVariable Long id, HttpSession session) {
+        User currentUser = getSessionUser(session);
+        if (currentUser == null) return ResponseEntity.status(401).body("Please login first");
+        
+        try {
+            return ResponseEntity.ok(incidentService.cancelReport(id, currentUser.getId()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // 6. DELETE (Admin)
+    // Usage: DELETE /api/incidents/1
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            incidentService.deleteIncident(id);
+            return ResponseEntity.ok("Incident deleted successfully");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
