@@ -13,19 +13,27 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Disable CSRF (Crucial for Postman/Thunder Client testing)
+            // 1. Disable CSRF (Required for REST API / Postman / Thunder Client testing)
             .csrf(csrf -> csrf.disable())
             
-            // 2. ALLOW EVERYTHING (The Fix)
-            // We turn off the automatic "Bouncer" so your IncidentController can do the checking.
+            // 2. Authorization Rules
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll() // Allow ALL endpoints
+                // Swagger / OpenAPI Documentation (Public Access)
+                .requestMatchers(
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
+                
+                // Authentication endpoints (Public Access)
+                .requestMatchers("/api/auth/**").permitAll()
+                
+                // All other endpoints (Manual RBAC in Controllers)
                 .anyRequest().permitAll()
             )
             
@@ -36,7 +44,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 4. CORS Configuration (Keep this for React)
+    // 4. CORS Configuration (Required for React Frontend)
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
