@@ -17,10 +17,10 @@ body {
 /* Figma Variables */
 :root {
   --color-primary: #01189B;
-  --color-dark: #DDDDDD;
+  --color-dark: #eeeef0;
 
   --color-light1: #FAFAFA;
-  --color-light2: #B1BAD3;
+  --color-light2: #E8EDF5;
 
   --radius-sm: 6px;
   --radius-md: 12px;
