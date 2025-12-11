@@ -1,12 +1,14 @@
 package com.responsite.backend.controller;
 
-import com.responsite.backend.entity.Resource;
+import com.responsite.backend.dto.ResourceDTO;
 import com.responsite.backend.entity.User;
 import com.responsite.backend.service.ResourceService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -38,7 +40,8 @@ public class ResourceController {
         if (user == null) return ResponseEntity.status(401).body("Please login first");
         if ("RESIDENT".equals(user.getRole())) return ResponseEntity.status(403).body("Access Denied");
 
-        return ResponseEntity.ok(resourceService.getAllResources());
+        List<ResourceDTO> resources = resourceService.getAllResources();
+        return ResponseEntity.ok(resources);
     }
 
     /**
@@ -47,12 +50,13 @@ public class ResourceController {
      * Usage: POST /api/resources
      */
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody Resource resource, HttpSession session) {
+    public ResponseEntity<?> add(@RequestBody ResourceDTO resourceDTO, HttpSession session) {
         User user = getSessionUser(session);
         if (user == null) return ResponseEntity.status(401).body("Please login first");
         if ("RESIDENT".equals(user.getRole())) return ResponseEntity.status(403).body("Access Denied");
 
-        return ResponseEntity.ok(resourceService.addResource(resource));
+        ResourceDTO savedResource = resourceService.addResource(resourceDTO);
+        return ResponseEntity.ok(savedResource);
     }
 
     /**
@@ -61,13 +65,14 @@ public class ResourceController {
      * Usage: PUT /api/resources/{id}
      */
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Resource resource, HttpSession session) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ResourceDTO resourceDTO, HttpSession session) {
         User user = getSessionUser(session);
         if (user == null) return ResponseEntity.status(401).body("Please login first");
         if ("RESIDENT".equals(user.getRole())) return ResponseEntity.status(403).body("Access Denied");
 
         try {
-            return ResponseEntity.ok(resourceService.updateResource(id, resource));
+            ResourceDTO updatedResource = resourceService.updateResource(id, resourceDTO);
+            return ResponseEntity.ok(updatedResource);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

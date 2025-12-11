@@ -1,6 +1,7 @@
 package com.responsite.backend.controller;
 
-import com.responsite.backend.entity.Incident;
+import com.responsite.backend.dto.IncidentRequestDTO;
+import com.responsite.backend.dto.IncidentResponseDTO;
 import com.responsite.backend.entity.User;
 import com.responsite.backend.service.IncidentService;
 import jakarta.servlet.http.HttpSession;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/incidents")
@@ -34,11 +36,12 @@ public class IncidentController {
      * Usage: POST /api/incidents
      */
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Incident incident, HttpSession session) {
+    public ResponseEntity<?> create(@RequestBody IncidentRequestDTO requestDTO, HttpSession session) {
         User user = getSessionUser(session);
         if (user == null) return ResponseEntity.status(401).body("Please login first");
 
-        return ResponseEntity.ok(incidentService.createIncident(incident, user.getId()));
+        IncidentResponseDTO response = incidentService.createIncident(requestDTO, user.getId());
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -52,7 +55,8 @@ public class IncidentController {
         if (user == null) return ResponseEntity.status(401).body("Please login first");
         if ("RESIDENT".equals(user.getRole())) return ResponseEntity.status(403).body("Access Denied");
 
-        return ResponseEntity.ok(incidentService.getAllIncidents());
+        List<IncidentResponseDTO> incidents = incidentService.getAllIncidents();
+        return ResponseEntity.ok(incidents);
     }
 
     /**
@@ -65,7 +69,8 @@ public class IncidentController {
         User user = getSessionUser(session);
         if (user == null) return ResponseEntity.status(401).body("Please login first");
 
-        return ResponseEntity.ok(incidentService.getMyIncidents(user.getId()));
+        List<IncidentResponseDTO> incidents = incidentService.getMyIncidents(user.getId());
+        return ResponseEntity.ok(incidents);
     }
 
     /**
@@ -80,7 +85,8 @@ public class IncidentController {
         if ("RESIDENT".equals(user.getRole())) return ResponseEntity.status(403).body("Access Denied");
 
         try {
-            return ResponseEntity.ok(incidentService.updateStatus(id, status));
+            IncidentResponseDTO response = incidentService.updateStatus(id, status);
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -95,9 +101,10 @@ public class IncidentController {
     public ResponseEntity<?> cancel(@PathVariable Long id, HttpSession session) {
         User user = getSessionUser(session);
         if (user == null) return ResponseEntity.status(401).body("Please login first");
-        
+
         try {
-            return ResponseEntity.ok(incidentService.cancelReport(id, user.getId()));
+            IncidentResponseDTO response = incidentService.cancelReport(id, user.getId());
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
