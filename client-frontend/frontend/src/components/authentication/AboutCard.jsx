@@ -1,5 +1,5 @@
-import { ABOUT_RESPONSITE } from '../constants/content';
-import '../styles/auth.css';
+import { ABOUT_RESPONSITE } from '../../constants/content';
+import '../../styles/auth.css';
 
 const AboutCard = () => {
   return (

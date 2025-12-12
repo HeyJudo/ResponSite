@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-
+/* Global resets */
 /* Global resets */
 * {
   margin: 0;
@@ -9,7 +8,7 @@
 
 /* Typography */
 body {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #ffffff;
   color: #111;
 }
@@ -17,12 +16,37 @@ body {
 /* Figma Variables */
 :root {
   --color-primary: #01189B;
-  --color-dark: #eeeef0;
+  --color-blue: #E8EDF5;
+  --color-dark: #F8F9FB; /*Almost white background*/
 
-  --color-light1: #FAFAFA;
-  --color-light2: #E8EDF5;
+  --color-light1: #F2F4F8; /*Outer card color*/
+  --color-light2: #E3E7F0; /*Inner card color*/
+
+
+  --color-red: #E62020;
+  --color-salmon: #FF4A4A;
+  --color-green: #4DE674;
+  --color-mustard: #F5C857;
 
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 20px;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  background: #f7f8fa;
+  color: #14182c;
+  box-sizing: border-box;
+}
+
+button {
+  font-family: 'Inter', Arial, sans-serif;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: none;
 }

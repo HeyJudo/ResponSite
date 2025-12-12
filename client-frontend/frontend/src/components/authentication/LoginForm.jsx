@@ -1,16 +1,21 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
+  const navigate = useNavigate();
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Add API call here
-    alert('Logged in!\n' + JSON.stringify(formData, null, 2));
+    // Dummy login check
+    if (formData.username === 'resident' && formData.password === '123') {
+      navigate('/dashboard');
+    } else {
+      alert('Invalid username or password.');
+    }
   };
 
   return (
