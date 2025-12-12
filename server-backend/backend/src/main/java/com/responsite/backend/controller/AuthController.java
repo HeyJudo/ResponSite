@@ -36,8 +36,8 @@ public class AuthController {
         User user = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
 
         if (user != null) {
-            // SUCCESS: Store user entity in Session (The Magic Cookie)
-            // Spring automatically sends a "JSESSIONID" cookie to the browser/Postman
+            // SUCCESS: Store user entity in Session
+            // Spring automatically sends a "JSESSIONID" cookie to the browser
             session.setAttribute("user", user);
             // Return DTO (without password) to client
             return ResponseEntity.ok(userService.toResponseDTO(user));
