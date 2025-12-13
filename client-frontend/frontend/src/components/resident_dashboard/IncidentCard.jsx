@@ -1,5 +1,3 @@
-import React from 'react';
-
 const IncidentCard = ({ count }) => (
   <div className="incident-card">
     <div className="incident-info">

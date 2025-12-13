@@ -1,9 +1,7 @@
-import { useLocation } from 'react-router-dom';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import '../../styles/auth.css';
 
 const AuthLayout = ({ leftContent, rightContent }) => {
-  const location = useLocation();
   return (
     <div className="auth-container">
       <header className="auth-header">

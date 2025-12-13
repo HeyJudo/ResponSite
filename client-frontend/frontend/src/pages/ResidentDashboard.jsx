@@ -1,11 +1,9 @@
-import React from 'react';
-import Sidebar from '../components/resident_dashboard/Sidebar.jsx';
-import Header from '../components/resident_dashboard/Header.jsx';
-import IncidentCard from '../components/resident_dashboard/IncidentCard.jsx';
-import QuickButtons from '../components/resident_dashboard/QuickButtons.jsx';
-import NotificationList from '../components/resident_dashboard/NotificationList.jsx';
-import { dummyNotifications } from '../constants/dummyNotifications.js';
-
+import Sidebar from '../components/resident_dashboard/Sidebar';
+import Header from '../components/resident_dashboard/Header';
+import IncidentCard from '../components/resident_dashboard/IncidentCard';
+import QuickButtons from '../components/resident_dashboard/QuickButtons';
+import NotificationList from '../components/resident_dashboard/NotificationList';
+import { dummyNotifications } from '../constants/dummyNotifications';
 import '../styles/global.css';
 import '../styles/dashboard.css';
 

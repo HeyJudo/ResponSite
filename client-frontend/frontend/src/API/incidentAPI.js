@@ -1,10 +1,21 @@
-// TODO: API Call
+/**
+ * Incident API
+ * TODO: Implement real API calls to backend
+ */
 
+/**
+ * Fetches the count of active incident reports
+ * @returns {Promise<number>} Number of active incidents
+ */
 export const fetchActiveIncidents = async () => {
   // TODO: Replace with real API call
   return 0;
 };
 
+/**
+ * Fetches notification list for the current user
+ * @returns {Promise<Array>} Array of notification objects
+ */
 export const fetchNotifications = async () => {
   // TODO: Replace with real API call
   return [

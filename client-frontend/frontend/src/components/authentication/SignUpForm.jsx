@@ -14,7 +14,7 @@ const SignUpForm = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target. name]: e.target.value
+      [e.target.name]: e.target.value
     });
   };
 
@@ -88,7 +88,7 @@ const SignUpForm = () => {
         </button>
 
         <p className="auth-link">
-          Already have an account? {' '}
+          Already have an account?{' '}
           <Link to="/signin">Sign In</Link>
         </p>
       </form>

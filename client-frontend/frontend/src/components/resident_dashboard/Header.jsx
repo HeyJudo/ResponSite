@@ -1,4 +1,3 @@
-import React from 'react';
 import userIconSvg from '../../assets/user-icon.svg';
 
 const Header = () => (

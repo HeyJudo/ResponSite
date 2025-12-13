@@ -1,25 +1,27 @@
-import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../../styles/dashboard.css';
 import logoSvg from '../../assets/logo.svg';
 
-const navItems = [
-  'Dashboard',
-  'Incident Reports',
-  'Evacuation Center',
-  'Infrastructure Projects',
+// Navigation configuration: maps nav items to their routes
+const NAV_CONFIG = [
+  { label: 'Dashboard', path: '/dashboard' },
+  { label: 'My Reports', path: '/incident-reports' },
+  { label: 'Evacuation Center', path: '/evacuation-center' },
+  { label: 'Infrastructure Projects', path: '/infrastructure-projects' },
 ];
+
+/**
+ * Determines active navigation index based on current path
+ */
+const getActiveIndex = (pathname) => {
+  const index = NAV_CONFIG.findIndex(item => item.path === pathname);
+  return index !== -1 ? index : 0;
+};
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Determine activeIdx from current path
-  let activeIdx = 0;
-  if (location.pathname === '/dashboard') activeIdx = 0;
-  else if (location.pathname === '/incident-reports') activeIdx = 1;
-  else if (location.pathname === '/evacuation-center') activeIdx = 2;
-  else if (location.pathname === '/infrastructure-projects') activeIdx = 3;
+  const activeIdx = getActiveIndex(location.pathname);
 
   return (
     <>
@@ -29,18 +31,13 @@ const Sidebar = () => {
       </div>
       <aside className="sidebar" style={{ marginTop: 80 }}>
         <nav className="sidebar-nav">
-          {navItems.map((item, idx) => (
+          {NAV_CONFIG.map((item, idx) => (
             <button
-              key={item}
+              key={item.path}
               className={`nav-btn${activeIdx === idx ? ' active' : ''}`}
-              onClick={() => {
-                if (item === 'Evacuation Center') navigate('/evacuation-center');
-                else if (item === 'Dashboard') navigate('/dashboard');
-                else if (item === 'Incident Reports') navigate('/incident-reports');
-                else if (item === 'Infrastructure Projects') navigate('/infrastructure-projects');
-              }}
+              onClick={() => navigate(item.path)}
             >
-              {item}
+              {item.label}
             </button>
           ))}
         </nav>

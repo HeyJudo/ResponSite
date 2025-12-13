@@ -1,14 +1,16 @@
-
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import IncidentForm from './IncidentForm';
+import { addMyReport } from '../../API/myReports';
 
 const QuickButtons = () => {
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   const handleIncidentSubmit = (data) => {
-    // TODO: send data to backend or handle as needed
+    addMyReport(data);
     setShowForm(false);
-    alert('Incident submitted!');
+    navigate('/incident-reports');
   };
 
   return (
@@ -16,7 +18,7 @@ const QuickButtons = () => {
       <h2 className="quick-title">Quick buttons</h2>
       <div className="quick-btn-group">
         <button className="quick-btn" onClick={() => setShowForm(true)}>Report New Incident</button>
-        <button className="quick-btn">Incident Reports</button>
+        <button className="quick-btn" onClick={() => navigate('/incident-reports')}>My Reports</button>
         <button className="quick-btn">Browse Projects</button>
       </div>
       {showForm && (
