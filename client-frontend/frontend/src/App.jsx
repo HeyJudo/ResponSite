@@ -4,7 +4,12 @@ import LoginPage from './pages/LoginPage';
 
 import ResidentDashboard from './pages/ResidentDashboard';
 import ResidentEvacuationCenter from './pages/ResidentEvacuationCenter';
+
+
 import ResidentMyReports from './pages/ResidentMyReports';
+import ResidentMyReportDetails from './pages/ResidentMyReportsDetails';
+
+import ResidentInfraProjects from './pages/ResidentInfraProjects';
 
 function App() {
   return (
@@ -16,6 +21,8 @@ function App() {
         <Route path="/dashboard" element={<ResidentDashboard />} />
         <Route path="/evacuation-center" element={<ResidentEvacuationCenter />} />
         <Route path="/incident-reports" element={<ResidentMyReports />} />
+        <Route path="/incident-reports/:id" element={<ResidentMyReportDetails />} />
+        <Route path="/infrastructure-projects" element={<ResidentInfraProjects />} />
       </Routes>
     </Router>
   );

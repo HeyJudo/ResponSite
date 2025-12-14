@@ -1,3 +1,88 @@
+.incident-details-form-card .res-report-details-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.incident-details-form-card .res-report-details-info > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 1.08rem;
+  font-family: 'Space Grotesk', 'Grotesk', 'Inter', Arial, sans-serif;
+}
+.incident-details-form-card .res-report-details-info strong {
+  min-width: 120px;
+  font-weight: 600;
+  color: #01189B;
+  font-family: 'Space Grotesk', 'Grotesk', 'Inter', Arial, sans-serif;
+}
+/* Blue card for Reported by section at the bottom left of the form card */
+.incident-reported-by-card {
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: 0 0 0 12px;
+  padding: 10px 24px 10px 10px;
+  margin-top: 32px;
+  width: 420px;
+  min-width: 320px;
+  max-width: 100%;
+  font-family: 'Space Grotesk', 'Grotesk', 'Inter', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+.incident-reported-by-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.incident-reported-by-name {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.incident-reported-by-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+.incident-reported-by-icon {
+  font-size: 1.1rem;
+  margin-right: 2px;
+}
+/* White form card for incident details below the blue card */
+.incident-details-form-card {
+  background: #fff;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+  padding: 24px 32px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+/* Incident Form Card for Incident # Title */
+.incident-form-card {
+  background: var(--color-primary);
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+  padding: 18px 32px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.incident-form-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1px;
+  font-family: 'Space Grotesk', 'Grotesk', 'Inter', Arial, sans-serif;
+}
 .dashboard-root {
   display: flex;
   flex-direction: column;
@@ -47,59 +132,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-/* Modal styles for notifications */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-.modal-window {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
-  padding: 32px 32px 24px 32px;
-  min-width: 340px;
-  max-width: 90vw;
-  max-height: 80vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.modal-window h2 {
-  margin-bottom: 18px;
-  font-size: 1.5rem;
-  color: #001d9c;
-}
-.modal-list {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-.close-modal-btn {
-  background: #001d9c;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 28px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  cursor: pointer;
-  margin-top: 8px;
-}
-.modal-overlay, .modal-window {
-  filter: none !important;
-  pointer-events: auto !important;
-  user-select: auto !important;
 }
 
 .dashboard-root {
@@ -335,4 +367,58 @@
   border-radius: 6px;
   padding: 17px 15px 18px 17px;
   font-size: 1rem;
+}
+
+/* Modal styles for notifications */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-window {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+  padding: 32px 32px 24px 32px;
+  min-width: 340px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.modal-window h2 {
+  margin-bottom: 18px;
+  font-size: 1.5rem;
+  color: #001d9c;
+}
+.modal-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.close-modal-btn {
+  background: #001d9c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.modal-overlay, .modal-window {
+  filter: none !important;
+  pointer-events: auto !important;
+  user-select: auto !important;
 }

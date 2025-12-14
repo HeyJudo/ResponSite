@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../../styles/auth.css';
+import '../../styles/resident/auth.css';
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({

@@ -1,5 +1,5 @@
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import '../../styles/auth.css';
+import '../../styles/resident/auth.css';
 
 const AuthLayout = ({ leftContent, rightContent }) => {
   return (

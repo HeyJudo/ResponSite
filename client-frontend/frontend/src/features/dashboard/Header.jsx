@@ -1,11 +1,11 @@
-import userIconSvg from '../../assets/user-icon.svg';
+import userDefaultSvg from '../../assets/user-default.svg';
 
 const Header = () => (
   <header className="dashboard-header">
     <div />
     <div className="user-info">
       <span>resident</span>
-      <img src={userIconSvg} alt="User Icon" className="user-icon" />
+      <img src={userDefaultSvg} alt="User Icon" className="user-icon" />
     </div>
   </header>
 );

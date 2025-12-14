@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import LoadingScreen from '../../components/LoadingScreen';
+
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) =>
@@ -10,16 +13,20 @@ const LoginForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Dummy login check
-    if (formData.username === 'resident' && formData.password === '123') {
-      navigate('/dashboard');
-    } else {
-      alert('Invalid username or password.');
-    }
+    setLoading(true);
+    setTimeout(() => {
+      if (formData.username === 'resident' && formData.password === '123') {
+        navigate('/dashboard');
+      } else {
+        setLoading(false);
+        alert('Invalid username or password.');
+      }
+    }, 1200); // Simulate loading
   };
 
   return (
     <div className="auth-card">
+      {loading && <LoadingScreen />}
       <h2 className="form-title">Login</h2>
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="form-group">

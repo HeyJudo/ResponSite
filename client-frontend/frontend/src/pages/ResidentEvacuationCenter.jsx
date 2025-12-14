@@ -1,8 +1,9 @@
-import Sidebar from '../components/resident_dashboard/Sidebar';
-import Header from '../components/resident_dashboard/Header';
+import Sidebar from '../features/dashboard/Sidebar';
+import Header from '../features/dashboard/Header';
 import evacuationCenters from '../API/evacuationCenter';
-import '../styles/global.css';
-import '../styles/center.css';
+import Table from '../components/Table';
+import '../styles/resident/global.css';
+import '../styles/resident/resInfraProjects.css';
 
 
 const ResidentEvacuationCenter = () => {
@@ -18,37 +19,25 @@ const ResidentEvacuationCenter = () => {
           <Sidebar />
         </div>
         <div className="dashboard-right">
-          <div className="evac-panel">
-            <div className="evac-title-card">
-              <span className="evac-title">Evacuation Centers</span>
+          <main className="right-panel">
+            <div className="incident-reports-wrapper">
+              <div className="incident-header">Evacuation Centers</div>
+              <div className="table-container">
+                <Table
+                  columns={[
+                    { key: 'name', header: 'Name' },
+                    { key: 'location', header: 'Location' },
+                    { key: 'status', header: 'Status', render: (value) => (
+                      <span className={`evac-status ${value.toLowerCase()}`}>{value}</span>
+                    ) },
+                    { key: 'capacity', header: 'Capacity' },
+                  ]}
+                  data={evacuationCenters}
+                  rowClassName={(_, idx) => idx === 0 ? 'evac-row-highlight' : ''}
+                />
+              </div>
             </div>
-            <div className="evac-table-card">
-              <table className="evac-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Capacity</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {evacuationCenters.map((center, idx) => (
-                    <tr key={center.name} className={idx === 0 ? "evac-row-highlight" : ""}>
-                      <td>{center.name}</td>
-                      <td>{center.location}</td>
-                      <td>
-                        <span className={`evac-status ${center.status.toLowerCase()}`}>
-                          {center.status}
-                        </span>
-                      </td>
-                      <td>{center.capacity}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          </main>
         </div>
       </div>
     </div>

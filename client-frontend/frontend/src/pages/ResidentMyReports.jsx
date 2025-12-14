@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
-import Sidebar from '../components/resident_dashboard/Sidebar';
-import Header from '../components/resident_dashboard/Header';
+import { useNavigate } from 'react-router-dom';
+import Sidebar from '../features/dashboard/Sidebar';
+import Header from '../features/dashboard/Header';
 import { getMyReports } from '../API/myReports';
-import '../styles/global.css';
-import '../styles/resReport.css';
+import Table from '../components/Table';
+import '../styles/resident/global.css';
+import '../styles/resident/resInfraProjects.css';
 
 
 const ResidentMyReports = () => {
   const [reports, setReports] = useState([]);
+  const navigate = useNavigate();
   
   useEffect(() => {
     setReports(getMyReports());
@@ -21,37 +24,28 @@ const ResidentMyReports = () => {
           <Sidebar />
         </div>
         <div className="dashboard-right">
-          <div className="evac-panel">
-            <div className="evac-title-card">
-              <span className="evac-title">My Reports</span>
+          <main className="right-panel">
+            <div className="incident-reports-wrapper">
+              <div className="incident-header">My Reports</div>
+              <div className="table-container">
+                <Table
+                  columns={[
+                    { key: 'id', header: 'Incident ID' },
+                    { key: 'type', header: 'Type' },
+                    { key: 'zone', header: 'Zone' },
+                    { key: 'status', header: 'Status', render: (value) => (
+                      <span className={`evac-status ${value.toLowerCase()}`}>{value}</span>
+                    ) },
+                    { key: 'dateReported', header: 'Date Reported' },
+                    { key: 'assignedTo', header: 'Assigned to' },
+                  ]}
+                  data={reports}
+                  rowClassName={() => 'clickable-row'}
+                  onRowClick={(row) => navigate(`/incident-reports/${row.id}`)}
+                />
+              </div>
             </div>
-            <div className="evac-table-card">
-              <table className="evac-table">
-                <thead>
-                  <tr>
-                    <th>Incident ID</th>
-                    <th>Type</th>
-                    <th>Zone</th>
-                    <th>Status</th>
-                    <th>Date Reported</th>
-                    <th>Assigned to</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {reports.map((report) => (
-                    <tr key={report.id}>
-                      <td>{report.id}</td>
-                      <td>{report.type}</td>
-                      <td>{report.zone}</td>
-                      <td><span className={`evac-status ${report.status.toLowerCase()}`}>{report.status}</span></td>
-                      <td>{report.dateReported}</td>
-                      <td>{report.assignedTo}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          </main>
         </div>
       </div>
     </div>

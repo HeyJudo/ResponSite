@@ -19,7 +19,7 @@ const QuickButtons = () => {
       <div className="quick-btn-group">
         <button className="quick-btn" onClick={() => setShowForm(true)}>Report New Incident</button>
         <button className="quick-btn" onClick={() => navigate('/incident-reports')}>My Reports</button>
-        <button className="quick-btn">Browse Projects</button>
+        <button className="quick-btn" onClick={() => navigate('/infrastructure-projects')}>Browse Projects</button>
       </div>
       {showForm && (
         <IncidentForm onClose={() => setShowForm(false)} onSubmit={handleIncidentSubmit} />

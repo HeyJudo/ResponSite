@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // Form field options
-const INCIDENT_TYPES = ['Tree', 'Power Outage', 'Road Damage', 'Other'];
+const INCIDENT_TYPES = ['Fallen Tree', 'Power Outage', 'Road Damage', 'Other'];
 const ZONES = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5'];
 const SEVERITIES = ['Low', 'Medium', 'High', 'Critical'];
 
