@@ -2,13 +2,13 @@
 
 
 import React from 'react';
-import Sidebar from '../features/dashboard/Sidebar';
-import Header from '../features/dashboard/Header';
+import Sidebar from '../../features/dashboard/Sidebar';
+import Header from '../../features/dashboard/Header';
 import '../styles/resident/global.css';
 import '../styles/resident/resInfraProjects.css';
-import { reporter } from '../API/reporter';
+import { reporter } from '../../API/resident/reporter';
 import { useParams } from 'react-router-dom';
-import { getMyReports } from '../API/myReports';
+import { getMyReports } from '../../API/resident/myReports';
 
 const ResidentMyReportDetails = () => {
   const { id } = useParams();

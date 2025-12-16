@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IncidentForm from './IncidentForm';
-import { addMyReport } from '../../API/myReports';
+import { addMyReport } from '../../API/resident/myReports';
 
 const QuickButtons = () => {
   const [showForm, setShowForm] = useState(false);

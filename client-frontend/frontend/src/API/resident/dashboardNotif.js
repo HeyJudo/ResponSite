@@ -1,4 +1,4 @@
-export const dummyNotifications = [
+export const dashboardNotif = [
   {
     id: 1,
     content: "Notification 1: Lorem ipsum dolor sit amet consectetur adipiscing elit. Lorem ipsum dolor sit amet consectetur adipiscing elit. Lorem ipsum dolor sit amet consectetur adipiscing elit. Lorem ipsum dolor sit amet consectetur adipiscing elit. Lorem ipsum dolor sit amet consectetur adipiscing elit."

@@ -1,14 +1,14 @@
-import Sidebar from '../features/dashboard/Sidebar';
-import Header from '../features/dashboard/Header';
+import Sidebar from '../../features/dashboard/Sidebar';
+import Header from '../../features/dashboard/Header';
 
 
 import '../styles/resident/global.css';
 import '../styles/resident/resInfraProjects.css';
-import FilterDropdown from '../components/FilterDropdown';
-import SortDropdown from '../components/SortDropdown';
-import SortDirectionCard from '../components/SortDirectionCard';
+import FilterDropdown from '../../components/FilterDropdown';
+import SortDropdown from '../../components/SortDropdown';
+import SortDirectionCard from '../../components/SortDirectionCard';
 
-import infraProj from '../API/infraProj';
+import infraProj from '../../API/resident/infraProj';
 import { useState } from 'react';
 
 const statusColors = {

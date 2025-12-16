@@ -1,7 +1,7 @@
-import Sidebar from '../features/dashboard/Sidebar';
-import Header from '../features/dashboard/Header';
-import evacuationCenters from '../API/evacuationCenter';
-import Table from '../components/Table';
+import Sidebar from '../../features/dashboard/Sidebar';
+import Header from '../../features/dashboard/Header';
+import evacuationCenters from '../../API/resident/evacuationCenter';
+import Table from '../../components/Table';
 import '../styles/resident/global.css';
 import '../styles/resident/resInfraProjects.css';
 

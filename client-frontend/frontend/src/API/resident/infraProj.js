@@ -39,26 +39,6 @@ const infraProj = [
     startDate: "11-29-2025",
     endDate: "11-29-2025",
     budget: "None"
-  },
-  {
-    name: "Project E",
-    type: "Bridge",
-    location: "Zone 1",
-    status: "Completed",
-    progress: "100%",
-    startDate: "11-29-2025",
-    endDate: "11-29-2025",
-    budget: "None"
-  },
-  {
-    name: "Project F",
-    type: "Drainage",
-    location: "Zone 2",
-    status: "In Progress",
-    progress: "50%",
-    startDate: "11-29-2025",
-    endDate: "11-29-2025",
-    budget: "None"
   }
 ];
 

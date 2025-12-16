@@ -1,11 +1,11 @@
-import Sidebar from '../features/dashboard/Sidebar';
-import Header from '../features/dashboard/Header';
-import IncidentCard from '../features/dashboard/IncidentCard';
-import QuickButtons from '../features/dashboard/QuickButtons';
-import NotificationList from '../features/dashboard/NotificationList';
-import { dummyNotifications } from '../API/dummyNotifications';
-import '../styles/resident/global.css';
-import '../styles/resident/dashboard.css';
+import Sidebar from '../../features/dashboard/Sidebar';
+import Header from '../../features/dashboard/Header';
+import IncidentCard from '../../features/dashboard/IncidentCard';
+import QuickButtons from '../../features/dashboard/QuickButtons';
+import NotificationList from '../../features/dashboard/NotificationList';
+import { dashboardNotif } from '../../API/resident/dashboardNotif'; 
+import '../../styles/resident/global.css';
+import '../../styles/resident/dashboard.css';
 
 
 const Dashboard = () => {
@@ -25,7 +25,7 @@ const Dashboard = () => {
           <main className="right-panel">
             <IncidentCard count={incidentCount} />
             <QuickButtons />
-            <NotificationList notifications={dummyNotifications} />
+            <NotificationList notifications={dashboardNotif} />
           </main>
         </div>
       </div>
