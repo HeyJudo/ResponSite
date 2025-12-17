@@ -1,17 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/resident/resInfraProjects.css';
 
-/**
- * Generic filter dropdown component.
- * @param {string} label - The label/title for the dropdown (e.g., 'Type', 'Zone', 'Status').
- * @param {string[]} options - The list of options to display.
- * @param {string} selected - The currently selected option.
- * @param {function} onSelect - Callback when an option is selected.
- * @param {function} onApply - Callback when the filter is applied (Enter button).
- * @param {function} onClose - Callback when the dropdown is closed (× button).
- * @param {boolean} show - Whether the dropdown is visible.
- * @param {React.ReactNode} cardContent - Optional custom content for the card (e.g., pink card).
- */
 const FilterDropdown = ({
   label = 'Filter',
   options = [],

@@ -1,9 +1,9 @@
-import Sidebar from '../../features/dashboard/Sidebar';
-import Header from '../../features/dashboard/Header';
+import Sidebar from '../../features/resident/Sidebar';
+import Header from '../../features/resident/Header';
 import evacuationCenters from '../../API/resident/evacuationCenter';
 import Table from '../../components/Table';
-import '../styles/resident/global.css';
-import '../styles/resident/resInfraProjects.css';
+import '../../styles/resident/global.css';
+import '../../styles/resident/resInfraProjects.css';
 
 
 const ResidentEvacuationCenter = () => {

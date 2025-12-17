@@ -1,6 +1,3 @@
-// Table.jsx
-// Generic table component for any tabular data
-
 const Table = ({ columns, data, rowClassName, onRowClick }) => (
   <table className="incident-table">
     <thead>

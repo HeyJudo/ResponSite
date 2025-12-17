@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import LoadingScreen from '../../components/LoadingScreen';
+import { RESIDENT_SAMPLE_CREDENTIALS } from '../../API/SampleCredentials';
+import { ADMIN_SAMPLE_CREDENTIALS } from '../../API/SampleCredentials';
 
 
 const LoginForm = () => {
@@ -15,8 +17,16 @@ const LoginForm = () => {
     e.preventDefault();
     setLoading(true);
     setTimeout(() => {
-      if (formData.username === 'resident' && formData.password === '123') {
+      if (
+        formData.username === RESIDENT_SAMPLE_CREDENTIALS.username &&
+        formData.password === RESIDENT_SAMPLE_CREDENTIALS.password
+      ) {
         navigate('/dashboard');
+      } else if (
+        formData.username === ADMIN_SAMPLE_CREDENTIALS.username &&
+        formData.password === ADMIN_SAMPLE_CREDENTIALS.password
+      ) {
+        navigate('/admDashboard');
       } else {
         setLoading(false);
         alert('Invalid username or password.');

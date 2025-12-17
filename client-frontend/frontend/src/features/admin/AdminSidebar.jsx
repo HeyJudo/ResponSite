@@ -1,33 +1,23 @@
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../../styles/resident/dashboard.css';
 import logoSvg from '../../assets/logo.svg';
 
-// Navigation configuration: maps nav items to their routes
-const NAV_CONFIG = [
-  { label: 'Dashboard', path: '/dashboard' },
-  { label: 'My Reports', path: '/incident-reports' },
-  { label: 'Evacuation Center', path: '/evacuation-center' },
-  { label: 'Infrastructure Projects', path: '/infrastructure-projects' },
+const ADMIN_NAV_CONFIG = [
+  { label: 'Dashboard', path: '/admDashboard' },
+  { label: 'Incident Reports', path: '/admin-page-2' },
+  { label: 'Resource Management', path: '/admin-page-3' },
+  { label: 'Infrastructure Projects', path: '/admin-page-4' },
+  { label: 'List of ', path: '/admin-page-5' },
 ];
 
-
-/**
- * Determines active navigation index based on current path
- * Handles subroutes (e.g., /incident-reports/123)
- */
 const getActiveIndex = (pathname) => {
-  // Exact match first
-  let index = NAV_CONFIG.findIndex(item => item.path === pathname);
+  let index = ADMIN_NAV_CONFIG.findIndex(item => item.path === pathname);
   if (index !== -1) return index;
-  // Handle /incident-reports/:id as active for My Reports
-  if (pathname.startsWith('/incident-reports')) {
-    return NAV_CONFIG.findIndex(item => item.path === '/incident-reports');
-  }
-  // Add more subroute logic if needed
   return 0;
 };
 
-const Sidebar = () => {
+const AdminSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const activeIdx = getActiveIndex(location.pathname);
@@ -40,7 +30,7 @@ const Sidebar = () => {
       </div>
       <aside className="sidebar" style={{ marginTop: 80 }}>
         <nav className="sidebar-nav">
-          {NAV_CONFIG.map((item, idx) => (
+          {ADMIN_NAV_CONFIG.map((item, idx) => (
             <button
               key={item.path}
               className={`nav-btn${activeIdx === idx ? ' active' : ''}`}
@@ -55,4 +45,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default AdminSidebar;

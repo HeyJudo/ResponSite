@@ -8,7 +8,7 @@ import ResidentMyReportDetails from './pages/resident/ResidentMyReportsDetails';
 import ResidentEvacuationCenter from './pages/resident/ResidentEvacuationCenter';
 import ResidentInfraProjects from './pages/resident/ResidentInfraProjects';
 
-
+import AdmDashboard from './pages/admin/admDashboard';
 
 function App() {
   return (
@@ -22,6 +22,8 @@ function App() {
         <Route path="/incident-reports/:id" element={<ResidentMyReportDetails />} />
         <Route path="/infrastructure-projects" element={<ResidentInfraProjects />} />
         <Route path="/evacuation-center" element={<ResidentEvacuationCenter />} />
+
+        <Route path="/admDashboard" element={<AdmDashboard />} />
       </Routes>
     </Router>
   );

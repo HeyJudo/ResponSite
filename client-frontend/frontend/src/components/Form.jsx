@@ -1,6 +1,3 @@
-// Form.jsx
-// Generic form component for authentication and other forms
-
 const Form = ({ title, onSubmit, fields, submitLabel, bottomText, bottomLink, bottomLinkText, children }) => (
   <div className="auth-card">
     <h2 className="form-title">{title}</h2>

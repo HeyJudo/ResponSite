@@ -1,3 +1,4 @@
+import React from 'react';
 import userDefaultSvg from '../../assets/user-default.svg';
 
 const Header = () => (
@@ -9,5 +10,6 @@ const Header = () => (
     </div>
   </header>
 );
+
 
 export default Header;

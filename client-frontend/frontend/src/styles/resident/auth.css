@@ -5,12 +5,12 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: grotesk;
   background-color: #ffffff;
+  overflow: hidden;
 }
 
 .auth-container {
-  min-height: 100vh;
   height: 100vh;
   width: 100vw;
   padding: 32px;
@@ -18,6 +18,7 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .auth-header {
@@ -69,7 +70,6 @@ body {
   flex-direction: column;
   flex: 0.8 1 0;
   min-width: 0;
-  min-height: 0;
   height: 100%;
 }
 
@@ -88,12 +88,13 @@ body {
 .inner-card {
   background: var(--color-light1);
   border-radius: 12px;
-  padding: 40px;
+  padding: 28px;
   height: 100%;
   min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow-y: auto;
 }
 
 /* About title */
@@ -125,13 +126,13 @@ body {
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .form-group label {
@@ -141,7 +142,7 @@ body {
 }
 
 .form-group input {
-  padding:  14px 18px;
+  padding: 12px 16px;
   border: 1px solid #d1d1d1;
   border-radius: 8px;
   font-size: 16px;

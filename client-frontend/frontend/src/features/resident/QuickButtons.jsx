@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import IncidentForm from './IncidentForm';
+import IncidentForm from '../resident/IncidentForm';
 import { addMyReport } from '../../API/resident/myReports';
 
 const QuickButtons = () => {

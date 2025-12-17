@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../../features/dashboard/Sidebar';
-import Header from '../../features/dashboard/Header';
+import Sidebar from '../../features/resident/Sidebar';
+import Header from '../../features/resident/Header';
 import { getMyReports } from '../../API/resident/myReports';
 import Table from '../../components/Table';
-import '../styles/resident/global.css';
-import '../styles/resident/resInfraProjects.css';
+import '../../styles/resident/global.css';
+import '../../styles/resident/resInfraProjects.css';
 
 
 const ResidentMyReports = () => {

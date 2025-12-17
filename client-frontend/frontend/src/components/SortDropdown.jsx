@@ -2,16 +2,6 @@ import React from 'react';
 import SortDirectionCard from './SortDirectionCard';
 import '../styles/resident/resInfraProjects.css';
 
-/**
- * Generic sort dropdown component.
- * @param {string} label - The label/title for the dropdown (e.g., 'Sort By').
- * @param {string[]} options - The list of options to display.
- * @param {string} selected - The currently selected option.
- * @param {function} onSelect - Callback when an option is selected.
- * @param {function} onApply - Callback when the sort is applied (Enter button).
- * @param {function} onClose - Callback when the dropdown is closed (× button).
- * @param {boolean} show - Whether the dropdown is visible.
- */
 const SortDropdown = ({
   label = 'Sort By',
   options = [],

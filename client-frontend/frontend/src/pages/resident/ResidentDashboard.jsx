@@ -1,8 +1,8 @@
-import Sidebar from '../../features/dashboard/Sidebar';
-import Header from '../../features/dashboard/Header';
-import IncidentCard from '../../features/dashboard/IncidentCard';
-import QuickButtons from '../../features/dashboard/QuickButtons';
-import NotificationList from '../../features/dashboard/NotificationList';
+import Sidebar from '../../features/resident/Sidebar';
+import Header from '../../features/resident/Header';
+import IncidentCard from '../../features/resident/IncidentCard';
+import QuickButtons from '../../features/resident/QuickButtons';
+import NotificationList from '../../features/resident/NotificationList';
 import { dashboardNotif } from '../../API/resident/dashboardNotif'; 
 import '../../styles/resident/global.css';
 import '../../styles/resident/dashboard.css';
