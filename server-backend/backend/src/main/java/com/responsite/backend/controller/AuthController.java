@@ -6,6 +6,10 @@ import com.responsite.backend.dto.UserResponseDTO;
 import com.responsite.backend.entity.User;
 import com.responsite.backend.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +43,14 @@ public class AuthController {
             // SUCCESS: Store user entity in Session
             // Spring automatically sends a "JSESSIONID" cookie to the browser
             session.setAttribute("user", user);
+            // Also set Spring Security Authentication so @PreAuthorize checks work
+            List<SimpleGrantedAuthority> authorities = List.of(
+                    new SimpleGrantedAuthority("ROLE_" + user.getRole())
+            );
+            UsernamePasswordAuthenticationToken auth =
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
             // Return DTO (without password) to client
             return ResponseEntity.ok(userService.toResponseDTO(user));
         } else {
