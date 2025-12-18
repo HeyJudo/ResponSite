@@ -1,20 +1,32 @@
-import "../CSS/LGUIncidentDetails.css";
-import { incidentDetails } from "../JS/incidentDetailsData";
+<div className="incident-layout">
 
-const LGUIncidentDetails = () => {
-  return (
-    <div className="details">
-      <h2>Incident #{incidentDetails.id}</h2>
+  <div className="incident-left">
+    <h2>Incident #0010</h2>
+    <p><b>Type:</b> Damaged Road</p>
+    <p><b>Severity:</b> <span className="badge medium">Medium</span></p>
+    <p><b>Zone:</b> Zone 1</p>
+    <p><b>Location:</b> Barangay Road</p>
+    <p><b>Description:</b> Lorem ipsum dolor sit amet.</p>
+  </div>
 
-      <p><b>Type:</b> {incidentDetails.type}</p>
-      <p><b>Severity:</b> {incidentDetails.severity}</p>
-      <p><b>Zone:</b> {incidentDetails.zone}</p>
-      <p><b>Location:</b> {incidentDetails.location}</p>
-      <p><b>Description:</b> {incidentDetails.description}</p>
+  <div className="incident-right">
+    <h3>Status</h3>
+    <span className="badge pending">Pending</span>
 
-      <button>Mark as Resolved</button>
-    </div>
-  );
-};
+    <h3>Progress</h3>
+    <ul className="timeline">
+      <li className="done">Reported</li>
+      <li className="current">In Progress</li>
+      <li>Resolved</li>
+    </ul>
 
-export default LGUIncidentDetails;
+    <h3>Assigned Team</h3>
+    <p>Rescue Team A</p>
+
+    <h3>Resolution Notes</h3>
+    <textarea placeholder="Resolution details..." />
+
+    <button>Mark as Resolved</button>
+  </div>
+
+</div>
