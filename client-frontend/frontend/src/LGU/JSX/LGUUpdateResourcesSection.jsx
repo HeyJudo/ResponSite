@@ -1,6 +1,6 @@
-import "../CSS/LGUResourceForms.css";
+import "../CSS/LGUUpdateResourcesSection.css";
 
-const LGUResourceForms = () => {
+const LGUUpdateResourcesSection = () => {
   return (
     <div className="resource-forms">
 
@@ -52,4 +52,4 @@ const LGUResourceForms = () => {
   );
 };
 
-export default LGUResourceForms;
+export default LGUUpdateResourcesSection;
