@@ -1,0 +1,19 @@
+.details {
+  padding: 24px;
+  background: #f2f4f8;
+  min-height: 100vh;
+}
+
+.details h2 {
+  margin-bottom: 20px;
+}
+
+.details p {
+  margin-bottom: 8px;
+}
+
+.details button {
+  margin-top: 20px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
