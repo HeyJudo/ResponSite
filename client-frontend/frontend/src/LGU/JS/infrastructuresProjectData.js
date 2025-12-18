@@ -1,0 +1,32 @@
+export const infrastructureProjects = [
+  {
+    name: "Road Rehabilitation",
+    type: "Road",
+    zone: "Zone 1",
+    status: "In Progress",
+    progress: "50%",
+    startDate: "12-01-2025",
+    targetEndDate: "12-30-2025",
+    budget: "₱500,000",
+  },
+  {
+    name: "Drainage Improvement",
+    type: "Drainage",
+    zone: "Zone 2",
+    status: "Planned",
+    progress: "0%",
+    startDate: "11-29-2025",
+    targetEndDate: "12-20-2025",
+    budget: "₱300,000",
+  },
+  {
+    name: "Barangay Hall Repair",
+    type: "Building",
+    zone: "Zone 3",
+    status: "Completed",
+    progress: "100%",
+    startDate: "11-01-2025",
+    targetEndDate: "11-25-2025",
+    budget: "₱200,000",
+  },
+];
