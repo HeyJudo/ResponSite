@@ -1,9 +1,12 @@
 package com.responsite.backend.controller;
 
 import com.responsite.backend.dto.ProjectDTO;
+import com.responsite.backend.entity.User;
 import com.responsite.backend.service.ProjectService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,29 +18,51 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    // PUBLIC: view all projects
+    // PUBLIC: view all projects (No login required)
     @GetMapping
-    public List<ProjectDTO> listProjects() {
-        return projectService.getAllProjects();
+    public ResponseEntity<List<ProjectDTO>> listProjects() {
+        return ResponseEntity.ok(projectService.getAllProjects());
     }
 
-    // PUBLIC: view single project
+    // PUBLIC: view single project (No login required)
     @GetMapping("/{id}")
-    public ProjectDTO getProject(@PathVariable Long id) {
-        return projectService.getProject(id);
+    public ResponseEntity<ProjectDTO> getProject(@PathVariable Long id) {
+        ProjectDTO project = projectService.getProject(id);
+        if (project == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(project);
     }
 
-    // LGU_STAFF: create project
+    // RESTRICTED: LGU_STAFF or ADMIN only - Create project
     @PostMapping
-    @PreAuthorize("hasRole('LGU_STAFF')")
-    public ProjectDTO createProject(@RequestBody ProjectDTO dto) {
-        return projectService.createProject(dto);
+    public ResponseEntity<?> createProject(@RequestBody ProjectDTO dto, HttpSession session) {
+        // Manual Session Auth Check
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first");
+        }
+        if (!user.getRole().equals("STAFF") && !user.getRole().equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only LGU Staff can create projects");
+        }
+
+        ProjectDTO created = projectService.createProject(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // LGU_STAFF: update project
+    // RESTRICTED: LGU_STAFF or ADMIN only - Update project progress
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('LGU_STAFF')")
-    public ProjectDTO updateProject(@PathVariable Long id, @RequestBody ProjectDTO dto) {
-        return projectService.updateProject(id, dto);
+    public ResponseEntity<?> updateProject(@PathVariable Long id, @RequestBody ProjectDTO dto, HttpSession session) {
+        // Manual Session Auth Check
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first");
+        }
+        if (!user.getRole().equals("STAFF") && !user.getRole().equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only LGU Staff can update projects");
+        }
+
+        ProjectDTO updated = projectService.updateProject(id, dto);
+        return ResponseEntity.ok(updated);
     }
 }
