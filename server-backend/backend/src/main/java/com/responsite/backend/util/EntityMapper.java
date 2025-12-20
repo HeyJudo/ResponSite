@@ -164,6 +164,7 @@ public class EntityMapper {
         dto.setBudget(project.getBudget());
         dto.setStartDate(project.getStartDate());
         dto.setTargetDate(project.getTargetDate());
+        dto.setCreatedAt(project.getCreatedAt());
         return dto;
     }
 
@@ -184,6 +185,8 @@ public class EntityMapper {
         project.setBudget(dto.getBudget());
         project.setStartDate(dto.getStartDate());
         project.setTargetDate(dto.getTargetDate());
+        // createdAt is managed by the entity lifecycle; do not overwrite if present
+        if (dto.getCreatedAt() != null) project.setCreatedAt(dto.getCreatedAt());
         return project;
     }
 

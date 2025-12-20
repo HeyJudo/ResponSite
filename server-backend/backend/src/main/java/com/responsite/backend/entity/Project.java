@@ -3,6 +3,8 @@ package com.responsite.backend.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import jakarta.persistence.PrePersist;
 
 @Entity
 @Data
@@ -23,4 +25,10 @@ public class Project {
     private LocalDate startDate;
     private LocalDate targetDate;
     private Double budget;
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
