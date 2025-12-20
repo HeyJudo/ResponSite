@@ -1,0 +1,36 @@
+.lgu-resources {
+  padding: 24px;
+  background: #f2f4f8;
+  min-height: 100vh;
+}
+
+.lgu-resources h2 {
+  margin-bottom: 16px;
+}
+
+.lgu-resources input {
+  padding: 8px;
+  margin-right: 8px;
+}
+
+.lgu-resources button {
+  padding: 8px 12px;
+  margin-right: 8px;
+}
+
+.lgu-resources table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  margin-top: 16px;
+}
+
+.lgu-resources th,
+.lgu-resources td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.lgu-resources th {
+  background: #eef1f6;
+}
