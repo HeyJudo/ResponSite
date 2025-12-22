@@ -28,8 +28,8 @@ const ResidentMyReportDetails = () => {
         </div>
         <div className="dashboard-right">
           <main className="right-panel">
-            <div className="incident-reports-wrapper">
-              <div className="incident-header">Incident #{report.id}</div>
+            <div className="resource-form-card">
+              <div className="resource-form-header">Incident #{report.id}</div>
               <div className="report-content">
                 <div className="report-info">
                   <div><strong>Type :</strong> {report.type}</div>

@@ -1,0 +1,174 @@
+/* Incident Report Details Page Styles */
+
+.dashboard-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-body-row {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.dashboard-left {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.dashboard-right {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.incident-detail-container {
+  padding: 10px;
+  max-width: 1000px;
+}
+
+.incident-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.back-btn {
+  background: #001D9C;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.back-btn:hover {
+  background: #0033cc;
+}
+
+.incident-detail-header h1 {
+  color: #001D9C;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.incident-form-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.incident-form-header {
+  background: #001D9C;
+  color: #fff;
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-sizing: border-box;
+}
+
+.incident-form-content {
+  padding: 2rem;
+}
+
+.form-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field-full {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.form-field-full:last-child {
+  margin-bottom: 0;
+}
+
+.form-field label {
+  font-weight: 600;
+  color: #001D9C;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-field p {
+  font-size: 1.05rem;
+  color: #333;
+  margin: 0;
+  padding: 0.25rem 0;
+}
+
+.form-field-full label {
+  font-weight: 600;
+  color: #001D9C;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-field-full p {
+  font-size: 1.05rem;
+  color: #333;
+  margin: 0;
+  padding: 0.25rem 0;
+}
+
+.severity-critical {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+.severity-high {
+  color: #f57c00;
+  font-weight: 600;
+}
+
+.severity-medium {
+  color: #fbc02d;
+  font-weight: 600;
+}
+
+.severity-low {
+  color: #388e3c;
+  font-weight: 600;
+}
+
+.status-pending {
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.status-in-progress {
+  color: #f57c00;
+  font-weight: 600;
+}
+
+.status-resolved {
+  color: #388e3c;
+  font-weight: 600;
+}
+
+.incident-detail-message {
+  background: #fff;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+  color: #999;
+  font-size: 1.1rem;
+}

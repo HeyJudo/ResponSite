@@ -5,10 +5,10 @@ import logoSvg from '../../assets/logo.svg';
 
 const ADMIN_NAV_CONFIG = [
   { label: 'Dashboard', path: '/admDashboard' },
-  { label: 'Incident Reports', path: '/admin-page-2' },
-  { label: 'Resource Management', path: '/admin-page-3' },
-  { label: 'Infrastructure Projects', path: '/admin-page-4' },
-  { label: 'List of ', path: '/admin-page-5' },
+  { label: 'Incident Reports', path: '/admIncidentReports' },
+  { label: 'Resource Management', path: '/admResourceManagement' },
+  { label: 'Infrastructure Projects', path: '/admInfraProjects' },
+  { label: 'List of Users', path: '/admListOfUsers' },
 ];
 
 const getActiveIndex = (pathname) => {

@@ -20,9 +20,9 @@ const ResidentEvacuationCenter = () => {
         </div>
         <div className="dashboard-right">
           <main className="right-panel">
-            <div className="incident-reports-wrapper">
-              <div className="incident-header">Evacuation Centers</div>
-              <div className="table-container">
+            <div className="resource-form-card">
+              <div className="resource-form-header">Evacuation Centers</div>
+              <div className="resource-table-container">
                 <Table
                   columns={[
                     { key: 'name', header: 'Name' },

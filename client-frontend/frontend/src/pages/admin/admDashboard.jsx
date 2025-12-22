@@ -1,9 +1,12 @@
 import AdminSidebar from '../../features/admin/AdminSidebar';
 import AdminHeader from '../../features/admin/AdminHeader';
+import DashboardStatsCards from '../../features/admin/DashboardStatsCards';
+import RecentIncidentsCard from '../../features/admin/RecentIncidentsCard';
+import TotalUsersCard from '../../features/admin/TotalUsersCard';
+import PendingUsersCard from '../../features/admin/PendingUsersCard';
+import DashboardSummary from '../../features/admin/DashboardSummary';
 import '../../styles/resident/global.css';
-import '../../styles/resident/dashboard.css';
 import '../../styles/admin/admDashboard.css';
-import { getPendingIncidentReportsCount, getItemsLowOnStockCount, getActiveInfraProjectsCount } from '../../API/admin/adminDashboardCounts';
 
 const AdmDashboard = () => {
   return (
@@ -16,27 +19,17 @@ const AdmDashboard = () => {
         <div className="dashboard-right">
           <main className="right-panel">
             <div className="admin-forms-stack">
-              <form className="admin-form-card">
-                <span className="admin-form-count">{getPendingIncidentReportsCount()}</span>  
-                <span className="admin-form-title">Pending Incident Reports</span>
-                <button type="button" className="admin-form-view-btn">View</button>
-              </form>
-              <form className="admin-form-card">
-                <span className="admin-form-count">{getItemsLowOnStockCount()}</span>
-                <span className="admin-form-title">Items Low on Stock</span>
-                <button type="button" className="admin-form-view-btn">View</button>
-              </form>
-              <form className="admin-form-card">
-                <span className="admin-form-count">{getActiveInfraProjectsCount()}</span>
-                <span className="admin-form-title">Active Infrastructure Projects</span>
-                <button type="button" className="admin-form-view-btn">View</button>
-              </form>
+              <DashboardStatsCards />
+              <RecentIncidentsCard />
+              <TotalUsersCard />
+              <PendingUsersCard />
             </div>
+            <DashboardSummary />
           </main>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default AdmDashboard;

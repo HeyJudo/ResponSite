@@ -1,5 +1,8 @@
+import './Table.css';
+
 const Table = ({ columns, data, rowClassName, onRowClick }) => (
-  <table className="incident-table">
+  <>
+    <table className="incident-table">
     <thead>
       <tr>
         {columns.map(col => (
@@ -24,6 +27,7 @@ const Table = ({ columns, data, rowClassName, onRowClick }) => (
       ))}
     </tbody>
   </table>
+  </>
 );
 
 export default Table;

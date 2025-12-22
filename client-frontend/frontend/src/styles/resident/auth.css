@@ -7,18 +7,16 @@
 body {
   font-family: grotesk;
   background-color: #ffffff;
-  overflow: hidden;
 }
 
 .auth-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   padding: 32px;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 .auth-header {

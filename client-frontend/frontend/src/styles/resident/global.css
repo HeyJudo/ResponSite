@@ -9,7 +9,7 @@
 
 /* Typography */
 body {
-  font-family: 'Space Grotesk', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   background-color: #ffffff;
   color: #111;
 }
@@ -38,14 +38,14 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Space Grotesk', 'Inter', Arial, sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   background: #f7f8fa;
   color: #14182c;
   box-sizing: border-box;
 }
 
 button {
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   cursor: pointer;
   outline: none;
   border: none;

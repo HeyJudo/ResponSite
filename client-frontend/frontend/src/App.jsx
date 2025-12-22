@@ -9,6 +9,12 @@ import ResidentEvacuationCenter from './pages/resident/ResidentEvacuationCenter'
 import ResidentInfraProjects from './pages/resident/ResidentInfraProjects';
 
 import AdmDashboard from './pages/admin/admDashboard';
+import AdmIncidentReports from './pages/admin/admIncidentReports';
+import AdmIncidentReportsDet from './pages/admin/admIncidentReportsDet';
+import AdmResourceManagement from './pages/admin/admResourceManagement';
+import AdmListOfUsers from './pages/admin/admListOfUsers';
+import AdmListOfPendingUsers from './pages/admin/admListOfPendingUsers';
+import AdmInfraProjects from './pages/admin/admInfraProjects';
 
 function App() {
   return (
@@ -24,6 +30,12 @@ function App() {
         <Route path="/evacuation-center" element={<ResidentEvacuationCenter />} />
 
         <Route path="/admDashboard" element={<AdmDashboard />} />
+        <Route path="/admIncidentReports" element={<AdmIncidentReports />} />
+        <Route path="/admIncidentReportsDet/:incidentId" element={<AdmIncidentReportsDet />} />
+        <Route path="/admResourceManagement" element={<AdmResourceManagement />} />
+        <Route path="/admInfraProjects" element={<AdmInfraProjects />} />
+        <Route path="/admListOfUsers" element={<AdmListOfUsers />} />
+        <Route path="/admListOfPendingUsers" element={<AdmListOfPendingUsers />} />
       </Routes>
     </Router>
   );
