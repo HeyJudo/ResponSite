@@ -1,0 +1,55 @@
+// Dummy data for recent incident reports
+const recentIncidentReports = [
+  {
+    incidentId: '0010',
+    type: 'Other',
+    zone: '1',
+    severity: 'Low',
+    status: 'Pending',
+    reportedBy: 'Sean',
+    dateReported: '12-01-2025',
+    assignedTo: 'None',
+  },
+  {
+    incidentId: '0009',
+    type: 'Fire',
+    zone: '3',
+    severity: 'Medium',
+    status: 'Pending',
+    reportedBy: 'Jude',
+    dateReported: '11-29-2025',
+    assignedTo: 'None',
+  },
+  {
+    incidentId: '0008',
+    type: 'Landslide',
+    zone: '2',
+    severity: 'Critical',
+    status: 'Pending',
+    reportedBy: 'Michelle',
+    dateReported: '11-27-2025',
+    assignedTo: 'None',
+  },
+  {
+    incidentId: '0008',
+    type: 'Landslide',
+    zone: '2',
+    severity: 'Critical',
+    status: 'Pending',
+    reportedBy: 'Michelle',
+    dateReported: '11-27-2025',
+    assignedTo: 'None',
+  },
+  {
+    incidentId: '0008',
+    type: 'Landslide',
+    zone: '2',
+    severity: 'Critical',
+    status: 'Pending',
+    reportedBy: 'Michelle',
+    dateReported: '11-27-2025',
+    assignedTo: 'None',
+  },
+];
+
+export default recentIncidentReports;

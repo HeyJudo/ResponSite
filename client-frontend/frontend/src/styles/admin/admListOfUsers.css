@@ -1,0 +1,49 @@
+.dashboard-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-body-row {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.dashboard-left {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.dashboard-right {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.user-form-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-top: 0;
+}
+
+.user-form-header {
+  background: #001D9C;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-sizing: border-box;
+}
+
+.user-table-wrapper {
+  padding: 10px;
+}
+
+.user-table-wrapper button {
+  margin-bottom: 15px;
+}

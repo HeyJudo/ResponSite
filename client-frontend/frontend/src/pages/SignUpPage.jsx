@@ -1,6 +1,6 @@
-import AuthLayout from '../components/authentication/AuthLayout';
-import AboutCard from '../components/authentication/AboutCard';
-import SignUpForm from '../components/authentication/SignUpForm';
+import AuthLayout from '../features/auth/AuthLayout';
+import AboutCard from '../features/auth/AboutCard';
+import SignUpForm from '../features/auth/SignUpForm';
 
 const SignUpPage = () => (
   <AuthLayout leftContent={<AboutCard />} rightContent={<SignUpForm />} />
