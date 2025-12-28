@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../../components/LoadingScreen';
 import { LguProfileContext } from '../../context/LguProfileContext';
+import { logoutUser } from '../../API/authService';
 import userDefaultSvg from '../../assets/user-default.svg';
 import '../../styles/resident/profileModal.css';
 
@@ -29,11 +30,23 @@ const LguProfileModal = ({ isOpen, onClose }) => {
     setIsEditing(false);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setLoading(true);
-    setTimeout(() => {
+    try {
+      await logoutUser();
+      // Clear localStorage
+      localStorage.removeItem('user');
+      // Dispatch event to update contexts
+      window.dispatchEvent(new Event('userLogout'));
+      // Navigate to signin
       navigate('/signin');
-    }, 1200);
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Even if API fails, clear local data and redirect
+      localStorage.removeItem('user');
+      window.dispatchEvent(new Event('userLogout'));
+      navigate('/signin');
+    }
   };
 
   return (

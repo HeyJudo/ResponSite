@@ -1,12 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 import { listOfPendingUsers } from '../../API/admin/listOfPendingUsers';
 
 const PendingUsersCard = () => {
-  const navigate = useNavigate();
-
-  const handleViewAll = () => {
-    navigate('/admListOfPendingUsers');
-  };
 
   return (
     <form className="recent-incident-form-card">
@@ -21,9 +15,6 @@ const PendingUsersCard = () => {
             </div>
           ))}
         </div>
-      </div>
-      <div className="view-btn-container">
-        <button type="button" className="admin-form-view-btn" onClick={handleViewAll}>View All</button>
       </div>
     </form>
   );
