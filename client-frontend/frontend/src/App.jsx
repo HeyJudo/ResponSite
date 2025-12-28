@@ -17,6 +17,7 @@ import AdmIncidentReports from './pages/admin/admIncidentReports';
 import AdmIncidentReportsDet from './pages/admin/admIncidentReportsDet';
 import AdmResourceManagement from './pages/admin/admResourceManagement';
 import AdmListOfUsers from './pages/admin/admListOfUsers';
+import AdmListOfPendingUsers from './pages/admin/admListOfPendingUsers';
 import AdmInfraProjects from './pages/admin/admInfraProjects';
 import AdmInfraProjectsDet from './pages/admin/admInfraProjectsDet';
 import AdmListOfFeedbacks from './pages/admin/admListOfFeedbacks';
@@ -55,6 +56,7 @@ function App() {
             <Route path="/admInfraProjectsDet" element={<AdmInfraProjectsDet />} />
             <Route path="/admListOfFeedbacks" element={<AdmListOfFeedbacks />} />
             <Route path="/admListOfUsers" element={<AdmListOfUsers />} />
+            <Route path="/admListOfPendingUsers" element={<AdmListOfPendingUsers />} />
 
             <Route path="/lguDashboard" element={<LguDashboard />} />
             <Route path="/lguIncidentReports" element={<LguIncidentReports />} />

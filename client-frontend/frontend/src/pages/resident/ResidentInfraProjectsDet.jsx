@@ -6,16 +6,13 @@ import Modal from '../../components/Modal';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admInfraProjectsDet.css';
 import { useLocation, useNavigate } from 'react-router-dom';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { ProfileContext } from '../../context/ProfileContext';
-import { getProjectById } from '../../API/projectService';
 
 const ResidentInfraProjectsDet = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const projectId = location.state?.project?.id;
-  const [project, setProject] = useState(location.state?.project);
-  const [loading, setLoading] = useState(!project);
+  const project = location.state?.project;
   const { profileData } = useContext(ProfileContext);
   const [processUpdates] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
@@ -23,24 +20,6 @@ const ResidentInfraProjectsDet = () => {
   const [tempFeedback, setTempFeedback] = useState('');
   const [tempType, setTempType] = useState('Report');
   const [tempAnon, setTempAnon] = useState(false);
-
-  // Fetch project details if ID is available
-  useEffect(() => {
-    if (projectId && !project) {
-      const fetchProject = async () => {
-        try {
-          setLoading(true);
-          const fetchedProject = await getProjectById(projectId);
-          setProject(fetchedProject);
-        } catch (error) {
-          console.error('Failed to fetch project:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchProject();
-    }
-  }, [projectId, project]);
 
   if (!project) {
     return (
@@ -53,16 +32,10 @@ const ResidentInfraProjectsDet = () => {
           <div className="dashboard-right">
             <main className="right-panel">
               <div style={{ padding: '2rem' }}>
-                {loading ? (
-                  <h2>Loading project...</h2>
-                ) : (
-                  <>
-                    <h2>No project selected</h2>
-                    <button onClick={() => navigate('/infrastructure-projects')}>
-                      Back to Projects
-                    </button>
-                  </>
-                )}
+                <h2>No project selected</h2>
+                <button onClick={() => navigate('/infrastructure-projects')}>
+                  Back to Projects
+                </button>
               </div>
             </main>
           </div>
@@ -97,21 +70,21 @@ const ResidentInfraProjectsDet = () => {
                         </div>
                         <div>
                           <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Progress</h4>
-                          <p style={{ margin: '0', fontSize: '1rem', fontWeight: '500', color: '#001D9C' }}>{project.progress !== undefined && project.progress !== null ? `${project.progress}%` : 'N/A'}</p>
+                          <p style={{ margin: '0', fontSize: '1rem', fontWeight: '500', color: '#001D9C' }}>{project.progress || 'N/A'}</p>
                         </div>
                       </div>
                       <div style={{ background: '#fff', padding: '10px', borderRadius: '6px', marginTop: '10px' }}>
                         <div style={{ marginBottom: '12px' }}>
                           <h5 style={{ margin: '0 0 6px 0', fontSize: '0.85rem', color: '#666' }}>Planned Date</h5>
-                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.startDate || 'N/A'}</p>
+                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.plannedDate || 'N/A'}</p>
                         </div>
                         <div style={{ marginBottom: '12px' }}>
                           <h5 style={{ margin: '0 0 6px 0', fontSize: '0.85rem', color: '#666' }}>Target End Date</h5>
-                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.targetDate || project.targetEndDate || project.endDate || 'N/A'}</p>
+                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.endDate || 'N/A'}</p>
                         </div>
                         <div>
                           <h5 style={{ margin: '0 0 6px 0', fontSize: '0.85rem', color: '#666' }}>Completion Date</h5>
-                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.actualEndDate || 'N/A'}</p>
+                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>N/A</p>
                         </div>
                       </div>
                     </div>
@@ -138,19 +111,19 @@ const ResidentInfraProjectsDet = () => {
                       </div>
                       <div style={{ marginBottom: '15px' }}>
                         <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Description</h4>
-                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#666' }}>{project.description || 'N/A'}</p>
+                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#666' }}>N/A</p>
                       </div>
                       <div style={{ marginBottom: '15px' }}>
                         <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Objective</h4>
-                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#666' }}>{project.objectives || 'N/A'}</p>
+                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#666' }}>N/A</p>
+                      </div>
+                      <div style={{ marginBottom: '15px' }}>
+                        <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Budget Allocated</h4>
+                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>₱{project.budget || 'N/A'}</p>
                       </div>
                       <div>
-                        <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Budget Allocated</h4>
-                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.budget ? `₱${Number(project.budget).toLocaleString()}` : 'N/A'}</p>
-                      </div>
-                      <div style={{ marginTop: '15px' }}>
-                        <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Budget Spent</h4>
-                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.budgetSpent ? `₱${Number(project.budgetSpent).toLocaleString()}` : 'N/A'}</p>
+                        <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Target Completion</h4>
+                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.endDate || 'N/A'}</p>
                       </div>
                     </div>
                     
@@ -160,19 +133,33 @@ const ResidentInfraProjectsDet = () => {
                       <div style={{ padding: '10px' }}>
                         <Table 
                           columns={[
+                            { key: 'task', header: 'Task' },
                             { key: 'plannedStart', header: 'Planned Start' },
                             { key: 'actualStart', header: 'Actual Start' },
-                            { key: 'targetEnd', header: 'Target End' },
-                            { key: 'actualEndDate', header: 'Actual End Date' },
+                            { key: 'targetEndDate', header: 'Target End Date' },
                             { key: 'adjustedDate', header: 'Adjusted Date' }
                           ]}
                           data={[
                             {
-                              plannedStart: project.startDate || 'N/A',
-                              actualStart: project.actualStartDate || 'N/A',
-                              targetEnd: project.targetDate || 'N/A',
-                              actualEndDate: project.actualEndDate || 'N/A',
-                              adjustedDate: project.adjustedDate || 'N/A'
+                              task: 'Planning',
+                              plannedStart: 'N/A',
+                              actualStart: 'N/A',
+                              targetEndDate: 'N/A',
+                              adjustedDate: 'N/A'
+                            },
+                            {
+                              task: 'Building',
+                              plannedStart: 'N/A',
+                              actualStart: 'N/A',
+                              targetEndDate: 'N/A',
+                              adjustedDate: 'N/A'
+                            },
+                            {
+                              task: 'Finalization',
+                              plannedStart: 'N/A',
+                              actualStart: 'N/A',
+                              targetEndDate: 'N/A',
+                              adjustedDate: 'N/A'
                             }
                           ]}
                         />

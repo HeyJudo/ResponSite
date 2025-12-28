@@ -5,39 +5,13 @@ import '../../styles/resident/global.css';
 import '../../styles/admin/admInfraProjects.css';
 import { useInfraProjectsFilters } from '../../features/admin/useInfraProjectsFilters';
 import InfraProjectsFilterSort from '../../features/admin/InfraProjectsFilterSort';
+import InfraProjectsTable from '../../features/admin/InfraProjectsTable';
 import infraProj from '../../API/resident/infraProj';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getAllProjects, createProject } from '../../API/projectService';
-import { statusColors } from '../../features/admin/admInfraProjects.constants';
+import { useState } from 'react';
 
 const admInfraProjects = () => {
-  const navigate = useNavigate();
   const [showAddModal, setShowAddModal] = useState(false);
   const [projectsData, setProjectsData] = useState(infraProj);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // Fetch projects on component mount
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true);
-        const projects = await getAllProjects();
-        setProjectsData(projects);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch projects:', err);
-        setError(err.message);
-        // Keep mock data as fallback
-        setProjectsData(infraProj);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []);
   const filters = useInfraProjectsFilters(projectsData);
   const [formData, setFormData] = useState({
     projectName: '',
@@ -46,9 +20,9 @@ const admInfraProjects = () => {
     description: '',
     objectives: '',
     startDate: '',
-    targetDate: '',
-    budget: '',
-    status: 'PLANNED',
+    targetEndDate: '',
+    totalBudget: '',
+    status: '',
     contractorName: '',
     contractorNumber: '',
     contractorEmail: '',
@@ -66,44 +40,40 @@ const admInfraProjects = () => {
     setShowAddModal(true);
   };
 
-  const handleSubmitProject = async () => {
-    try {
-      const newProjectData = {
-        name: formData.projectName,
-        type: formData.projectType,
-        location: formData.location,
-        description: formData.description,
-        objectives: formData.objectives,
-        startDate: formData.startDate,
-        targetDate: formData.targetDate,
-        budget: formData.budget,
-        status: 'PLANNED',
-        contractorName: formData.contractorName,
-        contractorNumber: formData.contractorNumber,
-        contractorEmail: formData.contractorEmail,
-      };
-
-      const createdProject = await createProject(newProjectData);
-      setProjectsData([...projectsData, createdProject]);
-      setFormData({
-        projectName: '',
-        projectType: '',
-        location: '',
-        description: '',
-        objectives: '',
-        startDate: '',
-        targetDate: '',
-        budget: '',
-        status: 'PLANNED',
-        contractorName: '',
-        contractorNumber: '',
-        contractorEmail: '',
-      });
-      setShowAddModal(false);
-    } catch (err) {
-      console.error('Failed to create project:', err);
-      setError(err.message);
-    }
+  const handleSubmitProject = () => {
+    const newProject = {
+      id: projectsData.length + 1,
+      name: formData.projectName,
+      type: formData.projectType,
+      location: formData.location,
+      description: formData.description,
+      objectives: formData.objectives,
+      startDate: formData.startDate,
+      targetEndDate: formData.targetEndDate,
+      totalBudget: formData.totalBudget,
+      status: formData.status,
+      contractor: {
+        name: formData.contractorName,
+        number: formData.contractorNumber,
+        email: formData.contractorEmail,
+      }
+    };
+    setProjectsData([...projectsData, newProject]);
+    setFormData({
+      projectName: '',
+      projectType: '',
+      location: '',
+      description: '',
+      objectives: '',
+      startDate: '',
+      targetEndDate: '',
+      totalBudget: '',
+      status: '',
+      contractorName: '',
+      contractorNumber: '',
+      contractorEmail: '',
+    });
+    setShowAddModal(false);
   };
 
   return (
@@ -119,49 +89,8 @@ const admInfraProjects = () => {
               <div className="resource-form-header">
                 Infrastructure Projects
               </div>
-              {loading && <p>Loading projects...</p>}
-              {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-              {!loading && (
-                <>
-                  <InfraProjectsFilterSort filters={filters} onAddProject={handleAddProject} />
-                  <div className="resource-table-container">
-                    <table className="incident-table">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Type</th>
-                          <th>Location/Zone</th>
-                          <th>Status</th>
-                          <th>Progress</th>
-                          <th>Start Date</th>
-                          <th>Target End Date</th>
-                          <th>Budget</th>
-                          <th>Budget Spent</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filters.filtered.map((item, idx) => (
-                          <tr key={idx} onClick={() => navigate('/admInfraProjectsDet', { state: { project: item } })} style={{ cursor: 'pointer' }}>
-                            <td>{item.name}</td>
-                            <td>{item.type}</td>
-                            <td>{item.location}</td>
-                            <td>
-                              <span className={`status-chip ${statusColors[item.status] || ""}`}>
-                                {item.status}
-                              </span>
-                            </td>
-                            <td>{item.progress !== undefined && item.progress !== null ? `${item.progress}%` : '0%'}</td>
-                            <td>{item.startDate || 'N/A'}</td>
-                            <td>{item.targetDate || 'N/A'}</td>
-                            <td>{item.budget ? `₱${Number(item.budget).toLocaleString()}` : item.totalBudget ? `₱${Number(item.totalBudget).toLocaleString()}` : 'N/A'}</td>
-                            <td>{item.budgetSpent ? `₱${Number(item.budgetSpent).toLocaleString()}` : 'N/A'}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </>
-              )}
+              <InfraProjectsFilterSort filters={filters} onAddProject={handleAddProject} />
+              <InfraProjectsTable data={filters.filtered} />
             </div>
           </main>
         </div>
@@ -206,14 +135,25 @@ const admInfraProjects = () => {
               <input type="date" name="startDate" value={formData.startDate} onChange={handleInputChange} />
             </div>
             <div className="modal-form-group">
-              <label>Target Date:</label>
-              <input type="date" name="targetDate" value={formData.targetDate} onChange={handleInputChange} />
+              <label>Target End Date:</label>
+              <input type="date" name="targetEndDate" value={formData.targetEndDate} onChange={handleInputChange} />
             </div>
           </div>
 
           <div className="modal-form-group">
-            <label>Budget (₱):</label>
-            <input type="number" name="budget" value={formData.budget} onChange={handleInputChange} placeholder="Enter budget in PHP" />
+            <label>Total Budget (₱):</label>
+            <input type="number" name="totalBudget" value={formData.totalBudget} onChange={handleInputChange} placeholder="Enter budget in PHP" />
+          </div>
+
+          <div className="modal-form-group">
+            <label>Status:</label>
+            <select name="status" value={formData.status} onChange={handleInputChange}>
+              <option value="">-- Select Status --</option>
+              <option value="Planned">Planned</option>
+              <option value="Delayed">Delayed</option>
+              <option value="Completed">Completed</option>
+              <option value="In Progress">In Progress</option>
+            </select>
           </div>
 
           <div className="modal-contractor-section">

@@ -21,7 +21,6 @@ const InfraProjectsTable = ({ data }) => {
             <th>Start Date</th>
             <th>Target End Date</th>
             <th>Budget</th>
-            <th>Budget Spent</th>
           </tr>
         </thead>
         <tbody>
@@ -35,11 +34,10 @@ const InfraProjectsTable = ({ data }) => {
                   {item.status}
                 </span>
               </td>
-              <td>{item.progress !== undefined && item.progress !== null ? `${item.progress}%` : 'N/A'}</td>
-              <td>{item.startDate || 'N/A'}</td>
-              <td>{item.targetDate || item.targetEndDate || item.endDate || 'N/A'}</td>
-              <td>{item.budget ? `₱${Number(item.budget).toLocaleString()}` : item.totalBudget ? `₱${Number(item.totalBudget).toLocaleString()}` : 'N/A'}</td>
-              <td>{item.budgetSpent ? `₱${Number(item.budgetSpent).toLocaleString()}` : 'N/A'}</td>
+              <td>{item.progress}</td>
+              <td>{item.startDate}</td>
+              <td>{item.endDate}</td>
+              <td>{item.budget}</td>
             </tr>
           ))}
         </tbody>

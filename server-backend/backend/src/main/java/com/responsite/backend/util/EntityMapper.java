@@ -176,17 +176,11 @@ public class EntityMapper {
         dto.setType(project.getType());
         dto.setLocation(project.getLocation());
         dto.setDescription(project.getDescription());
-        dto.setObjectives(project.getObjectives());
         dto.setStatus(project.getStatus());
         dto.setProgress(project.getProgress());
         dto.setBudget(project.getBudget());
-        dto.setBudgetSpent(project.getBudgetSpent());
-        dto.setSummaryNote(project.getSummaryNote());
         dto.setStartDate(project.getStartDate());
         dto.setTargetDate(project.getTargetDate());
-        dto.setActualStartDate(project.getActualStartDate());
-        dto.setAdjustedDate(project.getAdjustedDate());
-        dto.setActualEndDate(project.getActualEndDate());
         dto.setCreatedAt(project.getCreatedAt());
         return dto;
     }
@@ -203,17 +197,11 @@ public class EntityMapper {
         project.setType(dto.getType());
         project.setLocation(dto.getLocation());
         project.setDescription(dto.getDescription());
-        project.setObjectives(dto.getObjectives());
         project.setStatus(dto.getStatus());
         project.setProgress(dto.getProgress());
         project.setBudget(dto.getBudget());
-        project.setBudgetSpent(dto.getBudgetSpent());
-        project.setSummaryNote(dto.getSummaryNote());
         project.setStartDate(dto.getStartDate());
         project.setTargetDate(dto.getTargetDate());
-        project.setActualStartDate(dto.getActualStartDate());
-        project.setAdjustedDate(dto.getAdjustedDate());
-        project.setActualEndDate(dto.getActualEndDate());
         // createdAt is managed by the entity lifecycle; do not overwrite if present
         if (dto.getCreatedAt() != null) project.setCreatedAt(dto.getCreatedAt());
         return project;

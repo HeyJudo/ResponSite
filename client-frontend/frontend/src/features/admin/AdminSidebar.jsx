@@ -21,8 +21,8 @@ const getActiveIndex = (pathname) => {
   if (pathname.startsWith('/admInfraProjects') || pathname.startsWith('/admListOfFeedbacks')) {
     return ADMIN_NAV_CONFIG.findIndex(item => item.label === 'Infrastructure Projects');
   }
-  // Special handling for List of Users
-  if (pathname.startsWith('/admListOfUsers')) {
+  // Special handling for List of Users and Pending Approvals
+  if (pathname.startsWith('/admListOfUsers') || pathname.startsWith('/admListOfPendingUsers')) {
     return ADMIN_NAV_CONFIG.findIndex(item => item.label === 'List of Users');
   }
   let index = ADMIN_NAV_CONFIG.findIndex(item => item.path === pathname);

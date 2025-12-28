@@ -1,15 +1,10 @@
 package com.responsite.backend.entity;
 
+import jakarta.persistence.*;
+import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
-import lombok.Data;
 
 @Entity
 @Data
@@ -25,19 +20,11 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(columnDefinition = "TEXT")
-    private String objectives;
-
     private String status; // PLANNED, ONGOING
-    private Integer progress; // 0-100
+    private int progress; // 0-100
     private LocalDate startDate;
     private LocalDate targetDate;
     private Double budget;
-    private Double budgetSpent;
-    private String summaryNote;
-    private LocalDate actualStartDate;
-    private LocalDate adjustedDate;
-    private LocalDate actualEndDate;
     private LocalDateTime createdAt;
 
     @PrePersist

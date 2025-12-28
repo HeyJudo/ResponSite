@@ -2,7 +2,6 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../../components/LoadingScreen';
 import { AdminProfileContext } from '../../context/AdminProfileContext';
-import { logoutUser } from '../../API/authService';
 import userDefaultSvg from '../../assets/user-default.svg';
 import '../../styles/resident/profileModal.css';
 
@@ -30,23 +29,11 @@ const AdminProfileModal = ({ isOpen, onClose }) => {
     setIsEditing(false);
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     setLoading(true);
-    try {
-      await logoutUser();
-      // Clear localStorage
-      localStorage.removeItem('user');
-      // Dispatch event to update contexts
-      window.dispatchEvent(new Event('userLogout'));
-      // Navigate to signin
+    setTimeout(() => {
       navigate('/signin');
-    } catch (error) {
-      console.error('Logout failed:', error);
-      // Even if API fails, clear local data and redirect
-      localStorage.removeItem('user');
-      window.dispatchEvent(new Event('userLogout'));
-      navigate('/signin');
-    }
+    }, 1200);
   };
 
   return (
