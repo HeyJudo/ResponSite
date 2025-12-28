@@ -1,8 +1,9 @@
 package com.responsite.backend.dto;
 
-import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import lombok.Data;
 
 @Data
 public class ProjectDTO {
@@ -11,10 +12,16 @@ public class ProjectDTO {
     private String type;
     private String location;
     private String description;
+    private String objectives;
     private String status;
-    private int progress;
+    private Integer progress;
     private Double budget;
+    private Double budgetSpent;
+    private String summaryNote;
     private LocalDate startDate;
     private LocalDate targetDate;
+    private LocalDate actualStartDate;
+    private LocalDate adjustedDate;
+    private LocalDate actualEndDate;
     private LocalDateTime createdAt;
 }

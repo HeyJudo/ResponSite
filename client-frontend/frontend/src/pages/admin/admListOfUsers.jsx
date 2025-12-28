@@ -36,7 +36,6 @@ const AdmListOfUsers = () => {
             <div className="user-form-card">
               <div className="user-form-header">User Master List</div>
               <div className="user-table-wrapper">
-                <Button onClick={() => navigate('/admListOfPendingUsers')}>View Pending User Approvals</Button>
                 <Table columns={columns} data={listOfUsers} />
               </div>
             </div>

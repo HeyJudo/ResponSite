@@ -6,62 +6,148 @@ import Table from '../../components/Table';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admInfraProjectsDet.css';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getProjectById, updateProject } from '../../API/projectService';
 
 const AdmInfraProjectsDet = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const project = location.state?.project;
+  const projectId = location.state?.project?.id;
+  const [project, setProject] = useState(location.state?.project);
+  const [loading, setLoading] = useState(!project);
   const [showSummaryModal, setShowSummaryModal] = useState(false);
   const [tempNote, setTempNote] = useState('');
-  const [summaryNote, setSummaryNote] = useState('N/A');
+  const formatProgress = (value) => (value !== undefined && value !== null ? `${value}%` : 'N/A');
+  const formatCurrency = (value) => (value !== undefined && value !== null ? `₱${Number(value).toLocaleString()}` : 'N/A');
+
+  const [summaryNote, setSummaryNote] = useState(project?.summaryNote || 'N/A');
   const [status, setStatus] = useState(project?.status || 'N/A');
-  const [progress, setProgress] = useState(project?.progress || 'N/A');
-  const [budgetSpent, setBudgetSpent] = useState('N/A');
-  const [targetCompletion, setTargetCompletion] = useState(project?.endDate || 'N/A');
-  const [completionDate, setCompletionDate] = useState('N/A');
+  const [progress, setProgress] = useState(formatProgress(project?.progress));
+  const [targetCompletion, setTargetCompletion] = useState(project?.targetDate || project?.adjustedDate || 'N/A');
+  const [completionDate, setCompletionDate] = useState(project?.actualEndDate || 'N/A');
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [updateForm, setUpdateForm] = useState({
     status: 'in progress',
     progress: '',
-    targetCompletion: '',
+    adjustedDate: '',
     budgetSpent: '',
     note: ''
   });
   const [processUpdates, setProcessUpdates] = useState([]);
 
-  const handleSaveNote = () => {
-    setSummaryNote(tempNote || 'N/A');
-    setStatus('Completed');
-    setProgress('100%');
-    const today = new Date().toLocaleDateString();
-    setCompletionDate(today);
-    setTempNote('');
-    setShowSummaryModal(false);
+  // Fetch project details if ID is available
+  useEffect(() => {
+    if (projectId && !project) {
+      const fetchProject = async () => {
+        try {
+          setLoading(true);
+          const fetchedProject = await getProjectById(projectId);
+          setProject(fetchedProject);
+          setStatus(fetchedProject?.status || 'N/A');
+          setProgress(formatProgress(fetchedProject?.progress));
+          setTargetCompletion(fetchedProject?.targetDate || fetchedProject?.adjustedDate || fetchedProject?.targetEndDate || 'N/A');
+          setCompletionDate(fetchedProject?.actualEndDate || 'N/A');
+          setSummaryNote(fetchedProject?.summaryNote || 'N/A');
+        } catch (error) {
+          console.error('Failed to fetch project:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchProject();
+    }
+  }, [projectId, project]);
+
+  const handleSaveNote = async () => {
+    try {
+      if (project?.id) {
+        const today = new Date().toISOString().split('T')[0];
+        const updated = await updateProject(project.id, {
+          status: 'Completed',
+          progress: 100,
+          summaryNote: tempNote,
+          actualEndDate: today,
+        });
+        setProject(updated);
+        setStatus(updated.status || 'Completed');
+        setProgress(formatProgress(updated.progress ?? 100));
+        setTargetCompletion(updated.targetDate || updated.adjustedDate || targetCompletion);
+        setCompletionDate(updated.actualEndDate || today);
+        setSummaryNote(updated.summaryNote || tempNote || 'N/A');
+      }
+      setTempNote('');
+      setShowSummaryModal(false);
+    } catch (error) {
+      console.error('Failed to save note:', error);
+    }
   };
 
-  const handleSaveUpdate = () => {
-    const newUpdate = {
-      id: processUpdates.length + 1,
-      date: new Date().toLocaleDateString(),
-      ...updateForm
-    };
-    setProcessUpdates([...processUpdates, newUpdate]);
-    
-    // Update main display values
-    setStatus(updateForm.status.charAt(0).toUpperCase() + updateForm.status.slice(1));
-    if (updateForm.progress) setProgress(updateForm.progress + '%');
-    if (updateForm.budgetSpent) setBudgetSpent(updateForm.budgetSpent);
-    if (updateForm.targetCompletion) setTargetCompletion(updateForm.targetCompletion);
-    
-    setUpdateForm({
-      status: 'in progress',
-      progress: '',
-      targetCompletion: '',
-      budgetSpent: '',
-      note: ''
-    });
-    setShowUpdateModal(false);
+  const handleSaveUpdate = async () => {
+    try {
+      if (project?.id) {
+        const statusMap = {
+          planned: 'Planned',
+          'in progress': 'In Progress',
+          delayed: 'Delayed',
+        };
+        const normalizedStatus = statusMap[updateForm.status] || updateForm.status;
+        const updateData = {
+          status: normalizedStatus,
+        };
+        const today = new Date().toISOString().split('T')[0];
+
+        if (updateForm.progress) updateData.progress = parseInt(updateForm.progress, 10);
+        if (updateForm.budgetSpent) updateData.budgetSpent = parseFloat(updateForm.budgetSpent);
+
+        if (updateForm.status === 'delayed' && updateForm.adjustedDate) {
+          updateData.adjustedDate = updateForm.adjustedDate;
+        }
+
+        if (updateForm.status === 'planned') {
+          updateData.progress = 0;
+          updateData.startDate = today;
+        }
+
+        if (updateForm.status === 'in progress') {
+          updateData.actualStartDate = today;
+        }
+
+        const updated = await updateProject(project.id, updateData);
+        setProject(updated);
+        setStatus(updated.status || normalizedStatus);
+        setProgress(formatProgress(updated.progress));
+        setTargetCompletion(updated.adjustedDate || updated.targetDate || targetCompletion);
+        setCompletionDate(updated.actualEndDate || completionDate);
+      }
+
+      const newUpdate = {
+        id: processUpdates.length + 1,
+        date: new Date().toLocaleDateString(),
+        status: updateForm.status,
+          progress: updateForm.progress ? `${updateForm.progress}%` : updateForm.status === 'planned' ? '0%' : '',
+          budgetSpent: updateForm.budgetSpent,
+          adjustedDate: updateForm.adjustedDate,
+        note: updateForm.note,
+      };
+      setProcessUpdates([...processUpdates, newUpdate]);
+      
+      // Update main display values
+      const normalized = updateForm.status.charAt(0).toUpperCase() + updateForm.status.slice(1);
+      setStatus(normalized);
+      if (updateForm.progress) setProgress(`${updateForm.progress}%`);
+      if (updateForm.adjustedDate) setTargetCompletion(updateForm.adjustedDate);
+      
+      setUpdateForm({
+        status: 'in progress',
+        progress: '',
+        adjustedDate: '',
+        budgetSpent: '',
+        note: ''
+      });
+      setShowUpdateModal(false);
+    } catch (error) {
+      console.error('Failed to update project:', error);
+    }
   };
 
   if (!project) {
@@ -75,10 +161,16 @@ const AdmInfraProjectsDet = () => {
           <div className="dashboard-right">
             <main className="right-panel">
               <div style={{ padding: '2rem' }}>
-                <h2>No project selected</h2>
-                <button onClick={() => navigate('/admInfraProjects')}>
-                  Back to Projects
-                </button>
+                {loading ? (
+                  <h2>Loading project...</h2>
+                ) : (
+                  <>
+                    <h2>No project selected</h2>
+                    <button onClick={() => navigate('/admInfraProjects')}>
+                      Back to Projects
+                    </button>
+                  </>
+                )}
               </div>
             </main>
           </div>
@@ -119,11 +211,11 @@ const AdmInfraProjectsDet = () => {
                       <div style={{ background: '#fff', padding: '10px', borderRadius: '6px', marginTop: '10px' }}>
                         <div style={{ marginBottom: '12px' }}>
                           <h5 style={{ margin: '0 0 6px 0', fontSize: '0.85rem', color: '#666' }}>Planned Date</h5>
-                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.plannedDate || 'N/A'}</p>
+                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.startDate || 'N/A'}</p>
                         </div>
                         <div style={{ marginBottom: '12px' }}>
                           <h5 style={{ margin: '0 0 6px 0', fontSize: '0.85rem', color: '#666' }}>Target End Date</h5>
-                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{targetCompletion}</p>
+                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.targetDate || 'N/A'}</p>
                         </div>
                         <div>
                           <h5 style={{ margin: '0 0 6px 0', fontSize: '0.85rem', color: '#666' }}>Completion Date</h5>
@@ -158,19 +250,19 @@ const AdmInfraProjectsDet = () => {
                       </div>
                       <div style={{ marginBottom: '15px' }}>
                         <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Description</h4>
-                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#666' }}>N/A</p>
+                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#666' }}>{project.description || 'N/A'}</p>
                       </div>
                       <div style={{ marginBottom: '15px' }}>
                         <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Objective</h4>
-                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#666' }}>N/A</p>
+                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#666' }}>{project.objectives || 'N/A'}</p>
+                      </div>
+                      <div style={{ marginBottom: '15px' }}>
+                        <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Budget</h4>
+                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{project.budget ? `₱${Number(project.budget).toLocaleString()}` : 'N/A'}</p>
                       </div>
                       <div style={{ marginBottom: '15px' }}>
                         <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Budget Spent</h4>
-                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>₱{budgetSpent}</p>
-                      </div>
-                      <div>
-                        <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Target Completion</h4>
-                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{targetCompletion}</p>
+                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#333' }}>{formatCurrency(project.budgetSpent)}</p>
                       </div>
                     </div>
                     
@@ -180,33 +272,19 @@ const AdmInfraProjectsDet = () => {
                       <div style={{ padding: '10px' }}>
                         <Table 
                           columns={[
-                            { key: 'task', header: 'Task' },
                             { key: 'plannedStart', header: 'Planned Start' },
                             { key: 'actualStart', header: 'Actual Start' },
-                            { key: 'targetEndDate', header: 'Target End Date' },
+                            { key: 'targetEnd', header: 'Target End' },
+                            { key: 'actualEndDate', header: 'Actual End Date' },
                             { key: 'adjustedDate', header: 'Adjusted Date' }
                           ]}
                           data={[
                             {
-                              task: 'Planning',
-                              plannedStart: 'N/A',
-                              actualStart: 'N/A',
-                              targetEndDate: 'N/A',
-                              adjustedDate: 'N/A'
-                            },
-                            {
-                              task: 'Building',
-                              plannedStart: 'N/A',
-                              actualStart: 'N/A',
-                              targetEndDate: 'N/A',
-                              adjustedDate: 'N/A'
-                            },
-                            {
-                              task: 'Finalization',
-                              plannedStart: 'N/A',
-                              actualStart: 'N/A',
-                              targetEndDate: 'N/A',
-                              adjustedDate: 'N/A'
+                              plannedStart: project.startDate || 'N/A',
+                              actualStart: project.actualStartDate || 'N/A',
+                              targetEnd: project.targetDate || 'N/A',
+                              actualEndDate: project.actualEndDate || 'N/A',
+                              adjustedDate: project.adjustedDate || 'N/A'
                             }
                           ]}
                         />
@@ -244,13 +322,13 @@ const AdmInfraProjectsDet = () => {
                                 </div>
                                 <div>
                                   <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Budget Spent</h6>
-                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>₱{update.budgetSpent || 'N/A'}</p>
+                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.budgetSpent ? `₱${Number(update.budgetSpent).toLocaleString()}` : 'N/A'}</p>
                                 </div>
                               </div>
-                              {update.targetCompletion && (
+                              {update.adjustedDate && (
                                 <div style={{ marginBottom: '8px' }}>
-                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Target Completion</h6>
-                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.targetCompletion}</p>
+                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Adjusted Date</h6>
+                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.adjustedDate}</p>
                                 </div>
                               )}
                               {update.note && (
@@ -314,7 +392,6 @@ const AdmInfraProjectsDet = () => {
               <option value="planned">Planned</option>
               <option value="delayed">Delayed</option>
               <option value="in progress">In Progress</option>
-              <option value="completed">Completed</option>
             </select>
           </div>
 
@@ -331,11 +408,11 @@ const AdmInfraProjectsDet = () => {
 
           {updateForm.status === 'delayed' && (
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>Target Completion</label>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>Adjusted Date</label>
               <input
                 type="date"
-                value={updateForm.targetCompletion}
-                onChange={(e) => setUpdateForm({ ...updateForm, targetCompletion: e.target.value })}
+                value={updateForm.adjustedDate}
+                onChange={(e) => setUpdateForm({ ...updateForm, adjustedDate: e.target.value })}
                 style={{ width: '100%', padding: '0.6rem', fontSize: '1rem', borderRadius: '5px', border: '1px solid #ccc' }}
               />
             </div>

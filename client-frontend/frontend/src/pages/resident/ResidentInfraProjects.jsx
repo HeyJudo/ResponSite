@@ -10,8 +10,9 @@ import SortDirectionCard from '../../components/SortDirectionCard';
 import SearchBar from '../../components/SearchBar';
 
 import infraProj from '../../API/resident/infraProj';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAllProjects } from '../../API/projectService';
 
 const statusColors = {
   "In Progress": "status-inprogress",
@@ -24,6 +25,29 @@ const ResidentInfraProjects = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [filtered, setFiltered] = useState(infraProj);
+  const [projects, setProjects] = useState(infraProj);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch projects on component mount
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        const data = await getAllProjects();
+        setProjects(data);
+        setFiltered(data);
+      } catch (error) {
+        console.error('Failed to fetch projects:', error);
+        // Keep mock data as fallback
+        setProjects(infraProj);
+        setFiltered(infraProj);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   // Type filter
   const [showTypeFilter, setShowTypeFilter] = useState(false);
@@ -43,7 +67,7 @@ const ResidentInfraProjects = () => {
     if (e.key === 'Enter') {
       const value = e.target.value.toLowerCase();
       setFiltered(
-        infraProj.filter(item =>
+        projects.filter(item =>
           Object.values(item).some(val =>
             String(val).toLowerCase().includes(value)
           )
@@ -54,7 +78,7 @@ const ResidentInfraProjects = () => {
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
-    if (e.target.value === '') setFiltered(infraProj);
+    if (e.target.value === '') setFiltered(projects);
   };
 
 
@@ -74,7 +98,7 @@ const ResidentInfraProjects = () => {
   const handleTypeSelect = (type) => setSelectedType(type);
   const handleTypeFilterEnter = () => {
     setFiltered(
-      infraProj.filter(item =>
+      projects.filter(item =>
         item.type && item.type.toLowerCase() === selectedType.toLowerCase()
       )
     );
@@ -83,7 +107,7 @@ const ResidentInfraProjects = () => {
   const handleTypeFilterClose = () => {
     setShowTypeFilter(false);
     setSelectedType('');
-    setFiltered(infraProj);
+    setFiltered(projects);
   };
 
   // Zone filter handlers
@@ -96,7 +120,7 @@ const ResidentInfraProjects = () => {
   const handleZoneSelect = (zone) => setSelectedZone(zone);
   const handleZoneFilterEnter = () => {
     setFiltered(
-      infraProj.filter(item =>
+      projects.filter(item =>
         item.location && item.location.toLowerCase() === selectedZone.toLowerCase()
       )
     );
@@ -105,7 +129,7 @@ const ResidentInfraProjects = () => {
   const handleZoneFilterClose = () => {
     setShowZoneFilter(false);
     setSelectedZone('');
-    setFiltered(infraProj);
+    setFiltered(projects);
   };
 
   // Status filter handlers
@@ -118,7 +142,7 @@ const ResidentInfraProjects = () => {
   const handleStatusSelect = (status) => setSelectedStatus(status);
   const handleStatusFilterEnter = () => {
     setFiltered(
-      infraProj.filter(item =>
+      projects.filter(item =>
         item.status && item.status.toLowerCase() === selectedStatus.toLowerCase()
       )
     );  
@@ -127,7 +151,7 @@ const ResidentInfraProjects = () => {
   const handleStatusFilterClose = () => {
     setShowStatusFilter(false);
     setSelectedStatus('');
-    setFiltered(infraProj);
+    setFiltered(projects);
   };
 
   // Sort handlers
@@ -188,6 +212,12 @@ const ResidentInfraProjects = () => {
           <main className="right-panel">
             <div className="resource-form-card">
       <div className="resource-form-header">Infrastructure Projects</div>
+      {loading ? (
+        <div style={{ padding: '2rem' }}>
+          <p>Loading projects...</p>
+        </div>
+      ) : (
+        <>
       <div className="resource-search-actions">
         <SearchBar
           placeholder="Search"
@@ -270,6 +300,7 @@ const ResidentInfraProjects = () => {
               <th>Start Date</th>
               <th>Target End Date</th>
               <th>Budget</th>
+              <th>Budget Spent</th>
             </tr>
           </thead>
           <tbody>
@@ -283,15 +314,18 @@ const ResidentInfraProjects = () => {
                     {item.status}
                   </span>
                 </td>
-                <td>{item.progress}</td>
-                <td>{item.startDate}</td>
-                <td>{item.endDate}</td>
-                <td>{item.budget}</td>
+                <td>{item.progress !== undefined && item.progress !== null ? `${item.progress}%` : '0%'}</td>
+                <td>{item.startDate || 'N/A'}</td>
+                <td>{item.targetDate || item.targetEndDate || item.endDate || 'N/A'}</td>
+                <td>{item.budget ? `₱${Number(item.budget).toLocaleString()}` : item.totalBudget ? `₱${Number(item.totalBudget).toLocaleString()}` : 'N/A'}</td>
+                <td>{item.budgetSpent ? `₱${Number(item.budgetSpent).toLocaleString()}` : 'N/A'}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+        </>
+      )}
     </div>
           </main>
         </div>
