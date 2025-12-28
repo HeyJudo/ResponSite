@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import LoadingScreen from '../../components/LoadingScreen';
+import { createIncident } from '../../API/incidentService';
 
 // Form field options
 const INCIDENT_TYPES = ['Fallen Tree', 'Power Outage', 'Road Damage', 'Other'];
@@ -35,18 +37,31 @@ const IncidentForm = ({ onClose, onSubmit }) => {
     description: '',
     severity: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(form);
+    setLoading(true);
+    setError('');
+
+    try {
+      await createIncident(form);
+      onSubmit(form);
+      onClose();
+    } catch (err) {
+      setLoading(false);
+      setError(err.message || 'Failed to report incident. Please try again.');
+    }
   };
 
   return (
     <div className="modal-overlay">
+      {loading && <LoadingScreen />}
       <div className="modal-window" style={{ minWidth: 370, maxWidth: 420, padding: '28px 28px 18px 28px' }}>
         <h2 style={{ marginBottom: 10 }}>Report New Incident</h2>
         <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -97,9 +112,10 @@ const IncidentForm = ({ onClose, onSubmit }) => {
             options={SEVERITIES}
             placeholder="Select severity"
           />
+          {error && <div style={{ color: 'red', marginBottom: '10px', fontSize: '14px' }}>{error}</div>}
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
             <button type="button" className="close-modal-btn" onClick={onClose}>Cancel</button>
-            <button type="submit" className="close-modal-btn" style={{ background: '#001d9c' }}>Submit</button>
+            <button type="submit" className="close-modal-btn" style={{ background: '#001d9c' }} disabled={loading}>Submit</button>
           </div>
         </form>
       </div>

@@ -257,34 +257,50 @@
   margin-bottom: 22px;
 }
 .quick-title {
-  background: #001d9c;
+  background: var(--color-primary);
   color: #fff;
-  padding: 12px 26px 12px 26px;
-  font-size: 2rem;
-  font-weight: 500;
-  border-radius: 10px 10px 0 0;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+  padding: 18px 32px;
   margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-family: 'Space Grotesk', 'Grotesk', 'Inter', Arial, sans-serif;
 }
 .quick-btn-group {
-  background: #F8F9FB;
+  background: #fff;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+  padding: 16px 20px;
+  margin-bottom: 0;
   display: flex;
-  gap: 6px;
-  padding: 18px 26px;
-  border-radius:  0 0 10px 10px;
+  flex-direction: row;
+  gap: 12px;
 }
 .quick-btn {
-  flex: 1;
-  background: #001d9c;
+  background: var(--color-primary);
   color: #fff;
-  border-radius: 8px;
-  padding: 14px 0;
+  border-radius: 10px;
+  padding: 14px 16px;
   font-size: 1rem;
-  font-weight: 500;
-  transition: background 0.15s, filter 0.15s;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Space Grotesk', 'Grotesk', 'Inter', Arial, sans-serif;
+  flex: 1;
+}
+.quick-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(1, 24, 155, 0.2);
 }
 .quick-btn:active {
-  background: #3a4be7;
-  filter: brightness(1.2);
+  transform: translateY(0);
+  background: #1a2f7f;
 }
 
 /* Notifications */
@@ -292,71 +308,86 @@
   margin-top: 14px;
 }
 .notifications-header {
-  background: #001d9c;
-  color: #F8F9FB;
-  font-size: 1.3rem;
-  border-radius: 10px 10px 0 0;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+  margin-bottom: 0;
 }
 
 .notifications-header h2 {
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
-  padding: 2px 10px 2px 10px;
+  padding: 18px 32px;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  font-family: 'Space Grotesk', 'Grotesk', 'Inter', Arial, sans-serif;
 }
 
 .notifications-section {
-  background: #F8F9FB;
-  padding: 16px 20px 24px 20px;
-  border-radius: 0 0 10px 10px;
+  background: #fff;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+  padding: 16px 20px;
   height: 50vh;
 }
 .notif-section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 .notif-section-title {
-  color: #2d3377;
-  font-size: 1.15rem;
-  font-weight: 700;
+  color: #1a1a1a;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: capitalize;
 }
 .viewall-btn {
-  width: 150px;
-  background: #001d9c;
+  background: var(--color-primary);
   color: #fff;
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  transition: background 0.15s, filter 0.15s;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Space Grotesk', 'Grotesk', 'Inter', Arial, sans-serif;
+}
+.viewall-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(1, 24, 155, 0.2);
 }
 .viewall-btn:active {
-  background: #3a4be7;
-  filter: brightness(1.2);
+  transform: translateY(0);
+  background: #1a2f7f;
 }
 .notif-list-card {
-  background: #F2F4F8;
-  border-radius: 6px;
-  padding: 6px;
-  margin-top: 8px;
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 12px;
   margin-bottom: 8px;
+  border: 1px solid #e5e7eb;
 }
 .notif-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-height: 180px;
+  gap: 12px;
+  max-height: 200px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: #bfc6d1 #F2F4F8;
+  scrollbar-color: #d1d1d1 transparent;
 }
 .notif-item {
-  background: #E3E7F0;
-  color: #222;
+  background: #fff;
+  color: #4a4a4a;
   border-radius: 6px;
-  padding: 17px 15px 18px 17px;
-  font-size: 1rem;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  border: 1px solid #e5e7eb;
+  font-family: 'Space Grotesk', 'Grotesk', 'Inter', Arial, sans-serif;
 }
 
 /* Modal styles for notifications */

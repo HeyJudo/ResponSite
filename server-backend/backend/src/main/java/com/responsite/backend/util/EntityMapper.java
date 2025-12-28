@@ -1,10 +1,22 @@
 package com.responsite.backend.util;
 
-import com.responsite.backend.dto.*;
-import com.responsite.backend.entity.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.responsite.backend.dto.EvacuationCenterDTO;
+import com.responsite.backend.dto.FeedbackRequestDTO;
+import com.responsite.backend.dto.IncidentRequestDTO;
+import com.responsite.backend.dto.IncidentResponseDTO;
+import com.responsite.backend.dto.ProjectDTO;
+import com.responsite.backend.dto.RegisterRequestDTO;
+import com.responsite.backend.dto.ResourceDTO;
+import com.responsite.backend.dto.UserResponseDTO;
+import com.responsite.backend.entity.EvacuationCenter;
+import com.responsite.backend.entity.Incident;
+import com.responsite.backend.entity.Project;
+import com.responsite.backend.entity.ProjectFeedback;
+import com.responsite.backend.entity.Resource;
+import com.responsite.backend.entity.User;
 
 /**
  * Manual mapper class for converting between Entity and DTO objects.
@@ -44,6 +56,7 @@ public class EntityMapper {
         user.setContactNumber(dto.getContactNumber());
         user.setAddress(dto.getAddress());
         user.setZone(dto.getZone());
+        user.setEmail(dto.getEmail());
         return user;
     }
 
@@ -59,6 +72,7 @@ public class EntityMapper {
         dto.setId(incident.getId());
         dto.setType(incident.getType());
         dto.setLocation(incident.getLocation());
+        dto.setZone(incident.getZone());
         dto.setDescription(incident.getDescription());
         dto.setSeverity(incident.getSeverity());
         dto.setStatus(incident.getStatus());
@@ -67,6 +81,8 @@ public class EntityMapper {
         // Get reporter's name safely
         if (incident.getReporter() != null) {
             dto.setReporterName(incident.getReporter().getFullName());
+            dto.setReporterPhone(incident.getReporter().getContactNumber());
+            dto.setReporterEmail(incident.getReporter().getEmail());
         }
         return dto;
     }
@@ -80,6 +96,7 @@ public class EntityMapper {
         Incident incident = new Incident();
         incident.setType(dto.getType());
         incident.setLocation(dto.getLocation());
+        incident.setZone(dto.getZone());
         incident.setDescription(dto.getDescription());
         incident.setSeverity(dto.getSeverity());
         return incident;

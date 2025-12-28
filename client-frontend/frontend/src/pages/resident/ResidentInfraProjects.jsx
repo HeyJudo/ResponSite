@@ -1,5 +1,5 @@
-import Sidebar from '../../features/resident/Sidebar';
-import Header from '../../features/resident/Header';
+import ResidentSidebar from '../../features/resident/ResidentSidebar';
+import ResidentHeader from '../../features/resident/ResidentHeader';
 
 
 import '../../styles/resident/global.css';
@@ -11,6 +11,7 @@ import SearchBar from '../../components/SearchBar';
 
 import infraProj from '../../API/resident/infraProj';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const statusColors = {
   "In Progress": "status-inprogress",
@@ -20,6 +21,7 @@ const statusColors = {
 };
 
 const ResidentInfraProjects = () => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [filtered, setFiltered] = useState(infraProj);
 
@@ -177,10 +179,10 @@ const ResidentInfraProjects = () => {
 
   return (
     <div className="dashboard-root">
-      <Header />
+      <ResidentHeader />
       <div className="dashboard-body-row">
         <div className="dashboard-left">
-          <Sidebar />
+          <ResidentSidebar />
         </div>
         <div className="dashboard-right">
           <main className="right-panel">
@@ -272,7 +274,7 @@ const ResidentInfraProjects = () => {
           </thead>
           <tbody>
             {filtered.map((item, idx) => (
-              <tr key={idx}>
+              <tr key={idx} onClick={() => navigate('/residentInfraProjectsDet', { state: { project: item } })} style={{ cursor: 'pointer' }}>
                 <td>{item.name}</td>
                 <td>{item.type}</td>
                 <td>{item.location}</td>

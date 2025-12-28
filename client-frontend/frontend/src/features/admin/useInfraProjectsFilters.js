@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { statusOrderIncreasing, statusOrderDecreasing } from './admInfraProjects.constants';
 
 export const useInfraProjectsFilters = (initialData) => {
   const [search, setSearch] = useState('');
   const [filtered, setFiltered] = useState(initialData);
+
+  // Update filtered data when initialData changes
+  useEffect(() => {
+    setFiltered(initialData);
+  }, [initialData]);
 
   // Type filter
   const [showTypeFilter, setShowTypeFilter] = useState(false);

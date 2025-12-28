@@ -10,4 +10,5 @@ public class RegisterRequestDTO {
     private String contactNumber;
     private String address;
     private String zone;
+    private String email;
 }

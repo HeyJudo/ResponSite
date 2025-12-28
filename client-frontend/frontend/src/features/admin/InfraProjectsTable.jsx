@@ -1,6 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import { statusColors } from './admInfraProjects.constants';
 
 const InfraProjectsTable = ({ data }) => {
+  const navigate = useNavigate();
+
+  const handleRowClick = (project) => {
+    navigate('/admInfraProjectsDet', { state: { project } });
+  };
+
   return (
     <div className="resource-table-container">
       <table className="incident-table">
@@ -18,7 +25,7 @@ const InfraProjectsTable = ({ data }) => {
         </thead>
         <tbody>
           {data.map((item, idx) => (
-            <tr key={idx}>
+            <tr key={idx} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
               <td>{item.name}</td>
               <td>{item.type}</td>
               <td>{item.location}</td>

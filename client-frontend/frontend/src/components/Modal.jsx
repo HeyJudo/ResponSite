@@ -1,4 +1,5 @@
 import Button from './Button';
+import '../styles/modal.css';
 
 const Modal = ({ 
   isOpen, 
@@ -7,13 +8,15 @@ const Modal = ({
   children, 
   onSave, 
   showFooter = true,
-  saveButtonText = "Save"
+  saveButtonText = "Save",
+  className = ""
 }) => {
   if (!isOpen) return null;
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <div className={`modal-content ${className}`} onClick={e => e.stopPropagation()}>
+        <button className="modal-close-btn" onClick={onClose}>✕</button>
         <div className="modal-header">{title}</div>
         <div className="modal-body">
           {children}

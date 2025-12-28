@@ -7,11 +7,24 @@ const ADMIN_NAV_CONFIG = [
   { label: 'Dashboard', path: '/admDashboard' },
   { label: 'Incident Reports', path: '/admIncidentReports' },
   { label: 'Resource Management', path: '/admResourceManagement' },
+  { label: 'Evacuation Center', path: '/admEvacuationCenter' },
   { label: 'Infrastructure Projects', path: '/admInfraProjects' },
   { label: 'List of Users', path: '/admListOfUsers' },
 ];
 
 const getActiveIndex = (pathname) => {
+  // Special handling for Incident Reports and its details
+  if (pathname.startsWith('/admIncidentReports')) {
+    return ADMIN_NAV_CONFIG.findIndex(item => item.label === 'Incident Reports');
+  }
+  // Special handling for Infrastructure Projects and Feedback list
+  if (pathname.startsWith('/admInfraProjects') || pathname.startsWith('/admListOfFeedbacks')) {
+    return ADMIN_NAV_CONFIG.findIndex(item => item.label === 'Infrastructure Projects');
+  }
+  // Special handling for List of Users and Pending Approvals
+  if (pathname.startsWith('/admListOfUsers') || pathname.startsWith('/admListOfPendingUsers')) {
+    return ADMIN_NAV_CONFIG.findIndex(item => item.label === 'List of Users');
+  }
   let index = ADMIN_NAV_CONFIG.findIndex(item => item.path === pathname);
   if (index !== -1) return index;
   return 0;

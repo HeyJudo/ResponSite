@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/incidents")
@@ -123,7 +125,9 @@ public class IncidentController {
 
         try {
             incidentService.deleteIncident(id);
-            return ResponseEntity.ok("Incident deleted successfully");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Incident deleted successfully");
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

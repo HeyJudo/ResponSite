@@ -1,15 +1,22 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import LoadingScreen from '../../components/LoadingScreen';
+import { registerUser } from '../../API/authService';
 import '../../styles/resident/auth.css';
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
     username: '',
+    email: '',
     password: '',
+    fullName: '',
     contactNumber: '',
-    location: '',
+    address: '',
     zone: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -18,14 +25,23 @@ const SignUpForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Sign up data:', formData);
-    // TODO: Add API call here
+    setLoading(true);
+    setError('');
+
+    try {
+      await registerUser(formData);
+      navigate('/signin'); // Redirect to login after successful registration
+    } catch (err) {
+      setLoading(false);
+      setError(err.message || 'Registration failed. Please try again.');
+    }
   };
 
   return (
     <div className="auth-card">
+      {loading && <LoadingScreen />}
       <h2 className="form-title">Sign Up</h2>
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="form-group">
@@ -34,6 +50,17 @@ const SignUpForm = () => {
             type="text"
             name="username"
             value={formData.username}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             required
           />
@@ -51,6 +78,17 @@ const SignUpForm = () => {
         </div>
 
         <div className="form-group">
+          <label>Full Name</label>
+          <input
+            type="text"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
           <label>Contact Number</label>
           <input
             type="tel"
@@ -62,11 +100,11 @@ const SignUpForm = () => {
         </div>
 
         <div className="form-group">
-          <label>Location</label>
+          <label>Address</label>
           <input
             type="text"
-            name="location"
-            value={formData.location}
+            name="address"
+            value={formData.address}
             onChange={handleChange}
             required
           />
@@ -83,7 +121,9 @@ const SignUpForm = () => {
           />
         </div>
 
-        <button type="submit" className="register-btn">
+        {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+
+        <button type="submit" className="register-btn" disabled={loading}>
           Register
         </button>
 

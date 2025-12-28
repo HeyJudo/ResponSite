@@ -1,9 +1,12 @@
 import FilterDropdown from '../../components/FilterDropdown';
 import SortDropdown from '../../components/SortDropdown';
 import SearchBar from '../../components/SearchBar';
+import Button from '../../components/Button';
+import { useNavigate } from 'react-router-dom';
 import { typeOptions, zoneOptions, statusOptions, sortOptions } from './admInfraProjects.constants';
 
-const InfraProjectsFilterSort = ({ filters }) => {
+const InfraProjectsFilterSort = ({ filters, onAddProject }) => {
+  const navigate = useNavigate();
   const {
     search,
     handleSearchChange,
@@ -45,7 +48,10 @@ const InfraProjectsFilterSort = ({ filters }) => {
           onChange={handleSearchChange}
           onKeyDown={handleSearchKeyDown}
         />
-        <button className="feedback-btn">Go to List of Feedback</button>
+        <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+          <Button variant="primary" onClick={onAddProject}>Add Project</Button>
+          <button className="feedback-btn" onClick={() => navigate('/admListOfFeedbacks')}>Go to List of Feedback</button>
+        </div>
       </div>
       <div className="filters-sort">
         <div className="filters">

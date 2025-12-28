@@ -1,14 +1,25 @@
 package com.responsite.backend.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.responsite.backend.dto.EvacuationCenterDTO;
 import com.responsite.backend.entity.User;
 import com.responsite.backend.service.EvacuationCenterService;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/evacuation-centers")
@@ -53,6 +64,22 @@ public class EvacuationCenterController {
 
         try {
             EvacuationCenterDTO updatedCenter = service.updateStatus(id, status);
+            return ResponseEntity.ok(updatedCenter);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // 3.5. Update Center (SECURE - Login Required)
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCenter(@PathVariable Long id, @RequestBody EvacuationCenterDTO centerDTO, HttpSession session) {
+        User user = getSessionUser(session);
+        if (user == null || "RESIDENT".equals(user.getRole())) {
+            return ResponseEntity.status(403).body("Access Denied: Staff only");
+        }
+
+        try {
+            EvacuationCenterDTO updatedCenter = service.updateCenter(id, centerDTO);
             return ResponseEntity.ok(updatedCenter);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

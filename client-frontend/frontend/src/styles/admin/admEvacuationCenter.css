@@ -1,0 +1,108 @@
+/* Admin Evacuation Center Styles */
+
+.resource-form-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: visible;
+  margin-top: 0;
+  position: relative;
+}
+
+.resource-form-header {
+  background: #001D9C;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-sizing: border-box;
+}
+
+.resource-table-container {
+  padding: 10px;
+  overflow-x: auto;
+  overflow-y: visible;
+  position: relative;
+  z-index: 0;
+}
+
+/* Evacuation status styling */
+.evac-status {
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.evac-status.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.evac-status.inactive {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.evac-status.full {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Delete Button Styles */
+.delete-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: #c82333;
+}
+
+/* Center Selection Modal Styles */
+.center-selection {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.center-option {
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.center-option:hover {
+  background: #f8f9ff;
+  border-color: #001D9C;
+  box-shadow: 0 2px 4px rgba(0, 29, 156, 0.1);
+}
+
+.center-option:last-child {
+  margin-bottom: 0;
+}
+
+.center-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #001D9C;
+  margin-bottom: 0.25rem;
+}
+
+.center-details {
+  font-size: 0.9rem;
+  color: #666;
+}

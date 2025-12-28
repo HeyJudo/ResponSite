@@ -1,37 +1,47 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import LoadingScreen from '../../components/LoadingScreen';
-import { RESIDENT_SAMPLE_CREDENTIALS } from '../../API/SampleCredentials';
-import { ADMIN_SAMPLE_CREDENTIALS } from '../../API/SampleCredentials';
+import { loginUser } from '../../API/authService';
 
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      if (
-        formData.username === RESIDENT_SAMPLE_CREDENTIALS.username &&
-        formData.password === RESIDENT_SAMPLE_CREDENTIALS.password
-      ) {
-        navigate('/dashboard');
-      } else if (
-        formData.username === ADMIN_SAMPLE_CREDENTIALS.username &&
-        formData.password === ADMIN_SAMPLE_CREDENTIALS.password
-      ) {
+    setError('');
+
+    try {
+      const response = await loginUser(formData.username, formData.password);
+      
+      // Store user data in localStorage
+      localStorage.setItem('user', JSON.stringify(response));
+      
+      // Dispatch event to update contexts
+      window.dispatchEvent(new Event('userLogin'));
+      
+      // Route based on role
+      const role = response.role;
+      if (role === 'ADMIN') {
         navigate('/admDashboard');
+      } else if (role === 'STAFF' || role === 'LGU') {
+        navigate('/lguDashboard');
+      } else if (role === 'RESIDENT') {
+        navigate('/dashboard');
       } else {
-        setLoading(false);
-        alert('Invalid username or password.');
+        navigate('/dashboard'); // Default fallback
       }
-    }, 1200); // Simulate loading
+    } catch (err) {
+      setLoading(false);
+      setError(err.message || 'Invalid username or password.');
+    }
   };
 
   return (
@@ -47,7 +57,8 @@ const LoginForm = () => {
           <label>Password</label>
           <input name="password" type="password" value={formData.password} onChange={handleChange} required />
         </div>
-        <button type="submit" className="register-btn">Login</button>
+        {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+        <button type="submit" className="register-btn" disabled={loading}>Login</button>
         <p className="auth-link">
           Don't have an account?{' '}
           <Link to="/signup">Sign Up</Link>

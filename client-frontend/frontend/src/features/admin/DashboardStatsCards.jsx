@@ -1,22 +1,45 @@
-import { getPendingIncidentReportsCount, getItemsLowOnStockCount, getActiveInfraProjectsCount } from '../../API/admin/adminDashboardCounts';
+import { useState, useEffect } from 'react';
+import { getAllIncidents } from '../../API/incidentService';
+import { getItemsLowOnStockCount, getActiveInfraProjectsCount } from '../../API/admin/adminDashboardCounts';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardStatsCards = () => {
+  const [pendingCount, setPendingCount] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchIncidentCount = async () => {
+      try {
+        const data = await getAllIncidents();
+        // Count only PENDING and IN_PROGRESS incidents as "active"
+        const activeCount = data.filter(incident => 
+          incident.status === 'PENDING' || incident.status === 'IN_PROGRESS'
+        ).length;
+        setPendingCount(activeCount);
+      } catch (err) {
+        console.error('Failed to fetch incident count:', err);
+      }
+    };
+
+    fetchIncidentCount();
+  }, []);
+
   return (
     <>
       <form className="admin-form-card">
-        <span className="admin-form-count">{getPendingIncidentReportsCount()}</span>  
-        <span className="admin-form-title">Pending Incident Reports</span>
-        <button type="button" className="admin-form-view-btn">View</button>
+        <span className="admin-form-count">{pendingCount}</span>  
+        <span className="admin-form-title">Incident Reports</span>
+        <button type="button" className="admin-form-view-btn" onClick={() => navigate('/admIncidentReports')}>View</button>
       </form>
       <form className="admin-form-card">
         <span className="admin-form-count">{getItemsLowOnStockCount()}</span>
         <span className="admin-form-title">Items Low on Stock</span>
-        <button type="button" className="admin-form-view-btn">View</button>
+        <button type="button" className="admin-form-view-btn" onClick={() => navigate('/admResourceManagement')}>View</button>
       </form>
       <form className="admin-form-card">
         <span className="admin-form-count">{getActiveInfraProjectsCount()}</span>
         <span className="admin-form-title">Active Infrastructure Projects</span>
-        <button type="button" className="admin-form-view-btn">View</button>
+        <button type="button" className="admin-form-view-btn" onClick={() => navigate('/admInfraProjects')}>View</button>
       </form>
     </>
   );

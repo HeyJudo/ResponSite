@@ -1,39 +1,88 @@
 import React, { useState } from 'react';
 import Modal from '../../components/Modal';
-import { CATEGORY_OPTIONS, UNIT_OPTIONS, LOCATION_OPTIONS, calculateStatus } from '../../API/admin/resourceSampleData';
+
+// Category and location options
+const CATEGORY_OPTIONS = [
+  'Food & Water',
+  'Medical Supplies',
+  'Clothing',
+  'Shelter Materials',
+  'Tools & Equipment',
+  'Transportation',
+  'Communication',
+  'Other'
+];
+
+const UNIT_OPTIONS = [
+  'pieces',
+  'kg',
+  'liters',
+  'boxes',
+  'packs',
+  'bottles',
+  'cans',
+  'rolls'
+];
+
+const LOCATION_OPTIONS = [
+  'Main Warehouse',
+  'Distribution Center A',
+  'Distribution Center B',
+  'Emergency Stockpile',
+  'Field Depot 1',
+  'Field Depot 2'
+];
 
 const ResourceEditModal = ({ 
   isOpen, 
   onClose, 
-  onSave, 
-  resources, 
-  onResourcesChange 
+  onEditResource,
+  onDeleteResource,
+  resources
 }) => {
   const [showSelectModal, setShowSelectModal] = useState(false);
-  const [selectedItemName, setSelectedItemName] = useState('');
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSelectItem = () => {
-    const selected = resources.find(item => item.name === selectedItemName);
-    if (selected) {
-      setEditingItem({ ...selected });
-      setShowSelectModal(false);
-      setShowEditModal(true);
+  const handleDeleteItem = async () => {
+    if (editingItem && onDeleteResource) {
+      setIsLoading(true);
+      try {
+        await onDeleteResource(editingItem.id);
+        setShowEditModal(false);
+        setEditingItem(null);
+      } catch (error) {
+        console.error('Error deleting resource:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
-  const handleSaveEdit = () => {
-    if (editingItem) {
-      const updatedResources = resources.map(item => 
-        item.id === editingItem.id 
-          ? { ...editingItem, status: calculateStatus(editingItem.quantity, editingItem.reorderLevel) }
-          : item
-      );
-      onResourcesChange(updatedResources);
-      setShowEditModal(false);
-      setEditingItem(null);
-      setSelectedItemName('');
+  const handleSaveEdit = async () => {
+    if (editingItem && onEditResource) {
+      setIsLoading(true);
+      try {
+        const updatedData = {
+          name: editingItem.name,
+          category: editingItem.category,
+          quantity: parseInt(editingItem.quantity) || 0,
+          unit: editingItem.unit,
+          location: editingItem.location,
+          reorderLevel: parseInt(editingItem.reorderLevel) || 0,
+          note: editingItem.note || '',
+          status: (parseInt(editingItem.quantity) || 0) > (parseInt(editingItem.reorderLevel) || 0) ? 'Available' : 'Low Stock'
+        };
+        
+        await onEditResource(editingItem.id, updatedData);
+        setShowEditModal(false);
+        setEditingItem(null);
+      } catch (error) {
+        console.error('Error updating resource:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -41,7 +90,6 @@ const ResourceEditModal = ({
     setShowSelectModal(false);
     setShowEditModal(false);
     setEditingItem(null);
-    setSelectedItemName('');
     onClose();
   };
 
@@ -58,22 +106,27 @@ const ResourceEditModal = ({
         isOpen={showSelectModal}
         onClose={handleClose}
         title="Select Item to Edit"
-        saveButtonText="Select"
-        onSave={handleSelectItem}
+        showFooter={false}
       >
-        <div className="edit-form-field">
-          <label>Item Name:</label>
-          <select
-            value={selectedItemName}
-            onChange={(e) => setSelectedItemName(e.target.value)}
-          >
-            <option value="">Select an item...</option>
-            {resources.map((item, index) => (
-              <option key={index} value={item.name}>
-                {item.name}
-              </option>
-            ))}
-          </select>
+        <div className="item-selection">
+          {resources && resources.length > 0 ? (
+            resources.map(item => (
+              <div
+                key={item.id}
+                className="item-option"
+                onClick={() => {
+                  setEditingItem({ ...item });
+                  setShowSelectModal(false);
+                  setShowEditModal(true);
+                }}
+              >
+                <div className="item-name">{item.name}</div>
+                <div className="item-details">{item.category} • {item.location} • Qty: {item.quantity}</div>
+              </div>
+            ))
+          ) : (
+            <div className="no-items">No resources available to edit</div>
+          )}
         </div>
       </Modal>
 
@@ -111,6 +164,15 @@ const ResourceEditModal = ({
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className="edit-form-field">
+              <label>Quantity:</label>
+              <input
+                type="number"
+                value={editingItem.quantity}
+                onChange={(e) => setEditingItem({ ...editingItem, quantity: parseInt(e.target.value) || 0 })}
+              />
             </div>
 
             <div className="edit-form-field">
@@ -158,6 +220,18 @@ const ResourceEditModal = ({
                 onChange={(e) => setEditingItem({ ...editingItem, note: e.target.value })}
                 placeholder="Add a note..."
               />
+            </div>
+
+            {/* Delete Button */}
+            <div className="edit-form-field delete-section">
+              <button
+                className="delete-item-btn"
+                onClick={handleDeleteItem}
+                type="button"
+                disabled={isLoading}
+              >
+                Delete Item
+              </button>
             </div>
           </div>
         )}

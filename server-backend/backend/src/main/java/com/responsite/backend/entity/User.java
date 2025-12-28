@@ -20,4 +20,5 @@ public class User {
     private String contactNumber;
     private String address;
     private String zone; // Purok
+    private String email;
 }

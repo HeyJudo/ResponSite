@@ -274,3 +274,82 @@
   background: #ffeaea;
   color: #d32f2f;
 }
+/* Modal Form Styles */
+.modal-form-container {
+  padding: 1.5rem;
+}
+
+.modal-form-group {
+  margin-bottom: 1rem;
+}
+
+.modal-form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.modal-form-group input,
+.modal-form-group select,
+.modal-form-group textarea {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.modal-form-group textarea {
+  min-height: 80px;
+  resize: none;
+}
+
+.modal-date-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.modal-contractor-section {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #F2F4F8;
+  border-radius: 8px;
+}
+
+.modal-contractor-section h3 {
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.modal-contractor-section .modal-form-group {
+  margin-bottom: 0.8rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+}
+
+.modal-actions button {
+  border: none;
+  border-radius: 5px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.modal-actions .cancel-btn {
+  background: #ccc;
+  color: #000;
+}
+
+.modal-actions .submit-btn {
+  background: #001D9C;
+  color: #fff;
+}

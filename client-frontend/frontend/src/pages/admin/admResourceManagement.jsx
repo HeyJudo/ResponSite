@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminSidebar from '../../features/admin/AdminSidebar';
 import AdminHeader from '../../features/admin/AdminHeader';
 import ResourceAddModal from '../../features/admin/ResourceAddModal';
@@ -9,7 +9,7 @@ import '../../styles/admin/admResourceManagement.css';
 import Table from '../../components/Table';
 import SearchBar from './../../components/SearchBar';
 import Button from '../../components/Button';
-import { resourceSampleData } from '../../API/admin/resourceSampleData';
+import { getAllResources, addResource, updateResource, deleteResource } from '../../API/resourceService';
 
 const AdmResourceManagement = () => {
   const [search, setSearch] = useState('');
@@ -17,7 +17,78 @@ const AdmResourceManagement = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showStockModal, setShowStockModal] = useState(false);
   const [selectedStockItem, setSelectedStockItem] = useState(null);
-  const [resources, setResources] = useState(resourceSampleData);
+  const [resources, setResources] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        setLoading(true);
+        const data = await getAllResources();
+        setResources(data);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+        setResources([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResources();
+  }, []);
+
+  const handleAddResource = async (resourceData) => {
+    try {
+      const newResource = await addResource(resourceData);
+      setResources([...resources, newResource]);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleEditResource = async (id, updatedData) => {
+    try {
+      const updatedResource = await updateResource(id, updatedData);
+      setResources(resources.map(resource => 
+        resource.id === id ? updatedResource : resource
+      ));
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleDeleteResource = async (id) => {
+    try {
+      await deleteResource(id);
+      setResources(resources.filter(resource => resource.id !== id));
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleStockChange = async (id, newQuantity, reason) => {
+    try {
+      const resourceToUpdate = resources.find(r => r.id === id);
+      if (resourceToUpdate) {
+        const updatedData = {
+          ...resourceToUpdate,
+          quantity: newQuantity,
+          status: newQuantity > resourceToUpdate.reorderLevel ? 'Available' : 'Low Stock'
+        };
+        const updatedResource = await updateResource(id, updatedData);
+        setResources(resources.map(resource => 
+          resource.id === id ? updatedResource : resource
+        ));
+        setError(null);
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   const columns = [
     { key: 'name', header: 'Name' },
@@ -101,20 +172,26 @@ const AdmResourceManagement = () => {
           <main className="right-panel">
             <div className="resource-form-card">
               <div className="resource-form-header">Resources</div>
-              <div className="resource-search-actions">
-                <SearchBar
-                  placeholder="Search"
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                />
-                <div className="resource-action-buttons">
-                  <Button variant="primary" onClick={() => setShowAddModal(true)}>Add Item</Button>
-                  <Button variant="primary" onClick={() => setShowEditModal(true)}>Edit Item</Button>
-                </div>
-              </div>
-              <div className="resource-table-container">
-                <Table columns={columns} data={filteredData} />
-              </div>
+              {error && <p style={{ padding: '20px', color: 'red' }}>Error: {error}</p>}
+              {loading && <p style={{ padding: '20px', textAlign: 'center' }}>Loading...</p>}
+              {!loading && !error && (
+                <>
+                  <div className="resource-search-actions">
+                    <SearchBar
+                      placeholder="Search"
+                      value={search}
+                      onChange={e => setSearch(e.target.value)}
+                    />
+                    <div className="resource-action-buttons">
+                      <Button variant="primary" onClick={() => setShowAddModal(true)}>Add Item</Button>
+                      <Button variant="primary" onClick={() => setShowEditModal(true)}>Edit Item</Button>
+                    </div>
+                  </div>
+                  <div className="resource-table-container">
+                    <Table columns={columns} data={filteredData} />
+                  </div>
+                </>
+              )}
             </div>
           </main>
         </div>
@@ -124,11 +201,7 @@ const AdmResourceManagement = () => {
       <ResourceAddModal 
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
-        onSave={() => {
-          // Resources will be updated via callback
-        }}
-        resources={resources}
-        onResourcesChange={setResources}
+        onAddResource={handleAddResource}
       />
 
       {/* Edit Item Modal */}
@@ -136,7 +209,8 @@ const AdmResourceManagement = () => {
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
         resources={resources}
-        onResourcesChange={setResources}
+        onEditResource={handleEditResource}
+        onDeleteResource={handleDeleteResource}
       />
 
       {/* Stock Increase/Decrease Modal */}
@@ -147,8 +221,7 @@ const AdmResourceManagement = () => {
           setSelectedStockItem(null);
         }}
         selectedItem={selectedStockItem}
-        resources={resources}
-        onResourcesChange={setResources}
+        onStockChange={handleStockChange}
       />
     </div>
   );

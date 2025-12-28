@@ -1,0 +1,56 @@
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import '../../styles/resident/dashboard.css';
+import logoSvg from '../../assets/logo.svg';
+
+const LGU_NAV_CONFIG = [
+  { label: 'Dashboard', path: '/lguDashboard' },
+  { label: 'Incident Reports', path: '/lguIncidentReports' },
+  { label: 'Resource Management', path: '/lguResourceManagement' },
+  { label: 'Evacuation Center', path: '/lguEvacuationCenter' },
+  { label: 'Infrastructure Projects', path: '/lguInfraProjects' },
+];
+
+const getActiveIndex = (pathname) => {
+  // Special handling for Incident Reports and its details
+  if (pathname.startsWith('/lguIncidentReports')) {
+    return LGU_NAV_CONFIG.findIndex(item => item.label === 'Incident Reports');
+  }
+  // Special handling for Infrastructure Projects and Feedback list
+  if (pathname.startsWith('/lguInfraProjects') || pathname.startsWith('/lguListOfFeedbacks')) {
+    return LGU_NAV_CONFIG.findIndex(item => item.label === 'Infrastructure Projects');
+  }
+  let index = LGU_NAV_CONFIG.findIndex(item => item.path === pathname);
+  if (index !== -1) return index;
+  return 0;
+};
+
+const LguSidebar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const activeIdx = getActiveIndex(location.pathname);
+
+  return (
+    <>
+      <div className="sidebar-logo" style={{ position: 'absolute', top: -15, left: 32, zIndex: 10 }}>
+        <img src={logoSvg} alt="Logo" />
+        <span className="sidebar-title">RESPONSITE</span>
+      </div>
+      <aside className="sidebar" style={{ marginTop: 80 }}>
+        <nav className="sidebar-nav">
+          {LGU_NAV_CONFIG.map((item, idx) => (
+            <button
+              key={item.path}
+              className={`nav-btn${activeIdx === idx ? ' active' : ''}`}
+              onClick={() => navigate(item.path)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+      </aside>
+    </>
+  );
+};
+
+export default LguSidebar;

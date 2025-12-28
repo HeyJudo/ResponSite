@@ -1,7 +1,37 @@
 import React, { useState } from 'react';
 import Modal from '../../components/Modal';
 import FormField from '../../components/FormField';
-import { CATEGORY_OPTIONS, UNIT_OPTIONS, LOCATION_OPTIONS, calculateStatus, resourceSampleData } from '../../API/admin/resourceSampleData';
+
+const CATEGORY_OPTIONS = [
+  'Food & Water',
+  'Medical Supplies',
+  'Clothing',
+  'Shelter Materials',
+  'Tools & Equipment',
+  'Transportation',
+  'Communication',
+  'Other'
+];
+
+const UNIT_OPTIONS = [
+  'pieces',
+  'kg',
+  'liters',
+  'boxes',
+  'packs',
+  'bottles',
+  'cans',
+  'rolls'
+];
+
+const LOCATION_OPTIONS = [
+  'Main Warehouse',
+  'Distribution Center A',
+  'Distribution Center B',
+  'Emergency Stockpile',
+  'Field Depot 1',
+  'Field Depot 2'
+];
 
 const ResourceForm = ({ isOpen, onClose, onSave, initialData = null }) => {
   const [formData, setFormData] = useState(initialData || {
@@ -22,37 +52,36 @@ const ResourceForm = ({ isOpen, onClose, onSave, initialData = null }) => {
     }));
   };
 
-  const handleSave = () => {
-    const newItem = {
-      id: initialData?.id || Math.max(...resourceSampleData.map(r => r.id || 0), 0) + 1,
-      ...formData,
-      status: calculateStatus(formData.quantity, formData.reorderLevel)
+  const handleSave = async () => {
+    const resourceData = {
+      name: formData.name,
+      category: formData.category,
+      quantity: parseInt(formData.quantity) || 0,
+      unit: formData.unit,
+      location: formData.location,
+      reorderLevel: parseInt(formData.reorderLevel) || 0,
+      note: formData.note,
+      status: (parseInt(formData.quantity) || 0) > (parseInt(formData.reorderLevel) || 0) ? 'Available' : 'Low Stock'
     };
-    
-    if (initialData) {
-      // Update existing item
-      const index = resourceSampleData.findIndex(r => r.id === initialData.id);
-      if (index !== -1) {
-        resourceSampleData[index] = newItem;
-      }
-    } else {
-      // Add new item
-      resourceSampleData.push(newItem);
+
+    try {
+      await onSave(resourceData);
+      
+      // Reset form
+      setFormData({
+        name: '',
+        category: '',
+        quantity: '',
+        unit: '',
+        location: '',
+        reorderLevel: '',
+        note: ''
+      });
+      
+      onClose();
+    } catch (error) {
+      console.error('Error saving resource:', error);
     }
-
-    // Reset form
-    setFormData({
-      name: '',
-      category: '',
-      quantity: '',
-      unit: '',
-      location: '',
-      reorderLevel: '',
-      note: ''
-    });
-
-    onSave?.();
-    onClose();
   };
 
   const modalTitle = initialData ? 'Edit Item' : 'Add Item';

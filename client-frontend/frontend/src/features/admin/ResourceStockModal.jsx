@@ -5,11 +5,11 @@ const ResourceStockModal = ({
   isOpen, 
   onClose, 
   selectedItem,
-  resources, 
-  onResourcesChange 
+  onStockChange
 }) => {
   const [stockAmount, setStockAmount] = useState('');
   const [reason, setReason] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -18,29 +18,34 @@ const ResourceStockModal = ({
     }
   }, [isOpen]);
 
-  const handleIncreaseStock = () => {
+  const handleIncreaseStock = async () => {
     if (selectedItem && stockAmount) {
       const amount = parseInt(stockAmount) || 0;
-      const updatedResources = resources.map(item => 
-        item.id === selectedItem.id 
-          ? { ...item, quantity: item.quantity + amount }
-          : item
-      );
-      onResourcesChange(updatedResources);
-      onClose();
+      setIsLoading(true);
+      try {
+        await onStockChange(selectedItem.id, selectedItem.quantity + amount, reason);
+        onClose();
+      } catch (error) {
+        console.error('Error increasing stock:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
-  const handleDecreaseStock = () => {
+  const handleDecreaseStock = async () => {
     if (selectedItem && stockAmount) {
       const amount = parseInt(stockAmount) || 0;
-      const updatedResources = resources.map(item => 
-        item.id === selectedItem.id 
-          ? { ...item, quantity: Math.max(0, item.quantity - amount) }
-          : item
-      );
-      onResourcesChange(updatedResources);
-      onClose();
+      const newQuantity = Math.max(0, selectedItem.quantity - amount);
+      setIsLoading(true);
+      try {
+        await onStockChange(selectedItem.id, newQuantity, reason);
+        onClose();
+      } catch (error) {
+        console.error('Error decreasing stock:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -73,6 +78,7 @@ const ResourceStockModal = ({
                 value={stockAmount}
                 onChange={(e) => setStockAmount(e.target.value)}
                 placeholder="Enter amount"
+                disabled={isLoading}
               />
             </div>
             <div className="edit-form-field">
@@ -82,6 +88,7 @@ const ResourceStockModal = ({
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 placeholder="Enter reason for increase"
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -112,6 +119,7 @@ const ResourceStockModal = ({
                 value={stockAmount}
                 onChange={(e) => setStockAmount(e.target.value)}
                 placeholder="Enter amount"
+                disabled={isLoading}
               />
             </div>
             <div className="edit-form-field">
@@ -121,6 +129,7 @@ const ResourceStockModal = ({
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 placeholder="Enter reason for decrease"
+                disabled={isLoading}
               />
             </div>
           </div>

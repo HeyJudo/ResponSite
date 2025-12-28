@@ -1,13 +1,14 @@
 package com.responsite.backend.service;
 
-import com.responsite.backend.dto.EvacuationCenterDTO;
-import com.responsite.backend.entity.EvacuationCenter;
-import com.responsite.backend.Repository.EvacuationCenterRepository;
-import com.responsite.backend.util.EntityMapper;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.responsite.backend.Repository.EvacuationCenterRepository;
+import com.responsite.backend.dto.EvacuationCenterDTO;
+import com.responsite.backend.entity.EvacuationCenter;
+import com.responsite.backend.util.EntityMapper;
 
 @Service
 public class EvacuationCenterService {
@@ -34,15 +35,28 @@ public class EvacuationCenterService {
                 .orElseThrow(() -> new RuntimeException("Center not found"));
 
         // Validate status
-        if (!newStatus.equals("OPEN") && !newStatus.equals("CLOSED") && !newStatus.equals("FULL")) {
-            throw new RuntimeException("Invalid status. Use OPEN, CLOSED, or FULL.");
+        if (!newStatus.equals("ACTIVE") && !newStatus.equals("INACTIVE") && !newStatus.equals("FULL")) {
+            throw new RuntimeException("Invalid status. Use ACTIVE, INACTIVE, or FULL.");
         }
 
         center.setStatus(newStatus);
         EvacuationCenter savedCenter = repository.save(center);
         return EntityMapper.toDto(savedCenter);
     }
+    // 3.5. UPDATE CENTER: LGU updates center details
+    public EvacuationCenterDTO updateCenter(Long id, EvacuationCenterDTO centerDTO) {
+        EvacuationCenter center = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Center not found"));
 
+        // Update fields
+        center.setName(centerDTO.getName());
+        center.setLocation(centerDTO.getLocation());
+        center.setCapacity(centerDTO.getCapacity());
+        center.setStatus(centerDTO.getStatus());
+
+        EvacuationCenter savedCenter = repository.save(center);
+        return EntityMapper.toDto(savedCenter);
+    }
     // 4. DELETE: LGU removes a center
     public void deleteCenter(Long id) {
         repository.deleteById(id);
