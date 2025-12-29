@@ -8,6 +8,7 @@ import '../../styles/admin/admInfraProjectsDet.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getProjectById, updateProject } from '../../API/projectService';
+import { getFeedbacks } from '../../API/feedbackService';
 
 const AdmInfraProjectsDet = () => {
   const location = useLocation();
@@ -34,6 +35,7 @@ const AdmInfraProjectsDet = () => {
     note: ''
   });
   const [processUpdates, setProcessUpdates] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
 
   // Fetch project details if ID is available
   useEffect(() => {
@@ -57,6 +59,21 @@ const AdmInfraProjectsDet = () => {
       fetchProject();
     }
   }, [projectId, project]);
+
+  // Fetch feedbacks when project is loaded
+  useEffect(() => {
+    if (project && project.id) {
+      const fetchFeedbacks = async () => {
+        try {
+          const fetchedFeedbacks = await getFeedbacks(project.id);
+          setFeedbacks(fetchedFeedbacks);
+        } catch (error) {
+          console.error('Failed to fetch feedbacks:', error);
+        }
+      };
+      fetchFeedbacks();
+    }
+  }, [project]);
 
   const handleSaveNote = async () => {
     try {
@@ -347,7 +364,31 @@ const AdmInfraProjectsDet = () => {
                     <div style={{ background: '#f3f4f6', padding: '10px', borderRadius: '8px' }}>
                       <h4 style={{ margin: '10px 10px 0 10px', fontSize: '0.95rem', color: '#333', fontWeight: '600' }}>Feedback</h4>
                       <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <p style={{ margin: '0', fontSize: '0.95rem', color: '#999' }}>No feedback yet</p>
+                        {feedbacks.length === 0 ? (
+                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#999' }}>No feedback yet</p>
+                        ) : (
+                          feedbacks.map((f) => (
+                            <div key={f.id} style={{ background: '#fff', padding: '10px', borderRadius: '6px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', alignItems: 'center' }}>
+                                <div style={{ fontSize: '0.95rem', color: '#333', fontWeight: 600 }}>
+                                  {f.anonymous ? 'Anonymous' : `${f.userName}`}
+                                </div>
+                                <strong style={{ fontSize: '0.9rem', color: '#666' }}>
+                                  {f.timestamp ? new Date(f.timestamp).toLocaleDateString() : 'N/A'}
+                                </strong>
+                              </div>
+                              {f.subject && (
+                                <div style={{ fontSize: '0.9rem', color: '#666', fontWeight: 500, marginBottom: '4px' }}>
+                                  {f.subject}
+                                </div>
+                              )}
+                              <p style={{ margin: '0', fontSize: '0.95rem' }}>{f.message}</p>
+                              <div style={{ fontSize: '0.8rem', color: '#999', marginTop: '4px' }}>
+                                Type: {f.feedbackType}
+                              </div>
+                            </div>
+                          ))
+                        )}
                       </div>
                     </div>
                   </div>

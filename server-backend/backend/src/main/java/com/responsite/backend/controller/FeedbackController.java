@@ -46,7 +46,7 @@ public class FeedbackController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    // RESTRICTED: RESIDENT, LGU_STAFF or ADMIN only - View all feedbacks for a project
+    // RESTRICTED: RESIDENT, STAFF or ADMIN only - View all feedbacks for a project
     @GetMapping("/{projectId}")
     public ResponseEntity<?> getFeedbacks(@PathVariable Long projectId, HttpSession session) {
         // Manual Session Auth Check

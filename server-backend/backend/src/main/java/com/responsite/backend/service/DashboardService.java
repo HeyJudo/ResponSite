@@ -1,5 +1,10 @@
 package com.responsite.backend.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.responsite.backend.Repository.IncidentRepository;
 import com.responsite.backend.Repository.ResourceRepository;
 import com.responsite.backend.Repository.UserRepository;
@@ -7,10 +12,6 @@ import com.responsite.backend.dto.DashboardStatsDTO;
 import com.responsite.backend.entity.Incident;
 import com.responsite.backend.entity.Resource;
 import com.responsite.backend.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Service for Dashboard & Analytics (Module 5)
