@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useContext, useEffect } from 'react';
 import { ProfileContext } from '../../context/ProfileContext';
 import { getProjectById } from '../../API/projectService';
+import { submitFeedback, getFeedbacks } from '../../API/feedbackService';
 
 const ResidentInfraProjectsDet = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ const ResidentInfraProjectsDet = () => {
   const [tempFeedback, setTempFeedback] = useState('');
   const [tempType, setTempType] = useState('Report');
   const [tempAnon, setTempAnon] = useState(false);
+  const [tempSubject, setTempSubject] = useState('');
 
   // Fetch project details if ID is available
   useEffect(() => {
@@ -41,6 +43,21 @@ const ResidentInfraProjectsDet = () => {
       fetchProject();
     }
   }, [projectId, project]);
+
+  // Fetch feedbacks when project is loaded
+  useEffect(() => {
+    if (project && project.id) {
+      const fetchFeedbacks = async () => {
+        try {
+          const fetchedFeedbacks = await getFeedbacks(project.id);
+          setFeedbacks(fetchedFeedbacks);
+        } catch (error) {
+          console.error('Failed to fetch feedbacks:', error);
+        }
+      };
+      fetchFeedbacks();
+    }
+  }, [project]);
 
   if (!project) {
     return (
@@ -244,11 +261,21 @@ const ResidentInfraProjectsDet = () => {
                             <div key={f.id} style={{ background: '#fff', padding: '10px', borderRadius: '6px' }}>
                               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', alignItems: 'center' }}>
                                 <div style={{ fontSize: '0.95rem', color: '#333', fontWeight: 600 }}>
-                                  {f.anonymous ? 'Anonymous' : `(${f.type}) ${f.reporterName}`}
+                                  {f.anonymous ? 'Anonymous' : `${f.userName}`}
                                 </div>
-                                <strong style={{ fontSize: '0.9rem', color: '#666' }}>{f.date}</strong>
+                                <strong style={{ fontSize: '0.9rem', color: '#666' }}>
+                                  {f.timestamp ? new Date(f.timestamp).toLocaleDateString() : 'N/A'}
+                                </strong>
                               </div>
-                              <p style={{ margin: '0', fontSize: '0.95rem' }}>{f.text}</p>
+                              {f.subject && (
+                                <div style={{ fontSize: '0.9rem', color: '#666', fontWeight: 500, marginBottom: '4px' }}>
+                                  {f.subject}
+                                </div>
+                              )}
+                              <p style={{ margin: '0', fontSize: '0.95rem' }}>{f.message}</p>
+                              <div style={{ fontSize: '0.8rem', color: '#999', marginTop: '4px' }}>
+                                Type: {f.feedbackType}
+                              </div>
                             </div>
                           ))
                         )}
@@ -264,27 +291,45 @@ const ResidentInfraProjectsDet = () => {
       {/* Feedback Modal (form) */}
       <Modal
         isOpen={showFeedbackModal}
-        onClose={() => { setShowFeedbackModal(false); setTempFeedback(''); setTempType('Report'); setTempAnon(false); }}
+        onClose={() => { setShowFeedbackModal(false); setTempFeedback(''); setTempType('Report'); setTempAnon(false); setTempSubject(''); }}
         title="Add Feedback"
         showFooter={true}
-        onSave={() => {
-          const newFeedback = {
-            id: feedbacks.length + 1,
-            date: new Date().toLocaleDateString(),
-            project: project?.name || 'N/A',
-            type: tempType || 'Report',
-            anonymous: !!tempAnon,            reporterName: tempAnon ? 'Anonymous' : (profileData?.username || 'Resident'),
-            reporterRole: tempAnon ? '' : (profileData?.role || ''),            text: tempFeedback || 'N/A'
-          };
-          setFeedbacks([newFeedback, ...feedbacks]);
-          setTempFeedback('');
-          setTempType('Report');
-          setTempAnon(false);
-          setShowFeedbackModal(false);
+        onSave={async () => {
+          try {
+            const feedbackData = {
+              subject: tempSubject,
+              message: tempFeedback,
+              feedbackType: tempType,
+              anonymous: tempAnon
+            };
+            await submitFeedback(project.id, feedbackData);
+            // Refresh feedbacks from backend
+            const updatedFeedbacks = await getFeedbacks(project.id);
+            setFeedbacks(updatedFeedbacks);
+            alert('Feedback submitted successfully!');
+            setTempFeedback('');
+            setTempType('Report');
+            setTempAnon(false);
+            setTempSubject('');
+            setShowFeedbackModal(false);
+          } catch (error) {
+            alert('Failed to submit feedback: ' + error.message);
+          }
         }}
       >
         <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <div style={{ fontWeight: 600 }}>{project?.name || 'Project'}</div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <label style={{ fontSize: '0.9rem', color: '#333' }}>Subject</label>
+            <input
+              type="text"
+              placeholder="Enter feedback subject..."
+              value={tempSubject}
+              onChange={(e) => setTempSubject(e.target.value)}
+              style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #ccc', fontFamily: 'Space Grotesk, sans-serif' }}
+            />
+          </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <label style={{ fontSize: '0.9rem', color: '#333' }}>Feedback Type</label>

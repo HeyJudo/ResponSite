@@ -285,6 +285,7 @@ public class EntityMapper {
         feedback.setSubject(dto.getSubject());
         feedback.setMessage(dto.getMessage());
         feedback.setFeedbackType(dto.getFeedbackType());
+        feedback.setAnonymous(dto.isAnonymous());
         return feedback;
     }
 }

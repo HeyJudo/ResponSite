@@ -1,5 +1,11 @@
 package com.responsite.backend.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.responsite.backend.Repository.ProjectFeedbackRepository;
 import com.responsite.backend.Repository.ProjectRepository;
 import com.responsite.backend.Repository.UserRepository;
@@ -9,11 +15,6 @@ import com.responsite.backend.entity.Project;
 import com.responsite.backend.entity.ProjectFeedback;
 import com.responsite.backend.entity.User;
 import com.responsite.backend.util.EntityMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FeedbackService {
@@ -31,12 +32,15 @@ public class FeedbackService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
         ProjectFeedback feedback = EntityMapper.toEntity(dto);
         feedback.setProject(project);
-        feedback.setUser(user);
+
+        // Only set user if not anonymous
+        if (!dto.isAnonymous()) {
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            feedback.setUser(user);
+        }
 
         ProjectFeedback saved = feedbackRepository.save(feedback);
         return toDto(saved);
@@ -59,10 +63,13 @@ public class FeedbackService {
         if (feedback.getUser() != null) {
             dto.setUserId(feedback.getUser().getId());
             dto.setUserName(feedback.getUser().getFullName());
+        } else {
+            dto.setUserName("Anonymous");
         }
         dto.setFeedbackType(feedback.getFeedbackType());
         dto.setSubject(feedback.getSubject());
         dto.setMessage(feedback.getMessage());
+        dto.setAnonymous(feedback.isAnonymous());
         dto.setTimestamp(feedback.getTimestamp());
         return dto;
     }

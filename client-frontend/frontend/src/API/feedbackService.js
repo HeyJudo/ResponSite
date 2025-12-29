@@ -11,7 +11,7 @@ import { FEEDBACK_ENDPOINTS } from './endpoints';
 /**
  * Submit feedback for a project (RESIDENT only)
  * @param {number} projectId - Infrastructure project ID
- * @param {Object} data - { rating, comment }
+ * @param {Object} data - { subject, message, feedbackType, anonymous }
  * @returns {Promise} Submitted feedback data
  */
 export const submitFeedback = async (projectId, data) => {
@@ -37,7 +37,7 @@ export const submitFeedback = async (projectId, data) => {
 
 // ==================== GET FEEDBACKS FOR PROJECT ====================
 /**
- * Get all feedbacks for a project (STAFF and ADMIN only)
+ * Get all feedbacks for a project (RESIDENT, STAFF and ADMIN only)
  * @param {number} projectId - Infrastructure project ID
  * @returns {Promise} Array of feedback entries
  */

@@ -7,4 +7,5 @@ public class FeedbackRequestDTO {
     private String subject;
     private String message;
     private String feedbackType;
+    private boolean anonymous;
 }

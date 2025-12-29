@@ -162,12 +162,12 @@
 /**
  * POST /api/feedback/{projectId}
  * - Submit feedback for a project (RESIDENT only)
- * - Body: { rating, comment }
+ * - Body: { subject, message, feedbackType, anonymous }
  * - Response: Submitted feedback data
- * - Example usage: submitFeedback(1, { rating: 5, comment: 'Great project!' })
+ * - Example usage: submitFeedback(1, { subject: 'Road Construction Quality', message: 'Great project!', feedbackType: 'Comment', anonymous: false })
  * 
  * GET /api/feedback/{projectId}
- * - Get all feedbacks for a project (STAFF and ADMIN only)
+ * - Get all feedbacks for a project (RESIDENT, STAFF and ADMIN only)
  * - Response: Array of feedback entries
  * - Example usage: getFeedbacks(1)
  */
@@ -296,8 +296,10 @@
  * 
  * // Submit feedback (RESIDENT only)
  * await submitFeedback(1, {
- *   rating: 5,
- *   comment: 'Great infrastructure development!'
+ *   subject: 'Road Construction Quality',
+ *   message: 'The road construction is excellent!',
+ *   feedbackType: 'Comment',
+ *   anonymous: false
  * });
  */
 

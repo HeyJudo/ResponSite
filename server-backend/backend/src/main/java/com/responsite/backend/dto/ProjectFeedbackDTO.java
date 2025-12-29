@@ -1,7 +1,8 @@
 package com.responsite.backend.dto;
 
-import lombok.Data;
 import java.time.LocalDateTime;
+
+import lombok.Data;
 
 @Data
 public class ProjectFeedbackDTO {
@@ -12,5 +13,6 @@ public class ProjectFeedbackDTO {
     private String feedbackType;
     private String subject;
     private String message;
+    private boolean anonymous;
     private LocalDateTime timestamp;
 }
