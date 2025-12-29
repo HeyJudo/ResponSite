@@ -3,6 +3,7 @@ import AdminHeader from '../../features/admin/AdminHeader';
 import Modal from '../../components/Modal';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admInfraProjects.css';
+import '../../styles/admin/admResourceManagement.css';
 import { useInfraProjectsFilters } from '../../features/admin/useInfraProjectsFilters';
 import InfraProjectsFilterSort from '../../features/admin/InfraProjectsFilterSort';
 import infraProj from '../../API/resident/infraProj';
@@ -10,6 +11,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllProjects, createProject } from '../../API/projectService';
 import { statusColors } from '../../features/admin/admInfraProjects.constants';
+
+// Function to normalize status text to title case
+const normalizeStatus = (status) => {
+  if (!status) return status;
+  return status.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+};
 
 const admInfraProjects = () => {
   const navigate = useNavigate();
@@ -147,7 +154,7 @@ const admInfraProjects = () => {
                             <td>{item.location}</td>
                             <td>
                               <span className={`status-chip ${statusColors[item.status] || ""}`}>
-                                {item.status}
+                                {normalizeStatus(item.status)}
                               </span>
                             </td>
                             <td>{item.progress !== undefined && item.progress !== null ? `${item.progress}%` : '0%'}</td>

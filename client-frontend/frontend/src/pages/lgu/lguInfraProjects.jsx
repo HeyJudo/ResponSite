@@ -2,8 +2,10 @@ import LguSidebar from '../../features/lgu/LguSidebar';
 import LguHeader from '../../features/lgu/LguHeader';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admInfraProjects.css';
+import '../../styles/admin/admResourceManagement.css';
 import { useInfraProjectsFilters } from '../../features/admin/useInfraProjectsFilters';
 import Modal from '../../components/Modal';
+import Button from '../../components/Button';
 import infraProj from '../../API/resident/infraProj';
 import FilterDropdown from '../../components/FilterDropdown';
 import SortDropdown from '../../components/SortDropdown';
@@ -13,6 +15,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllProjects, createProject } from '../../API/projectService';
 import { statusColors } from '../../features/admin/admInfraProjects.constants';
+
+// Function to normalize status text to title case
+const normalizeStatus = (status) => {
+  if (!status) return status;
+  return status.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+};
 
 const LguInfraProjects = () => {
   const navigate = useNavigate();
@@ -163,7 +171,7 @@ const LguInfraProjects = () => {
                   onChange={handleSearchChange}
                   onKeyDown={handleSearchKeyDown}
                 />
-                <button className="add-btn" onClick={handleAddProject}>+ Add Project</button>
+                <Button variant="primary" onClick={handleAddProject}>Add Project</Button>
               </div>
               <div className="filters-sort">
                 <div className="filters">
@@ -249,7 +257,7 @@ const LguInfraProjects = () => {
                         <td>{item.location}</td>
                         <td>
                           <span className={`status-chip ${statusColors[item.status] || ""}`}>
-                            {item.status}
+                            {normalizeStatus(item.status)}
                           </span>
                         </td>
                         <td>{item.progress !== undefined && item.progress !== null ? `${item.progress}%` : '0%'}</td>

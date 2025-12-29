@@ -17,8 +17,8 @@ const getActiveIndex = (pathname) => {
   if (pathname.startsWith('/admIncidentReports')) {
     return ADMIN_NAV_CONFIG.findIndex(item => item.label === 'Incident Reports');
   }
-  // Special handling for Infrastructure Projects and Feedback list
-  if (pathname.startsWith('/admInfraProjects') || pathname.startsWith('/admListOfFeedbacks')) {
+  // Special handling for Infrastructure Projects
+  if (pathname.startsWith('/admInfraProjects')) {
     return ADMIN_NAV_CONFIG.findIndex(item => item.label === 'Infrastructure Projects');
   }
   // Special handling for List of Users

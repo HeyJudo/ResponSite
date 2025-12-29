@@ -18,7 +18,17 @@ const statusColors = {
   "In Progress": "status-inprogress",
   "Completed": "status-completed",
   "Planned": "status-planned",
-  "Delayed": "status-delayed"
+  "Delayed": "status-delayed",
+  "PLANNED": "status-planned",
+  "IN PROGRESS": "status-inprogress",
+  "COMPLETED": "status-completed",
+  "DELAYED": "status-delayed"
+};
+
+// Function to normalize status text to title case
+const normalizeStatus = (status) => {
+  if (!status) return status;
+  return status.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
 };
 
 const ResidentInfraProjects = () => {
@@ -311,7 +321,7 @@ const ResidentInfraProjects = () => {
                 <td>{item.location}</td>
                 <td>
                   <span className={`status-chip ${statusColors[item.status] || ""}`}>
-                    {item.status}
+                    {normalizeStatus(item.status)}
                   </span>
                 </td>
                 <td>{item.progress !== undefined && item.progress !== null ? `${item.progress}%` : '0%'}</td>

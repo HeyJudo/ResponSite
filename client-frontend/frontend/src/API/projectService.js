@@ -116,3 +116,57 @@ export const updateProject = async (id, data) => {
     throw new Error(`Failed to update project: ${error.message}`);
   }
 };
+
+// ==================== ADD PROCESS UPDATE ====================
+/**
+ * Add a process update to an infrastructure project (STAFF and ADMIN only)
+ * @param {number} projectId - Project ID
+ * @param {Object} data - Process update data { status, progress, budgetSpent, adjustedDate, note }
+ * @returns {Promise} Created process update data
+ */
+export const addProcessUpdate = async (projectId, data) => {
+  try {
+    const response = await fetch(PROJECT_ENDPOINTS.ADD_PROCESS_UPDATE(projectId), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Failed to add process update: ${error.message}`);
+  }
+};
+
+// ==================== GET PROCESS UPDATES ====================
+/**
+ * Get all process updates for an infrastructure project (All authenticated users)
+ * @param {number} projectId - Project ID
+ * @returns {Promise} Array of process updates
+ */
+export const getProcessUpdates = async (projectId) => {
+  try {
+    const response = await fetch(PROJECT_ENDPOINTS.GET_PROCESS_UPDATES(projectId), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Failed to fetch process updates: ${error.message}`);
+  }
+};

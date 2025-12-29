@@ -5,11 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.responsite.backend.Repository.ProcessUpdateRepository;
 import com.responsite.backend.Repository.ProjectFeedbackRepository;
 import com.responsite.backend.Repository.ProjectRepository;
 import com.responsite.backend.Repository.UserRepository;
+import com.responsite.backend.dto.ProcessUpdateDTO;
+import com.responsite.backend.dto.ProcessUpdateRequestDTO;
 import com.responsite.backend.dto.ProjectDTO;
+import com.responsite.backend.entity.ProcessUpdate;
 import com.responsite.backend.entity.Project;
+import com.responsite.backend.entity.User;
 import com.responsite.backend.util.EntityMapper;
 
 @Service
@@ -20,6 +25,9 @@ public class ProjectService {
 
     @Autowired
     private ProjectFeedbackRepository feedbackRepository;
+
+    @Autowired
+    private ProcessUpdateRepository processUpdateRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -102,5 +110,28 @@ public class ProjectService {
 
         Project saved = projectRepository.save(project);
         return EntityMapper.toDto(saved);
+    }
+
+    public ProcessUpdateDTO addProcessUpdate(Long projectId, ProcessUpdateRequestDTO dto, String username) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        ProcessUpdate update = EntityMapper.toEntity(dto);
+        update.setProject(project);
+        update.setUser(user);
+
+        ProcessUpdate saved = processUpdateRepository.save(update);
+        return EntityMapper.toDto(saved);
+    }
+
+    public List<ProcessUpdateDTO> getProcessUpdates(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        List<ProcessUpdate> updates = processUpdateRepository.findByProjectOrderByTimestampDesc(project);
+        return EntityMapper.toProcessUpdateDtoList(updates);
     }
 }

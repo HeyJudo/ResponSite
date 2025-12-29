@@ -47,6 +47,8 @@ export const PROJECT_ENDPOINTS = {
   GET_BY_ID: (id) => `${BASE_URL}/projects/${id}`,
   CREATE: `${BASE_URL}/projects`,
   UPDATE: (id) => `${BASE_URL}/projects/${id}`,
+  ADD_PROCESS_UPDATE: (projectId) => `${BASE_URL}/projects/${projectId}/process-updates`,
+  GET_PROCESS_UPDATES: (projectId) => `${BASE_URL}/projects/${projectId}/process-updates`,
 };
 
 // ==================== FEEDBACK ====================

@@ -2,7 +2,11 @@ export const statusColors = {
   "In Progress": "status-inprogress",
   "Completed": "status-completed",
   "Planned": "status-planned",
-  "Delayed": "status-delayed"
+  "Delayed": "status-delayed",
+  "PLANNED": "status-planned",
+  "IN PROGRESS": "status-inprogress",
+  "COMPLETED": "status-completed",
+  "DELAYED": "status-delayed"
 };
 
 export const typeOptions = ['Bridge', 'Building', 'Drainage', 'Road', 'Other'];

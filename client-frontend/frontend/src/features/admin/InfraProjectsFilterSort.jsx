@@ -50,7 +50,6 @@ const InfraProjectsFilterSort = ({ filters, onAddProject }) => {
         />
         <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
           <Button variant="primary" onClick={onAddProject}>Add Project</Button>
-          <button className="feedback-btn" onClick={() => navigate('/admListOfFeedbacks')}>Go to List of Feedback</button>
         </div>
       </div>
       <div className="filters-sort">

@@ -7,12 +7,15 @@ import com.responsite.backend.dto.EvacuationCenterDTO;
 import com.responsite.backend.dto.FeedbackRequestDTO;
 import com.responsite.backend.dto.IncidentRequestDTO;
 import com.responsite.backend.dto.IncidentResponseDTO;
+import com.responsite.backend.dto.ProcessUpdateDTO;
+import com.responsite.backend.dto.ProcessUpdateRequestDTO;
 import com.responsite.backend.dto.ProjectDTO;
 import com.responsite.backend.dto.RegisterRequestDTO;
 import com.responsite.backend.dto.ResourceDTO;
 import com.responsite.backend.dto.UserResponseDTO;
 import com.responsite.backend.entity.EvacuationCenter;
 import com.responsite.backend.entity.Incident;
+import com.responsite.backend.entity.ProcessUpdate;
 import com.responsite.backend.entity.Project;
 import com.responsite.backend.entity.ProjectFeedback;
 import com.responsite.backend.entity.Resource;
@@ -287,5 +290,55 @@ public class EntityMapper {
         feedback.setFeedbackType(dto.getFeedbackType());
         feedback.setAnonymous(dto.isAnonymous());
         return feedback;
+    }
+
+    // ==================== PROCESS UPDATE MAPPINGS ====================
+
+    /**
+     * Converts ProcessUpdate entity to ProcessUpdateDTO.
+     */
+    public static ProcessUpdateDTO toDto(ProcessUpdate update) {
+        if (update == null) return null;
+
+        ProcessUpdateDTO dto = new ProcessUpdateDTO();
+        dto.setId(update.getId());
+        if (update.getProject() != null) dto.setProjectId(update.getProject().getId());
+        if (update.getUser() != null) {
+            dto.setUserId(update.getUser().getId());
+            dto.setUserName(update.getUser().getFullName());
+        }
+        dto.setStatus(update.getStatus());
+        dto.setProgress(update.getProgress());
+        dto.setBudgetSpent(update.getBudgetSpent());
+        dto.setAdjustedDate(update.getAdjustedDate());
+        dto.setNote(update.getNote());
+        dto.setTimestamp(update.getTimestamp());
+        return dto;
+    }
+
+    /**
+     * Converts ProcessUpdateRequestDTO to ProcessUpdate entity.
+     */
+    public static ProcessUpdate toEntity(ProcessUpdateRequestDTO dto) {
+        if (dto == null) return null;
+
+        ProcessUpdate update = new ProcessUpdate();
+        update.setStatus(dto.getStatus());
+        update.setProgress(dto.getProgress());
+        update.setBudgetSpent(dto.getBudgetSpent());
+        update.setAdjustedDate(dto.getAdjustedDate());
+        update.setNote(dto.getNote());
+        return update;
+    }
+
+    /**
+     * Converts a list of ProcessUpdate entities to a list of ProcessUpdateDTOs.
+     */
+    public static List<ProcessUpdateDTO> toProcessUpdateDtoList(List<ProcessUpdate> updates) {
+        if (updates == null) return null;
+
+        return updates.stream()
+                .map(EntityMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

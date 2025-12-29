@@ -8,7 +8,7 @@ import '../../styles/admin/admInfraProjectsDet.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useContext, useEffect } from 'react';
 import { ProfileContext } from '../../context/ProfileContext';
-import { getProjectById } from '../../API/projectService';
+import { getProjectById, getProcessUpdates } from '../../API/projectService';
 import { submitFeedback, getFeedbacks } from '../../API/feedbackService';
 
 const ResidentInfraProjectsDet = () => {
@@ -18,7 +18,7 @@ const ResidentInfraProjectsDet = () => {
   const [project, setProject] = useState(location.state?.project);
   const [loading, setLoading] = useState(!project);
   const { profileData } = useContext(ProfileContext);
-  const [processUpdates] = useState([]);
+  const [processUpdates, setProcessUpdates] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [tempFeedback, setTempFeedback] = useState('');
@@ -56,6 +56,21 @@ const ResidentInfraProjectsDet = () => {
         }
       };
       fetchFeedbacks();
+    }
+  }, [project]);
+
+  // Fetch process updates when project is loaded
+  useEffect(() => {
+    if (project && project.id) {
+      const fetchProcessUpdates = async () => {
+        try {
+          const fetchedUpdates = await getProcessUpdates(project.id);
+          setProcessUpdates(fetchedUpdates);
+        } catch (error) {
+          console.error('Failed to fetch process updates:', error);
+        }
+      };
+      fetchProcessUpdates();
     }
   }, [project]);
 
@@ -210,29 +225,37 @@ const ResidentInfraProjectsDet = () => {
                               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '8px' }}>
                                 <div>
                                   <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Date</h6>
-                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.date}</p>
+                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>
+                                    {update.timestamp ? new Date(update.timestamp).toLocaleString() : 'N/A'}
+                                  </p>
                                 </div>
                                 <div>
-                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Status</h6>
-                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500', textTransform: 'capitalize' }}>{update.status}</p>
+                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Updated By</h6>
+                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.userName || 'N/A'}</p>
                                 </div>
                               </div>
                               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '8px' }}>
                                 <div>
-                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Progress</h6>
-                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.progress || 'N/A'}</p>
+                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Status</h6>
+                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500', textTransform: 'capitalize' }}>{update.status}</p>
                                 </div>
                                 <div>
-                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Budget Spent</h6>
-                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>₱{update.budgetSpent || 'N/A'}</p>
+                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Progress</h6>
+                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.progress !== null && update.progress !== undefined ? `${update.progress}%` : 'N/A'}</p>
                                 </div>
                               </div>
-                              {update.targetCompletion && (
-                                <div style={{ marginBottom: '8px' }}>
-                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Target Completion</h6>
-                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.targetCompletion}</p>
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '8px' }}>
+                                <div>
+                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Budget Spent</h6>
+                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.budgetSpent !== null && update.budgetSpent !== undefined ? `₱${Number(update.budgetSpent).toLocaleString()}` : 'N/A'}</p>
                                 </div>
-                              )}
+                                <div>
+                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Adjusted Date</h6>
+                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>
+                                    {update.adjustedDate ? new Date(update.adjustedDate).toLocaleDateString() : 'N/A'}
+                                  </p>
+                                </div>
+                              </div>
                               {update.note && (
                                 <div>
                                   <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Note</h6>
@@ -306,7 +329,6 @@ const ResidentInfraProjectsDet = () => {
             // Refresh feedbacks from backend
             const updatedFeedbacks = await getFeedbacks(project.id);
             setFeedbacks(updatedFeedbacks);
-            alert('Feedback submitted successfully!');
             setTempFeedback('');
             setTempType('Report');
             setTempAnon(false);
