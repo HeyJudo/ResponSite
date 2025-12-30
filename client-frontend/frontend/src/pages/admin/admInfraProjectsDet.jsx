@@ -8,6 +8,7 @@ import '../../styles/admin/admInfraProjectsDet.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getProjectById, updateProject, addProcessUpdate, getProcessUpdates } from '../../API/projectService';
+import { getFeedbacks } from '../../API/feedbackService';
 
 const AdmInfraProjectsDet = () => {
   const location = useLocation();
@@ -34,6 +35,9 @@ const AdmInfraProjectsDet = () => {
     note: ''
   });
   const [processUpdates, setProcessUpdates] = useState([]);
+
+  // Feedback state
+  const [feedbacks, setFeedbacks] = useState([]);
 
   // Fetch project details if ID is available
   useEffect(() => {
@@ -70,6 +74,21 @@ const AdmInfraProjectsDet = () => {
         }
       };
       fetchProcessUpdates();
+    }
+  }, [project]);
+
+  // Fetch feedbacks when project is loaded
+  useEffect(() => {
+    if (project && project.id) {
+      const fetchFeedbacks = async () => {
+        try {
+          const fetchedFeedbacks = await getFeedbacks(project.id);
+          setFeedbacks(fetchedFeedbacks);
+        } catch (error) {
+          console.error('Failed to fetch feedbacks:', error);
+        }
+      };
+      fetchFeedbacks();
     }
   }, [project]);
 
@@ -336,7 +355,7 @@ const AdmInfraProjectsDet = () => {
                                   <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.userName || 'N/A'}</p>
                                 </div>
                               </div>
-                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '8px' }}>
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '8px' }}>
                                 <div>
                                   <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Status</h6>
                                   <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500', textTransform: 'capitalize' }}>{update.status}</p>
@@ -345,25 +364,60 @@ const AdmInfraProjectsDet = () => {
                                   <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Progress</h6>
                                   <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.progress !== null && update.progress !== undefined ? `${update.progress}%` : 'N/A'}</p>
                                 </div>
+                              </div>
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '8px' }}>
                                 <div>
                                   <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Budget Spent</h6>
                                   <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{update.budgetSpent !== null && update.budgetSpent !== undefined ? `₱${Number(update.budgetSpent).toLocaleString()}` : 'N/A'}</p>
                                 </div>
-                              </div>
-                              {update.adjustedDate && (
-                                <div style={{ marginBottom: '8px' }}>
+                                <div>
                                   <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Adjusted Date</h6>
                                   <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>
                                     {update.adjustedDate ? new Date(update.adjustedDate).toLocaleDateString() : 'N/A'}
                                   </p>
                                 </div>
-                              )}
+                              </div>
                               {update.note && (
                                 <div>
                                   <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>Note</h6>
                                   <p style={{ margin: '0', fontSize: '0.9rem' }}>{update.note}</p>
                                 </div>
                               )}
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Feedback Section */}
+                    <div style={{ background: '#f3f4f6', padding: '10px', borderRadius: '8px', marginBottom: '10px' }}>
+                      <div style={{ marginBottom: '10px', padding: '0 10px' }}>
+                        <h4 style={{ margin: '0', fontSize: '0.95rem', color: '#333', fontWeight: '600' }}>Feedback</h4>
+                      </div>
+                      {/* Feedback History */}
+                      <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {feedbacks.length === 0 ? (
+                          <p style={{ margin: '0', fontSize: '0.95rem', color: '#999' }}>No feedback yet</p>
+                        ) : (
+                          feedbacks.map((feedback) => (
+                            <div key={feedback.id} style={{ background: '#fff', padding: '10px', borderRadius: '6px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                                <div>
+                                  <h6 style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>
+                                    {feedback.isAnonymous ? 'Anonymous' : (feedback.userName || 'Unknown User')}
+                                  </h6>
+                                  <p style={{ margin: '0', fontSize: '0.9rem', fontWeight: '500' }}>{feedback.subject}</p>
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                  <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#666' }}>{feedback.type}</p>
+                                  <p style={{ margin: '0', fontSize: '0.8rem', color: '#666' }}>
+                                    {feedback.timestamp ? new Date(feedback.timestamp).toLocaleString() : 'N/A'}
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p style={{ margin: '0', fontSize: '0.9rem' }}>{feedback.message}</p>
+                              </div>
                             </div>
                           ))
                         )}
