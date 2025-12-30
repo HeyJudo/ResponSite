@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { getAllIncidents } from '../../API/incidentService';
 import { getItemsLowOnStockCount, getActiveInfraProjectsCount } from '../../API/shared/dashboardCounts';
+import { getDashboardStats } from '../../API/dashboardService';
 import { useNavigate } from 'react-router-dom';
 
 const DashboardStatsCards = () => {
   const [pendingCount, setPendingCount] = useState(0);
+  const [dashboardStats, setDashboardStats] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,7 +23,21 @@ const DashboardStatsCards = () => {
       }
     };
 
+    const fetchDashboardStats = async () => {
+      try {
+        const stats = await getDashboardStats();
+        setDashboardStats(stats);
+        // Use dashboard stats for pending incidents if available
+        if (stats.pendingIncidents !== undefined) {
+          setPendingCount(stats.pendingIncidents);
+        }
+      } catch (err) {
+        console.error('Failed to fetch dashboard stats:', err);
+      }
+    };
+
     fetchIncidentCount();
+    fetchDashboardStats();
   }, []);
 
   return (

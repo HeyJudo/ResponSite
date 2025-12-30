@@ -20,6 +20,7 @@ export const INCIDENT_ENDPOINTS = {
   GET_ALL: `${BASE_URL}/incidents`,
   GET_MY_REPORTS: `${BASE_URL}/incidents/my-reports`,
   UPDATE_STATUS: (id) => `${BASE_URL}/incidents/${id}/status`,
+  ASSIGN_RESPONDENT: (id) => `${BASE_URL}/incidents/${id}/assign`,
   CANCEL: (id) => `${BASE_URL}/incidents/${id}/cancel`,
   DELETE: (id) => `${BASE_URL}/incidents/${id}`,
 };

@@ -1,8 +1,24 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listOfUsers } from '../../API/admin/listOfUsers';
+import { getDashboardStats } from '../../API/dashboardService';
 
 const TotalUsersCard = () => {
   const navigate = useNavigate();
+  const [dashboardStats, setDashboardStats] = useState({});
+
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      try {
+        const stats = await getDashboardStats();
+        setDashboardStats(stats);
+      } catch (err) {
+        console.error('Failed to fetch dashboard stats:', err);
+      }
+    };
+
+    fetchDashboardStats();
+  }, []);
 
   // Calculate actual counts from the user master list
   const calculateUserCounts = () => {
@@ -22,7 +38,7 @@ const TotalUsersCard = () => {
   return (
     <form className="recent-incident-form-card">
       <div className="recent-incident-header">
-        Total Users
+        Total Users {dashboardStats.totalUsers !== undefined && `(${dashboardStats.totalUsers})`}
       </div>
       <div className="form-card-padding">
         <div className="total-users-stack">

@@ -7,6 +7,7 @@ import Modal from '../../components/Modal';
 import Table from '../../components/Table';
 import { dashboardNotif } from '../../API/resident/dashboardNotif'; 
 import { getMyIncidents } from '../../API/incidentService';
+import { getDashboardStats } from '../../API/dashboardService';
 import '../../styles/resident/global.css';
 import '../../styles/resident/dashboard.css';
 import { useState, useEffect } from 'react';
@@ -16,6 +17,7 @@ const Dashboard = () => {
   const [incidentCount, setIncidentCount] = useState(0);
   const [incidents, setIncidents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dashboardStats, setDashboardStats] = useState({});
 
   useEffect(() => {
     const fetchIncidents = async () => {
@@ -28,7 +30,21 @@ const Dashboard = () => {
       }
     };
 
+    const fetchDashboardStats = async () => {
+      try {
+        const stats = await getDashboardStats();
+        setDashboardStats(stats);
+        // Use dashboard stats for active reports count if available
+        if (stats.myActiveReports !== undefined) {
+          setIncidentCount(stats.myActiveReports);
+        }
+      } catch (err) {
+        console.error('Failed to fetch dashboard stats:', err);
+      }
+    };
+
     fetchIncidents();
+    fetchDashboardStats();
   }, []);
 
   const handleViewClick = () => {

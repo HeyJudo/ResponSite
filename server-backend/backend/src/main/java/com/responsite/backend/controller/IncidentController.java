@@ -1,17 +1,28 @@
 package com.responsite.backend.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.responsite.backend.dto.IncidentRequestDTO;
 import com.responsite.backend.dto.IncidentResponseDTO;
 import com.responsite.backend.entity.User;
 import com.responsite.backend.service.IncidentService;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/incidents")
@@ -127,6 +138,45 @@ public class IncidentController {
             incidentService.deleteIncident(id);
             Map<String, String> response = new HashMap<>();
             response.put("message", "Incident deleted successfully");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    /**
+     * 7. ASSIGN RESPONDENT
+     * Access: STAFF and ADMIN only
+     * Usage: PUT /api/incidents/5/assign?respondent=Jude
+     */
+    @PutMapping("/{id}/assign")
+    public ResponseEntity<?> assignRespondent(@PathVariable Long id, @RequestParam String respondent, HttpSession session) {
+        User user = getSessionUser(session);
+        if (user == null) return ResponseEntity.status(401).body("Please login first");
+        if ("RESIDENT".equals(user.getRole())) return ResponseEntity.status(403).body("Access Denied");
+
+        try {
+            IncidentResponseDTO response = incidentService.assignRespondent(id, respondent);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    /**
+     * 8. RESOLVE WITH NOTES
+     * Access: STAFF and ADMIN only
+     * Usage: PUT /api/incidents/5/resolve
+     */
+    @PutMapping("/{id}/resolve")
+    public ResponseEntity<?> resolveWithNotes(@PathVariable Long id, @RequestBody Map<String, String> body, HttpSession session) {
+        User user = getSessionUser(session);
+        if (user == null) return ResponseEntity.status(401).body("Please login first");
+        if ("RESIDENT".equals(user.getRole())) return ResponseEntity.status(403).body("Access Denied");
+
+        try {
+            String resolutionNotes = body.get("resolutionNotes");
+            IncidentResponseDTO response = incidentService.resolveIncidentWithNotes(id, resolutionNotes);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

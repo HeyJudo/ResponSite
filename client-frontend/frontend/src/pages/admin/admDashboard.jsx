@@ -3,7 +3,6 @@ import AdminHeader from '../../features/admin/AdminHeader';
 import DashboardStatsCards from '../../features/admin/DashboardStatsCards';
 import RecentIncidentsCard from '../../features/admin/RecentIncidentsCard';
 import TotalUsersCard from '../../features/admin/TotalUsersCard';
-import PendingUsersCard from '../../features/admin/PendingUsersCard';
 import DashboardSummary from '../../features/admin/DashboardSummary';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admDashboard.css';
@@ -22,7 +21,6 @@ const AdmDashboard = () => {
               <DashboardStatsCards />
               <RecentIncidentsCard />
               <TotalUsersCard />
-              <PendingUsersCard />
             </div>
             <DashboardSummary />
           </main>

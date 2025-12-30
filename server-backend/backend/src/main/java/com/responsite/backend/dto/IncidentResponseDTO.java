@@ -17,4 +17,8 @@ public class IncidentResponseDTO {
     private String reporterName;
     private String reporterPhone;
     private String reporterEmail;
+    private String assignedTo;
+    private LocalDateTime inProgressDate;
+    private LocalDateTime resolvedDate;
+    private String resolutionNotes;
 }

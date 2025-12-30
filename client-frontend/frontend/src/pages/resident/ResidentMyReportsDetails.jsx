@@ -35,10 +35,10 @@ const ResidentMyReportDetails = () => {
   const status = report?.status || 'PENDING';
   const dates = {
     pending: report?.timestamp ? new Date(report.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-    inProgress: null,
-    resolved: null,
+    inProgress: report?.inProgressDate ? new Date(report.inProgressDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : null,
+    resolved: report?.resolvedDate ? new Date(report.resolvedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : null,
   };
-  const assignedTo = 'Pending assignment';
+  const assignedTo = report?.assignedTo || 'Pending assignment';
   const resolutionNotes = report?.resolutionNotes || 'No resolution notes';
 
   const handleCancelReport = () => {

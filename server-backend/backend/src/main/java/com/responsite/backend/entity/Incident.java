@@ -1,8 +1,16 @@
 package com.responsite.backend.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import lombok.Data;
 
 @Entity
 @Data
@@ -19,9 +27,15 @@ public class Incident {
     private String description;
 
     private String severity; // Low, Medium, High
-    private String status; // PENDING, RESOLVED, CANCELLED
+    private String status; // PENDING, IN_PROGRESS, RESOLVED, CANCELLED
+    private String assignedTo; // Name of the respondent assigned
 
     private LocalDateTime timestamp;
+    private LocalDateTime inProgressDate; // When the incident moved to IN_PROGRESS
+    private LocalDateTime resolvedDate; // When the incident was RESOLVED
+    
+    @Column(columnDefinition = "TEXT")
+    private String resolutionNotes; // Notes about the resolution
 
     @ManyToOne
     @JoinColumn(name = "reporter_id")

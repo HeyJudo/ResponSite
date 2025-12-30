@@ -137,6 +137,33 @@ export const cancelIncident = async (id) => {
   }
 };
 
+// ==================== ASSIGN RESPONDENT ====================
+/**
+ * Assign a respondent to an incident (ADMIN/LGU only)
+ * @param {number} id - Incident ID
+ * @param {string} respondentName - Name of the respondent to assign
+ * @returns {Promise} Updated incident data
+ */
+export const assignRespondent = async (id, respondentName) => {
+  try {
+    const response = await fetch(`${INCIDENT_ENDPOINTS.ASSIGN_RESPONDENT(id)}?respondent=${respondentName}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Failed to assign respondent: ${error.message}`);
+  }
+};
+
 // ==================== DELETE INCIDENT ====================
 /**
  * Delete incident permanently (ADMIN only)
@@ -160,5 +187,32 @@ export const deleteIncident = async (id) => {
     return await response.json();
   } catch (error) {
     throw new Error(`Failed to delete incident: ${error.message}`);
+  }
+};
+// ==================== RESOLVE WITH NOTES ====================
+/**
+ * Resolve an incident with resolution notes
+ * @param {number} id - Incident ID
+ * @param {string} resolutionNotes - Notes about the resolution
+ * @returns {Promise} Updated incident data
+ */
+export const resolveIncidentWithNotes = async (id, resolutionNotes) => {
+  try {
+    const response = await fetch(`http://localhost:8080/api/incidents/${id}/resolve`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ resolutionNotes }),
+    });
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Failed to resolve incident: ${error.message}`);
   }
 };

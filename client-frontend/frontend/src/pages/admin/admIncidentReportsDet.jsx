@@ -2,7 +2,7 @@ import AdminSidebar from '../../features/admin/AdminSidebar';
 import AdminHeader from '../../features/admin/AdminHeader';
 import Modal from '../../components/Modal';
 import LoadingScreen from '../../components/LoadingScreen';
-import { updateIncidentStatus, deleteIncident } from '../../API/incidentService';
+import { updateIncidentStatus, deleteIncident, assignRespondent, resolveIncidentWithNotes } from '../../API/incidentService';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admIncidentReportsDet.css';
 
@@ -24,11 +24,11 @@ const AdmIncidentReportsDet = () => {
   // Status phases state management
   const [status, setStatus] = useState(incident?.status || 'PENDING');
   const [dates, setDates] = useState({
-    pending: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-    inProgress: null,
-    resolved: null,
+    pending: incident?.timestamp ? new Date(incident.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    inProgress: incident?.inProgressDate ? new Date(incident.inProgressDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : null,
+    resolved: incident?.resolvedDate ? new Date(incident.resolvedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : null,
   });
-  const [assignedTo, setAssignedTo] = useState('');
+  const [assignedTo, setAssignedTo] = useState(incident?.assignedTo || '');
   const [showRespondentModal, setShowRespondentModal] = useState(false);
   const [resolutionNotes, setResolutionNotes] = useState('');
   const [showResolutionModal, setShowResolutionModal] = useState(false);
@@ -44,23 +44,38 @@ const AdmIncidentReportsDet = () => {
   };
 
   // Handle respondent selection from modal
-  const handleSelectRespondent = (name) => {
-    setAssignedTo(name);
-    if (status === 'Pending') {
-      setStatus('In Progress');
-      setDates(prev => ({
-        ...prev,
-        inProgress: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-      }));
+  const handleSelectRespondent = async (name) => {
+    setLoading(true);
+    setError('');
+    
+    try {
+      const incidentId = incident?.id || incident?.incidentId || incident?.incident_id;
+      if (!incidentId) {
+        setError('Incident ID not found');
+        setLoading(false);
+        return;
+      }
+
+      // Call API to assign respondent
+      await assignRespondent(incidentId, name);
+
+      setAssignedTo(name);
+      if (status === 'PENDING' || status === 'Pending') {
+        setStatus('IN_PROGRESS');
+        setDates(prev => ({
+          ...prev,
+          inProgress: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        }));
+        // Also update status to IN_PROGRESS
+        await updateIncidentStatus(incidentId, 'IN_PROGRESS');
+      }
+      
+      setShowRespondentModal(false);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message || 'Failed to assign respondent');
+      setLoading(false);
     }
-    // Store the assignment in localStorage to update the table
-    const incidentId = incident?.id || incident?.incidentId || incident?.incident_id;
-    if (incidentId) {
-      const assignments = JSON.parse(localStorage.getItem('incidentAssignments') || '{}');
-      assignments[incidentId] = name;
-      localStorage.setItem('incidentAssignments', JSON.stringify(assignments));
-    }
-    setShowRespondentModal(false);
   };
 
   // Handle "Mark as Resolved" button click - moves to Resolved phase
@@ -83,13 +98,15 @@ const AdmIncidentReportsDet = () => {
         return;
       }
       
-      await updateIncidentStatus(incidentId, 'RESOLVED');
+      // Use new endpoint that saves resolution notes
+      await resolveIncidentWithNotes(incidentId, resolutionNotes);
       setStatus('RESOLVED');
       setDates(prev => ({
         ...prev,
         resolved: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
       }));
       setShowResolutionModal(false);
+      setLoading(false);
     } catch (err) {
       setError(err.message || 'Failed to update status');
       setLoading(false);

@@ -1,18 +1,19 @@
 package com.responsite.backend.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.responsite.backend.Repository.IncidentRepository;
+import com.responsite.backend.Repository.UserRepository;
 import com.responsite.backend.dto.IncidentRequestDTO;
 import com.responsite.backend.dto.IncidentResponseDTO;
 import com.responsite.backend.entity.Incident;
 import com.responsite.backend.entity.User;
-import com.responsite.backend.Repository.IncidentRepository;
-import com.responsite.backend.Repository.UserRepository;
 import com.responsite.backend.util.EntityMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class IncidentService {
@@ -58,6 +59,17 @@ public class IncidentService {
         if (incidentOpt.isPresent()) {
             Incident incident = incidentOpt.get();
             incident.setStatus(newStatus);
+            
+            // Set date when status changes to IN_PROGRESS
+            if ("IN_PROGRESS".equals(newStatus) && incident.getInProgressDate() == null) {
+                incident.setInProgressDate(LocalDateTime.now());
+            }
+            
+            // Set date when status changes to RESOLVED
+            if ("RESOLVED".equals(newStatus)) {
+                incident.setResolvedDate(LocalDateTime.now());
+            }
+            
             Incident savedIncident = incidentRepository.save(incident);
             return EntityMapper.toDto(savedIncident);
         }
@@ -93,5 +105,35 @@ public class IncidentService {
         } else {
             throw new RuntimeException("Incident not found");
         }
+    }
+
+    // 7. ASSIGN RESPONDENT: Staff/Admin assigns a respondent to an incident
+    public IncidentResponseDTO assignRespondent(Long id, String respondentName) {
+        Incident incident = incidentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Incident not found"));
+
+        incident.setAssignedTo(respondentName);
+        
+        // Automatically set status to IN_PROGRESS if it's PENDING
+        if ("PENDING".equals(incident.getStatus())) {
+            incident.setStatus("IN_PROGRESS");
+            incident.setInProgressDate(LocalDateTime.now());
+        }
+
+        Incident savedIncident = incidentRepository.save(incident);
+        return EntityMapper.toDto(savedIncident);
+    }
+
+    // 8. RESOLVE WITH NOTES: Mark incident as resolved with resolution notes
+    public IncidentResponseDTO resolveIncidentWithNotes(Long id, String resolutionNotes) {
+        Incident incident = incidentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Incident not found"));
+
+        incident.setStatus("RESOLVED");
+        incident.setResolvedDate(LocalDateTime.now());
+        incident.setResolutionNotes(resolutionNotes);
+
+        Incident savedIncident = incidentRepository.save(incident);
+        return EntityMapper.toDto(savedIncident);
     }
 }

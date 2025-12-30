@@ -80,6 +80,10 @@ public class EntityMapper {
         dto.setSeverity(incident.getSeverity());
         dto.setStatus(incident.getStatus());
         dto.setTimestamp(incident.getTimestamp());
+        dto.setAssignedTo(incident.getAssignedTo());
+        dto.setInProgressDate(incident.getInProgressDate());
+        dto.setResolvedDate(incident.getResolvedDate());
+        dto.setResolutionNotes(incident.getResolutionNotes());
 
         // Get reporter's name safely
         if (incident.getReporter() != null) {
