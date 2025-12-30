@@ -18,6 +18,8 @@ const admEvacuationCenter = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showSelectModal, setShowSelectModal] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [centerToDelete, setCenterToDelete] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -142,6 +144,30 @@ const admEvacuationCenter = () => {
     }
   };
 
+  // Handle delete button click - show confirmation
+  const handleDeleteClick = (center) => {
+    setCenterToDelete(center);
+    setShowDeleteConfirmation(true);
+    handleCloseEdit(); // Close the edit modal
+  };
+
+  // Handle confirmed delete
+  const handleConfirmDelete = async () => {
+    if (centerToDelete) {
+      try {
+        await deleteEvacuationCenter(centerToDelete.id);
+        // Remove from local state
+        setCenters(centers.filter(center => center.id !== centerToDelete.id));
+        setShowDeleteConfirmation(false);
+        setCenterToDelete(null);
+      } catch (err) {
+        setError(err.message);
+        setShowDeleteConfirmation(false);
+        setCenterToDelete(null);
+      }
+    }
+  };
+
   const handleCloseEdit = () => {
     setShowSelectModal(false);
     setShowEditModal(false);
@@ -200,12 +226,12 @@ const admEvacuationCenter = () => {
         </div>
       </div>
 
-      {/* Add Center Modal */}
       <Modal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         title="Add Center"
         onSave={handleAddCenter}
+        saveDisabled={!formData.name.trim() || !formData.location.trim() || formData.capacity === ''}
       >
         <div className="form-container">
           <FormField
@@ -254,16 +280,22 @@ const admEvacuationCenter = () => {
         showFooter={false}
       >
         <div className="center-selection">
-          {centers.map(center => (
-            <div
-              key={center.id}
-              className="center-option"
-              onClick={() => handleSelectCenter(center)}
-            >
-              <div className="center-name">{center.name}</div>
-              <div className="center-details">{center.location} • {center.status}</div>
+          {centers.length > 0 ? (
+            centers.map(center => (
+              <div
+                key={center.id}
+                className="center-option"
+                onClick={() => handleSelectCenter(center)}
+              >
+                <div className="center-name">{center.name}</div>
+                <div className="center-details">{center.location} • {center.status}</div>
+              </div>
+            ))
+          ) : (
+            <div className="no-centers-message">
+              No evacuation centers available to edit
             </div>
-          ))}
+          )}
         </div>
       </Modal>
 
@@ -313,19 +345,36 @@ const admEvacuationCenter = () => {
           />
         </div>
         <div className="modal-actions">
-          <Button variant="primary" onClick={handleEditCenter}>Save Changes</Button>
-          <Button 
-            variant="danger" 
-            onClick={() => {
-              if (window.confirm('Are you sure you want to delete this evacuation center?')) {
-                handleDeleteCenter(selectedCenter.id);
-                handleCloseEdit();
-              }
-            }}
+          <Button variant="primary" onClick={handleEditCenter} disabled={!formData.name.trim() || !formData.location.trim() || formData.capacity === ''}>Save Changes</Button>
+          <Button
+            variant="danger"
+            onClick={() => handleDeleteClick(selectedCenter)}
           >
             Delete Center
           </Button>
           <Button variant="secondary" onClick={handleCloseEdit}>Cancel</Button>
+        </div>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal isOpen={showDeleteConfirmation} onClose={() => setShowDeleteConfirmation(false)} title="Delete Evacuation Center" showFooter={false}>
+        <div style={{ padding: '1.5rem' }}>
+          <p style={{ marginBottom: '1.5rem', fontSize: '1rem' }}>Are you sure you want to delete this evacuation center? This action cannot be undone.</p>
+          {centerToDelete && (
+            <div style={{ background: '#f8f9fa', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', borderLeft: '4px solid #dc3545' }}>
+              <strong style={{ color: '#dc3545' }}>{centerToDelete.name}</strong>
+              <br />
+              Location: {centerToDelete.location}
+              <br />
+              Status: {centerToDelete.status}
+              <br />
+              Capacity: {centerToDelete.capacity}
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: '0.8rem', justifyContent: 'flex-end' }}>
+            <button onClick={() => setShowDeleteConfirmation(false)} style={{ background: '#ccc', color: '#000', border: 'none', borderRadius: '5px', padding: '0.6rem 1.2rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}>Cancel</button>
+            <button onClick={handleConfirmDelete} style={{ background: '#d32f2f', color: '#fff', border: 'none', borderRadius: '5px', padding: '0.6rem 1.2rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}>Delete</button>
+          </div>
         </div>
       </Modal>
     </div>

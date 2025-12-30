@@ -9,6 +9,7 @@ const Modal = ({
   onSave, 
   showFooter = true,
   saveButtonText = "Save",
+  saveDisabled = false,
   className = ""
 }) => {
   if (!isOpen) return null;
@@ -23,7 +24,7 @@ const Modal = ({
         </div>
         {showFooter && (
           <div className="modal-footer">
-            <Button variant="primary" onClick={onSave}>{saveButtonText}</Button>
+            <Button variant="primary" onClick={onSave} disabled={saveDisabled}>{saveButtonText}</Button>
             <Button variant="secondary" onClick={onClose}>Cancel</Button>
           </div>
         )}

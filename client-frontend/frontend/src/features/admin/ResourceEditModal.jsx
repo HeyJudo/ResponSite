@@ -39,6 +39,7 @@ const ResourceEditModal = ({
 }) => {
   const [showSelectModal, setShowSelectModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,9 +50,11 @@ const ResourceEditModal = ({
         await onDeleteResource(editingItem.id);
         setShowEditModal(false);
         setEditingItem(null);
+        setShowDeleteConfirm(false); // Close the delete confirmation modal
         onClose();
       } catch (error) {
         console.error('Error deleting resource:', error);
+        setShowDeleteConfirm(false); // Close the modal even on error
       } finally {
         setIsLoading(false);
       }
@@ -130,7 +133,9 @@ const ResourceEditModal = ({
               </div>
             ))
           ) : (
-            <div className="no-items">No resources available to edit</div>
+            <div className="no-centers-message">
+              No resource items available to edit
+            </div>
           )}
         </div>
       </Modal>
@@ -222,7 +227,10 @@ const ResourceEditModal = ({
             <div className="edit-form-field delete-section">
               <button
                 className="delete-item-btn"
-                onClick={handleDeleteItem}
+                onClick={() => {
+                  setShowDeleteConfirm(true);
+                  setShowEditModal(false); // Close the edit modal
+                }}
                 type="button"
                 disabled={isLoading}
               >
@@ -231,6 +239,33 @@ const ResourceEditModal = ({
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        title="Delete Resource Item"
+        showFooter={false}
+      >
+        <div style={{ padding: '1.5rem' }}>
+          <p style={{ marginBottom: '1.5rem', fontSize: '1rem' }}>Are you sure you want to delete this resource item? This action cannot be undone.</p>
+          {editingItem && (
+            <div style={{ background: '#f8f9fa', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', borderLeft: '4px solid #dc3545' }}>
+              <strong style={{ color: '#dc3545' }}>{editingItem.name}</strong>
+              <br />
+              Category: {editingItem.category}
+              <br />
+              Quantity: {editingItem.quantity} {editingItem.unit}
+              <br />
+              Location: {editingItem.location}
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: '0.8rem', justifyContent: 'flex-end' }}>
+            <button onClick={() => setShowDeleteConfirm(false)} style={{ background: '#ccc', color: '#000', border: 'none', borderRadius: '5px', padding: '0.6rem 1.2rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}>Cancel</button>
+            <button onClick={handleDeleteItem} style={{ background: '#d32f2f', color: '#fff', border: 'none', borderRadius: '5px', padding: '0.6rem 1.2rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}>Delete</button>
+          </div>
+        </div>
       </Modal>
     </>
   );
