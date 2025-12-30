@@ -9,6 +9,17 @@ export const statusColors = {
   "DELAYED": "status-delayed"
 };
 
+export const incidentStatusColors = {
+  "PENDING": "status-pending",
+  "IN_PROGRESS": "status-inprogress",
+  "RESOLVED": "status-resolved",
+  "CANCELLED": "status-cancelled",
+  "Pending": "status-pending",
+  "In Progress": "status-inprogress",
+  "Resolved": "status-resolved",
+  "Cancelled": "status-cancelled"
+};
+
 export const typeOptions = ['Bridge', 'Building', 'Drainage', 'Road', 'Other'];
 export const zoneOptions = ['Zone 1', 'Zone 2', 'Zone 3'];
 export const statusOptions = ['Planned', 'In Progress', 'Completed', 'Delayed'];

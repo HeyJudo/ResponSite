@@ -10,6 +10,7 @@ import '../../styles/resident/global.css';
 import '../../styles/resident/resInfraProjects.css';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { cancelIncident } from '../../API/incidentService';
+import { incidentStatusColors } from '../../features/admin/admInfraProjects.constants';
 
 const ResidentMyReportDetails = () => {
   const { id } = useParams();
@@ -103,7 +104,12 @@ const ResidentMyReportDetails = () => {
                 {/* Right 50% - Stacked form cards */}
                 <div style={{ width: '50%', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                   <div style={{ background: '#F2F4F8', borderRadius: '8px', padding: '0.8rem 1rem', minHeight: '45px', color: '#000000ff', fontWeight: 500, fontSize: '1rem', display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '0.7rem' }}>
-                    <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>Status: <span style={{ fontWeight: 700, marginLeft: '0.5rem' }}>{status}</span></div>
+                    <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      Status: 
+                      <span className={`status-chip ${incidentStatusColors[status] || ""}`}>
+                        {status}
+                      </span>
+                    </div>
                     <div style={{ background: '#e9e9e9ff', borderRadius: '7px', padding: '0.9rem 1rem', width: '100%', color: '#000000ff', fontWeight: 500, fontSize: '0.95rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span>Pending</span>

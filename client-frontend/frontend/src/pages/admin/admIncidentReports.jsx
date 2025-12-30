@@ -3,6 +3,7 @@ import AdminHeader from '../../features/admin/AdminHeader';
 import Table from '../../components/Table';
 import SearchBar from '../../components/SearchBar';
 import { getAllIncidents } from '../../API/incidentService';
+import { incidentStatusColors } from '../../features/admin/admInfraProjects.constants';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admIncidentReports.css';
 import { useState, useEffect } from 'react';
@@ -82,7 +83,11 @@ const AdmIncidentReports = () => {
                     { key: 'zone', header: 'Zone' },
                     { key: 'location', header: 'Location' },
                     { key: 'severity', header: 'Severity' },
-                    { key: 'status', header: 'Status' },
+                    { key: 'status', header: 'Status', render: (value) => (
+                      <span className={`status-chip ${incidentStatusColors[value] || ""}`}>
+                        {value}
+                      </span>
+                    ) },
                     { key: 'reporterName', header: 'Reported By' },
                     { key: 'timestamp', header: 'Date Reported', render: (value) => {
                       if (!value) return 'N/A';

@@ -8,6 +8,7 @@ import Table from '../../components/Table';
 import { dashboardNotif } from '../../API/resident/dashboardNotif'; 
 import { getMyIncidents } from '../../API/incidentService';
 import { getDashboardStats } from '../../API/dashboardService';
+import { incidentStatusColors } from '../../features/admin/admInfraProjects.constants';
 import '../../styles/resident/global.css';
 import '../../styles/resident/dashboard.css';
 import { useState, useEffect } from 'react';
@@ -83,7 +84,11 @@ const Dashboard = () => {
             { key: 'type', header: 'Type' },
             { key: 'zone', header: 'Zone' },
             { key: 'severity', header: 'Severity' },
-            { key: 'status', header: 'Status' },
+            { key: 'status', header: 'Status', render: (value) => (
+              <span className={`status-chip ${incidentStatusColors[value] || ""}`}>
+                {value}
+              </span>
+            ) },
             { key: 'reporterName', header: 'Reported By' },
             { key: 'timestamp', header: 'Date Reported', render: (value) => value ? new Date(value).toLocaleDateString() : 'N/A' },
             { key: 'assignedTo', header: 'Assigned to', render: (value) => value || '---' },

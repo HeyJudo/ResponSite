@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ResidentSidebar from '../../features/resident/ResidentSidebar';
 import ResidentHeader from '../../features/resident/ResidentHeader';
 import { getMyIncidents } from '../../API/incidentService';
+import { incidentStatusColors } from '../../features/admin/admInfraProjects.constants';
 import Table from '../../components/Table';
 import '../../styles/resident/global.css';
 import '../../styles/resident/resInfraProjects.css';
@@ -53,7 +54,9 @@ const ResidentMyReports = () => {
                     { key: 'location', header: 'Location' },
                     { key: 'severity', header: 'Severity' },
                     { key: 'status', header: 'Status', render: (value) => (
-                      <span className={`evac-status ${value.toLowerCase()}`}>{value}</span>
+                      <span className={`status-chip ${incidentStatusColors[value] || ""}`}>
+                        {value}
+                      </span>
                     ) },
                     { key: 'timestamp', header: 'Date Reported', render: (value) => (
                       value ? new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'

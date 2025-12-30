@@ -3,6 +3,7 @@ import LguHeader from '../../features/lgu/LguHeader';
 import Modal from '../../components/Modal';
 import LoadingScreen from '../../components/LoadingScreen';
 import { updateIncidentStatus, assignRespondent, resolveIncidentWithNotes } from '../../API/incidentService';
+import { incidentStatusColors } from '../../features/admin/admInfraProjects.constants';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admIncidentReportsDet.css';
 
@@ -30,7 +31,7 @@ const LguIncidentReportsDet = () => {
   });
   const [assignedTo, setAssignedTo] = useState(incident?.assignedTo || '');
   const [showRespondentModal, setShowRespondentModal] = useState(false);
-  const [resolutionNotes, setResolutionNotes] = useState('');
+  const [resolutionNotes, setResolutionNotes] = useState(incident?.resolutionNotes || '');
   const [showResolutionModal, setShowResolutionModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -152,7 +153,12 @@ const LguIncidentReportsDet = () => {
                 {/* Right 50% - Stacked form cards */}
                 <div style={{ width: '50%', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                   <div style={{ background: '#F2F4F8', borderRadius: '8px', padding: '0.8rem 1rem', minHeight: '45px', color: '#000000ff', fontWeight: 500, fontSize: '1rem', display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '0.7rem' }}>
-                    <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>Status: <span style={{ fontWeight: 700, marginLeft: '0.5rem' }}>{status}</span></div>
+                    <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      Status: 
+                      <span className={`status-chip ${incidentStatusColors[status] || ""}`}>
+                        {status}
+                      </span>
+                    </div>
                     <div style={{ background: '#e9e9e9ff', borderRadius: '7px', padding: '0.9rem 1rem', width: '100%', color: '#000000ff', fontWeight: 500, fontSize: '0.95rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span>Pending</span>
@@ -172,7 +178,7 @@ const LguIncidentReportsDet = () => {
                     <span>Respondent/Assigned to: <span style={{ fontWeight: 700, marginLeft: '0.5rem' }}>{assignedTo || '---'}</span></span>
                     <button type="button" onClick={() => {console.log('Add button clicked'); handleAddRespondent();}} style={{ background: status === 'PENDING' ? '#001D9C' : '#ccc', color: status === 'PENDING' ? '#fff' : '#999', border: 'none', borderRadius: '5px', padding: '0.35rem 1.1rem', fontWeight: 600, fontSize: '0.95rem', cursor: status === 'PENDING' ? 'pointer' : 'not-allowed', marginLeft: '1rem', opacity: status === 'PENDING' ? 1 : 0.5, position: 'relative', zIndex: 100 }}>Add</button>
                   </div>
-                  <div style={{ background: '#F2F4F8', borderRadius: '8px', padding: '0.8rem 1rem', minHeight: '45px', color: '#000000ff', fontWeight: 500, fontSize: '1rem', display: 'flex', alignItems: 'center' }}>Resolution Notes: <span style={{ fontWeight: 700, marginLeft: '0.5rem' }}>{resolutionNotes || '---'}</span></div>
+                  <div style={{ background: '#F2F4F8', borderRadius: '8px', padding: '0.8rem 1rem', minHeight: '45px', color: '#000000ff', fontWeight: 500, fontSize: '1rem', display: 'flex', alignItems: 'center' }}>Resolution Notes: <span style={{ fontWeight: 700, marginLeft: '0.5rem' }}>{resolutionNotes || 'No resolution notes'}</span></div>
                 </div>
               </div>
               {/* Reporter Blue Card and Action Buttons Row */}
