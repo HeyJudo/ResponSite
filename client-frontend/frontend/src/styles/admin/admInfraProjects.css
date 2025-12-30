@@ -274,6 +274,21 @@
   background: #ffeaea;
   color: #d32f2f;
 }
+
+.status-available {
+  background: #e6f7e6;
+  color: #1a7f1a;
+}
+
+.status-lowstock {
+  background: #fceca5;
+  color: #b68e0a;
+}
+
+.status-depleted {
+  background: #ffeaea;
+  color: #d32f2f;
+}
 /* Modal Form Styles */
 .modal-form-container {
   padding: 1.5rem;

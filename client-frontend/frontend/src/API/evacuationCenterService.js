@@ -134,7 +134,14 @@ export const deleteEvacuationCenter = async (id) => {
       throw new Error(await response.text());
     }
 
-    return await response.json();
+    // Check if response has content before trying to parse as JSON
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return await response.json();
+    } else {
+      // Return success for plain text responses
+      return { message: 'Evacuation center deleted successfully' };
+    }
   } catch (error) {
     throw new Error(`Failed to delete evacuation center: ${error.message}`);
   }

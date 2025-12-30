@@ -3,14 +3,11 @@ import Modal from '../../components/Modal';
 import FormField from '../../components/FormField';
 
 const CATEGORY_OPTIONS = [
-  'Food & Water',
-  'Medical Supplies',
+  'Shelter Supplies',
   'Clothing',
-  'Shelter Materials',
-  'Tools & Equipment',
-  'Transportation',
-  'Communication',
-  'Other'
+  'Food',
+  'Equipment',
+  'Medicine'
 ];
 
 const UNIT_OPTIONS = [
@@ -40,8 +37,7 @@ const ResourceForm = ({ isOpen, onClose, onSave, initialData = null }) => {
     quantity: '',
     unit: '',
     location: '',
-    reorderLevel: '',
-    note: ''
+    reorderLevel: ''
   });
 
   const handleInputChange = (e) => {
@@ -60,7 +56,6 @@ const ResourceForm = ({ isOpen, onClose, onSave, initialData = null }) => {
       unit: formData.unit,
       location: formData.location,
       reorderLevel: parseInt(formData.reorderLevel) || 0,
-      note: formData.note,
       status: (parseInt(formData.quantity) || 0) > (parseInt(formData.reorderLevel) || 0) ? 'Available' : 'Low Stock'
     };
 
@@ -74,8 +69,7 @@ const ResourceForm = ({ isOpen, onClose, onSave, initialData = null }) => {
         quantity: '',
         unit: '',
         location: '',
-        reorderLevel: '',
-        note: ''
+        reorderLevel: ''
       });
       
       onClose();
@@ -146,15 +140,6 @@ const ResourceForm = ({ isOpen, onClose, onSave, initialData = null }) => {
           value={formData.reorderLevel}
           onChange={handleInputChange}
           placeholder="Enter reorder level"
-        />
-        
-        <FormField 
-          label="Note:" 
-          type="textarea"
-          name="note"
-          value={formData.note}
-          onChange={handleInputChange}
-          placeholder="Enter additional notes"
         />
       </div>
     </Modal>

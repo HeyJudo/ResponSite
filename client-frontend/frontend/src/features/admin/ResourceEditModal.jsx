@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '../../components/Modal';
 
 // Category and location options
 const CATEGORY_OPTIONS = [
-  'Food & Water',
-  'Medical Supplies',
+  'Shelter Supplies',
   'Clothing',
-  'Shelter Materials',
-  'Tools & Equipment',
-  'Transportation',
-  'Communication',
-  'Other'
+  'Food',
+  'Equipment',
+  'Medicine'
 ];
 
 const UNIT_OPTIONS = [
@@ -52,6 +49,7 @@ const ResourceEditModal = ({
         await onDeleteResource(editingItem.id);
         setShowEditModal(false);
         setEditingItem(null);
+        onClose();
       } catch (error) {
         console.error('Error deleting resource:', error);
       } finally {
@@ -71,13 +69,13 @@ const ResourceEditModal = ({
           unit: editingItem.unit,
           location: editingItem.location,
           reorderLevel: parseInt(editingItem.reorderLevel) || 0,
-          note: editingItem.note || '',
           status: (parseInt(editingItem.quantity) || 0) > (parseInt(editingItem.reorderLevel) || 0) ? 'Available' : 'Low Stock'
         };
         
         await onEditResource(editingItem.id, updatedData);
         setShowEditModal(false);
         setEditingItem(null);
+        onClose();
       } catch (error) {
         console.error('Error updating resource:', error);
       } finally {
@@ -93,9 +91,16 @@ const ResourceEditModal = ({
     onClose();
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       setShowSelectModal(true);
+      setShowEditModal(false);
+      setEditingItem(null);
+    } else {
+      // Reset state when modal closes
+      setShowSelectModal(false);
+      setShowEditModal(false);
+      setEditingItem(null);
     }
   }, [isOpen]);
 
@@ -155,9 +160,10 @@ const ResourceEditModal = ({
             <div className="edit-form-field">
               <label>Category:</label>
               <select
-                value={editingItem.category}
+                value={editingItem.category || ''}
                 onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })}
               >
+                <option value="">Select Category</option>
                 {CATEGORY_OPTIONS.map((category) => (
                   <option key={category} value={category}>
                     {category}
@@ -209,16 +215,6 @@ const ResourceEditModal = ({
                 type="number"
                 value={editingItem.reorderLevel}
                 onChange={(e) => setEditingItem({ ...editingItem, reorderLevel: parseInt(e.target.value) || 0 })}
-              />
-            </div>
-
-            <div className="edit-form-field">
-              <label>Note:</label>
-              <input
-                type="text"
-                value={editingItem.note || ''}
-                onChange={(e) => setEditingItem({ ...editingItem, note: e.target.value })}
-                placeholder="Add a note..."
               />
             </div>
 

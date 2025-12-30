@@ -8,13 +8,11 @@ const ResourceStockModal = ({
   onStockChange
 }) => {
   const [stockAmount, setStockAmount] = useState('');
-  const [reason, setReason] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setStockAmount('');
-      setReason('');
     }
   }, [isOpen]);
 
@@ -23,7 +21,7 @@ const ResourceStockModal = ({
       const amount = parseInt(stockAmount) || 0;
       setIsLoading(true);
       try {
-        await onStockChange(selectedItem.id, selectedItem.quantity + amount, reason);
+        await onStockChange(selectedItem.id, selectedItem.quantity + amount);
         onClose();
       } catch (error) {
         console.error('Error increasing stock:', error);
@@ -39,7 +37,7 @@ const ResourceStockModal = ({
       const newQuantity = Math.max(0, selectedItem.quantity - amount);
       setIsLoading(true);
       try {
-        await onStockChange(selectedItem.id, newQuantity, reason);
+        await onStockChange(selectedItem.id, newQuantity);
         onClose();
       } catch (error) {
         console.error('Error decreasing stock:', error);
@@ -81,16 +79,6 @@ const ResourceStockModal = ({
                 disabled={isLoading}
               />
             </div>
-            <div className="edit-form-field">
-              <label>Reason:</label>
-              <input
-                type="text"
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                placeholder="Enter reason for increase"
-                disabled={isLoading}
-              />
-            </div>
           </div>
         )}
       </Modal>
@@ -119,16 +107,6 @@ const ResourceStockModal = ({
                 value={stockAmount}
                 onChange={(e) => setStockAmount(e.target.value)}
                 placeholder="Enter amount"
-                disabled={isLoading}
-              />
-            </div>
-            <div className="edit-form-field">
-              <label>Reason:</label>
-              <input
-                type="text"
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                placeholder="Enter reason for decrease"
                 disabled={isLoading}
               />
             </div>

@@ -6,7 +6,10 @@ export const statusColors = {
   "PLANNED": "status-planned",
   "IN PROGRESS": "status-inprogress",
   "COMPLETED": "status-completed",
-  "DELAYED": "status-delayed"
+  "DELAYED": "status-delayed",
+  "AVAILABLE": "status-available",
+  "LOW_STOCK": "status-lowstock",
+  "DEPLETED": "status-depleted"
 };
 
 export const incidentStatusColors = {

@@ -10,8 +10,14 @@ import Table from '../../components/Table';
 import SearchBar from './../../components/SearchBar';
 import Button from '../../components/Button';
 import { getAllResources, addResource, updateResource, deleteResource } from '../../API/resourceService';
+import { statusColors } from '../../features/admin/admInfraProjects.constants';
 
 const AdmResourceManagement = () => {
+  // Function to normalize status text to title case and replace underscores
+  const normalizeStatus = (status) => {
+    if (!status) return status;
+    return status.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  };
   const [search, setSearch] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -70,7 +76,7 @@ const AdmResourceManagement = () => {
     }
   };
 
-  const handleStockChange = async (id, newQuantity, reason) => {
+  const handleStockChange = async (id, newQuantity) => {
     try {
       const resourceToUpdate = resources.find(r => r.id === id);
       if (resourceToUpdate) {
@@ -122,7 +128,15 @@ const AdmResourceManagement = () => {
     },
     { key: 'unit', header: 'Unit' },
     { key: 'location', header: 'Location' },
-    { key: 'status', header: 'Status' }
+    { 
+      key: 'status', 
+      header: 'Status',
+      render: (status) => (
+        <span className={`status-chip ${statusColors[status] || ""}`}>
+          {normalizeStatus(status)}
+        </span>
+      )
+    }
   ];
 
   const filteredData = resources.filter(row =>
