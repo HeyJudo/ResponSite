@@ -5,9 +5,9 @@ import QuickButtons from '../../features/resident/QuickButtons';
 import NotificationList from '../../features/resident/NotificationList';
 import Modal from '../../components/Modal';
 import Table from '../../components/Table';
-import { dashboardNotif } from '../../API/resident/dashboardNotif'; 
 import { getMyIncidents } from '../../API/incidentService';
 import { getDashboardStats } from '../../API/dashboardService';
+import { getAllProjects } from '../../API/projectService';
 import { incidentStatusColors } from '../../features/admin/admInfraProjects.constants';
 import '../../styles/resident/global.css';
 import '../../styles/resident/dashboard.css';
@@ -19,33 +19,50 @@ const Dashboard = () => {
   const [incidents, setIncidents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dashboardStats, setDashboardStats] = useState({});
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    const fetchIncidents = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getMyIncidents();
-        setIncidents(data);
-        setIncidentCount(data.length);
-      } catch (err) {
-        console.error('Failed to fetch incidents:', err);
-      }
-    };
+        const [myIncidents, stats, projects] = await Promise.all([
+          getMyIncidents(),
+          getDashboardStats(),
+          getAllProjects(),
+        ]);
 
-    const fetchDashboardStats = async () => {
-      try {
-        const stats = await getDashboardStats();
+        setIncidents(myIncidents);
         setDashboardStats(stats);
-        // Use dashboard stats for active reports count if available
-        if (stats.myActiveReports !== undefined) {
-          setIncidentCount(stats.myActiveReports);
-        }
+
+        // Active reports count from stats if available, otherwise use list length
+        setIncidentCount(
+          stats && stats.myActiveReports !== undefined
+            ? stats.myActiveReports
+            : myIncidents.length
+        );
+
+        // Build notifications
+        const incidentNotifs = (myIncidents || [])
+          .filter(inc => inc.status === 'IN_PROGRESS' || inc.status === 'RESOLVED')
+          .map(inc => ({
+            id: `inc-${inc.id || inc.timestamp || Math.random()}`,
+            content:
+              inc.status === 'IN_PROGRESS'
+                ? `Your incident (${inc.type || 'Incident'}) is now in progress.`
+                : `Your incident (${inc.type || 'Incident'}) has been resolved.`
+          }));
+
+        const projectNotifs = (projects || []).map(proj => ({
+          id: `proj-${proj.id || proj.name || Math.random()}`,
+          content: `New infrastructure project created: ${proj.name || 'Project'}.`
+        }));
+
+        setNotifications([...incidentNotifs, ...projectNotifs]);
       } catch (err) {
-        console.error('Failed to fetch dashboard stats:', err);
+        console.error('Failed to fetch dashboard data:', err);
       }
     };
 
-    fetchIncidents();
-    fetchDashboardStats();
+    fetchData();
   }, []);
 
   const handleViewClick = () => {
@@ -67,7 +84,7 @@ const Dashboard = () => {
           <main className="right-panel">
             <IncidentCard count={incidentCount} onViewClick={handleViewClick} />
             <QuickButtons />
-            <NotificationList notifications={dashboardNotif} />
+            <NotificationList notifications={notifications} />
           </main>
         </div>
       </div>

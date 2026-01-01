@@ -20,7 +20,7 @@ const NotificationItem = ({ content, preview = false }) => (
   </div>
 );
 
-const NotificationList = ({ notifications }) => {
+export default function NotificationList({ notifications }) {
   const [showModal, setShowModal] = useState(false);
 
   // Toggle body blur effect when modal is shown/hidden
@@ -67,6 +67,4 @@ const NotificationList = ({ notifications }) => {
       </div>
     </>
   );
-};
-
-export default NotificationList;
+}
