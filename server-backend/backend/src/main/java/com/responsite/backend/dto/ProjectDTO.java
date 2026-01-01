@@ -11,6 +11,9 @@ public class ProjectDTO {
     private String name;
     private String type;
     private String location;
+    private String contractorName;
+    private String contractorNumber;
+    private String contractorEmail;
     private String description;
     private String objectives;
     private String status;

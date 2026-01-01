@@ -22,6 +22,10 @@ public class Project {
     private String type; // Road, Bridge
     private String location;
 
+    private String contractorName;
+    private String contractorNumber;
+    private String contractorEmail;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 

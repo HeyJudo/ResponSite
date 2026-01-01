@@ -182,6 +182,9 @@ public class EntityMapper {
         dto.setName(project.getName());
         dto.setType(project.getType());
         dto.setLocation(project.getLocation());
+        dto.setContractorName(project.getContractorName());
+        dto.setContractorNumber(project.getContractorNumber());
+        dto.setContractorEmail(project.getContractorEmail());
         dto.setDescription(project.getDescription());
         dto.setObjectives(project.getObjectives());
         dto.setStatus(project.getStatus());
@@ -209,6 +212,9 @@ public class EntityMapper {
         project.setName(dto.getName());
         project.setType(dto.getType());
         project.setLocation(dto.getLocation());
+        project.setContractorName(dto.getContractorName());
+        project.setContractorNumber(dto.getContractorNumber());
+        project.setContractorEmail(dto.getContractorEmail());
         project.setDescription(dto.getDescription());
         project.setObjectives(dto.getObjectives());
         project.setStatus(dto.getStatus());

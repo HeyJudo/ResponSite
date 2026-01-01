@@ -159,6 +159,23 @@ const ResidentInfraProjectsDet = () => {
                   
                   {/* Right Column - Large Card */}
                   <div style={{ maxHeight: '700px', overflowY: 'auto', paddingRight: '5px' }}>
+                    <div style={{ background: '#001D9C', color: '#fff', padding: '12px', borderRadius: '10px', marginBottom: '10px' }}>
+                      <h4 style={{ margin: '0 0 8px 0', fontSize: '0.95rem', fontWeight: '600' }}>Contractor</h4>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                        <div>
+                          <h5 style={{ margin: '0 0 4px 0', fontSize: '0.85rem', fontWeight: '500', color: '#dbe4ff' }}>Name</h5>
+                          <p style={{ margin: '0', fontSize: '0.95rem', fontWeight: '600' }}>{project.contractorName || 'N/A'}</p>
+                        </div>
+                        <div>
+                          <h5 style={{ margin: '0 0 4px 0', fontSize: '0.85rem', fontWeight: '500', color: '#dbe4ff' }}>Contact Number</h5>
+                          <p style={{ margin: '0', fontSize: '0.95rem', fontWeight: '600' }}>{project.contractorNumber || 'N/A'}</p>
+                        </div>
+                        <div>
+                          <h5 style={{ margin: '0 0 4px 0', fontSize: '0.85rem', fontWeight: '500', color: '#dbe4ff' }}>Email</h5>
+                          <p style={{ margin: '0', fontSize: '0.95rem', fontWeight: '600' }}>{project.contractorEmail || 'N/A'}</p>
+                        </div>
+                      </div>
+                    </div>
                     <div style={{ background: '#f3f4f6', padding: '10px', borderRadius: '8px', marginBottom: '10px' }}>
                       <div style={{ marginBottom: '15px' }}>
                         <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#333' }}>Project Type</h4>

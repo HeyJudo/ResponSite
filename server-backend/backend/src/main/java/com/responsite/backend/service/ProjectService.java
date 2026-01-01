@@ -62,6 +62,9 @@ public class ProjectService {
         if (dto.getName() != null) project.setName(dto.getName());
         if (dto.getType() != null) project.setType(dto.getType());
         if (dto.getLocation() != null) project.setLocation(dto.getLocation());
+        if (dto.getContractorName() != null) project.setContractorName(dto.getContractorName());
+        if (dto.getContractorNumber() != null) project.setContractorNumber(dto.getContractorNumber());
+        if (dto.getContractorEmail() != null) project.setContractorEmail(dto.getContractorEmail());
         if (dto.getDescription() != null) project.setDescription(dto.getDescription());
         if (dto.getObjectives() != null) project.setObjectives(dto.getObjectives());
         if (dto.getBudget() != null) project.setBudget(dto.getBudget());
