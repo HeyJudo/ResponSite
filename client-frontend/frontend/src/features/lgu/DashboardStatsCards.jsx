@@ -48,12 +48,12 @@ const DashboardStatsCards = () => {
         <button type="button" className="admin-form-view-btn" onClick={() => navigate('/lguIncidentReports')}>View</button>
       </form>
       <form className="admin-form-card">
-        <span className="admin-form-count">{getItemsLowOnStockCount()}</span>
+        <span className="admin-form-count">{dashboardStats.lowStockItems !== undefined ? dashboardStats.lowStockItems : getItemsLowOnStockCount()}</span>
         <span className="admin-form-title">Items Low on Stock</span>
         <button type="button" className="admin-form-view-btn" onClick={() => navigate('/lguResourceManagement')}>View</button>
       </form>
       <form className="admin-form-card">
-        <span className="admin-form-count">{getActiveInfraProjectsCount()}</span>
+        <span className="admin-form-count">{dashboardStats.activeProjects !== undefined ? dashboardStats.activeProjects : getActiveInfraProjectsCount()}</span>
         <span className="admin-form-title">Active Infrastructure Projects</span>
         <button type="button" className="admin-form-view-btn" onClick={() => navigate('/lguInfraProjects')}>View</button>
       </form>

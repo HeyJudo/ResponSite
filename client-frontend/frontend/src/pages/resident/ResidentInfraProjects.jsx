@@ -235,7 +235,6 @@ const ResidentInfraProjects = () => {
           onChange={handleSearchChange}
           onKeyDown={handleSearchKeyDown}
         />
-        <button className="feedback-btn">Go to List of Feedback</button>
       </div>
       <div className="filters-sort">
         <div className="filters">

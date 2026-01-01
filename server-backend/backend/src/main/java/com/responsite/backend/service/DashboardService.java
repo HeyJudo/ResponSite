@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.responsite.backend.Repository.IncidentRepository;
+import com.responsite.backend.Repository.ProjectRepository;
 import com.responsite.backend.Repository.ResourceRepository;
 import com.responsite.backend.Repository.UserRepository;
 import com.responsite.backend.dto.DashboardStatsDTO;
@@ -28,6 +29,9 @@ public class DashboardService {
 
     @Autowired
     private ResourceRepository resourceRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     /**
      * Get dashboard statistics for the current user.
@@ -52,9 +56,7 @@ public class DashboardService {
         // Resident view: My Active Reports (reporter == currentUser AND status != "RESOLVED")
         long myActiveReports = countMyActiveReports(currentUser);
 
-        // Placeholder: Active Projects (Module 4 not yet implemented)
-        // TODO: Replace with actual count when ProjectRepository is available
-        long activeProjects = 0L;
+        long activeProjects = countActiveProjects();
 
         return DashboardStatsDTO.builder()
                 .totalUsers(totalUsers)
@@ -98,6 +100,24 @@ public class DashboardService {
         List<Incident> myIncidents = incidentRepository.findByReporter(currentUser);
         return myIncidents.stream()
                 .filter(incident -> !"RESOLVED".equalsIgnoreCase(incident.getStatus()))
+                .count();
+    }
+
+    /**
+     * Count active infrastructure projects.
+     * Treat projects with status COMPLETED/CANCELLED/ARCHIVED as inactive.
+     */
+    private long countActiveProjects() {
+        return projectRepository.findAll()
+                .stream()
+                .filter(project -> {
+                    String status = project.getStatus();
+                    if (status == null) return true;
+                    String normalized = status.trim().toUpperCase();
+                    return !normalized.equals("COMPLETED")
+                            && !normalized.equals("CANCELLED")
+                            && !normalized.equals("ARCHIVED");
+                })
                 .count();
     }
 }
