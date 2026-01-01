@@ -1,14 +1,17 @@
 package com.responsite.backend.service;
 
-import com.responsite.backend.dto.RegisterRequestDTO;
-import com.responsite.backend.dto.UserResponseDTO;
-import com.responsite.backend.entity.User;
-import com.responsite.backend.Repository.UserRepository;
-import com.responsite.backend.util.EntityMapper;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.responsite.backend.Repository.UserRepository;
+import com.responsite.backend.dto.RegisterRequestDTO;
+import com.responsite.backend.dto.UserResponseDTO;
+import com.responsite.backend.entity.User;
+import com.responsite.backend.util.EntityMapper;
 
 @Service
 public class UserService {
@@ -52,5 +55,13 @@ public class UserService {
     // Convert User entity to DTO for API responses
     public UserResponseDTO toResponseDTO(User user) {
         return EntityMapper.toDto(user);
+    }
+
+    // Logic: Get all users (for admin list)
+    public List<UserResponseDTO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(EntityMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

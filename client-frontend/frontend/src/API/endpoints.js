@@ -14,6 +14,11 @@ export const AUTH_ENDPOINTS = {
   CHECK_SESSION: `${BASE_URL}/auth/check`,
 };
 
+// ==================== USERS ====================
+export const USER_ENDPOINTS = {
+  GET_ALL: `${BASE_URL}/users`,
+};
+
 // ==================== INCIDENTS ====================
 export const INCIDENT_ENDPOINTS = {
   CREATE: `${BASE_URL}/incidents`,
