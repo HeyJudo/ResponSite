@@ -1,12 +1,13 @@
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import '../../styles/resident/auth.css';
+import logoImg from '../../assets/responsite-logo.png';
 
 const AuthLayout = ({ leftContent, rightContent }) => {
   return (
     <div className="auth-container">
       <header className="auth-header">
         <div className="logo">
-          <span className="logo-circle"></span>
+          <img src={logoImg} alt="ResponSite Logo" style={{ width: '70px', height: '70px' }} />
           <span className="logo-text">RESPONSITE</span>
         </div>
       </header>

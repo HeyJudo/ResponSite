@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../../styles/resident/dashboard.css';
-import logoSvg from '../../assets/logo.svg';
+import logoImg from '../../assets/responsite-logo.png';
 
 const ADMIN_NAV_CONFIG = [
   { label: 'Dashboard', path: '/admDashboard' },
@@ -37,8 +37,8 @@ const AdminSidebar = () => {
 
   return (
     <>
-      <div className="sidebar-logo" style={{ position: 'absolute', top: -15, left: 32, zIndex: 10 }}>
-        <img src={logoSvg} alt="Logo" />
+      <div className="sidebar-logo" style={{ position: 'absolute', top: -15, left: -20, zIndex: 10 }}>
+        <img src={logoImg} alt="Logo" style={{ width: '60px', height: '60px' }} />
         <span className="sidebar-title">RESPONSITE</span>
       </div>
       <aside className="sidebar" style={{ marginTop: 80 }}>

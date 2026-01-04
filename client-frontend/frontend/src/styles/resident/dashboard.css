@@ -443,3 +443,130 @@
   pointer-events: auto !important;
   user-select: auto !important;
 }
+
+/* Mobile Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-body-row {
+    flex-direction: column;
+  }
+
+  .dashboard-left {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .dashboard-right {
+    margin: 0;
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-root {
+    min-height: 100vh;
+  }
+
+  .dashboard-body-row {
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .dashboard-left {
+    width: 100%;
+    min-width: unset;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+    overflow-y: visible;
+    background: transparent;
+  }
+
+  .dashboard-right {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+    overflow-y: visible;
+  }
+
+  .sidebar-logo {
+    margin: 12px 0 12px 16px;
+  }
+
+  .sidebar-title {
+    font-size: 1.3rem;
+  }
+
+  .sidebar-nav {
+    margin-top: 0;
+    padding: 8px;
+    gap: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .nav-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    flex: 1 1 auto;
+    min-width: 70px;
+  }
+
+  .incident-details-form-card {
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+  }
+
+  .incident-reported-by-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 16px;
+    padding: 12px 16px;
+  }
+
+  .modal-window {
+    min-width: 90vw;
+    max-width: 95vw;
+    max-height: 80vh;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-logo {
+    margin: 8px 0 8px 12px;
+  }
+
+  .sidebar-title {
+    font-size: 1.1rem;
+  }
+
+  .sidebar-nav {
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .nav-btn {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+
+  .incident-details-form-card {
+    padding: 12px 16px;
+  }
+
+  .incident-form-card {
+    padding: 12px 16px;
+  }
+
+  .modal-window {
+    min-width: 95vw;
+    padding: 16px;
+  }
+}
