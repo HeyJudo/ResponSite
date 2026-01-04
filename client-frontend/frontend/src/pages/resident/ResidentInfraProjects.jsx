@@ -130,7 +130,7 @@ const ResidentInfraProjects = () => {
   const handleZoneFilterEnter = () => {
     setFiltered(
       projects.filter(item =>
-        item.location && item.location.toLowerCase() === selectedZone.toLowerCase()
+        item.location && item.location.toLowerCase().includes(selectedZone.toLowerCase())
       )
     );
     setShowZoneFilter(false);

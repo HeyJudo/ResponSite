@@ -147,6 +147,7 @@ const LguIncidentReportsDet = () => {
                   </div>
                   <div className="form-field-full" style={{ marginBottom: 0 }}>
                     <p style={{ margin: 0 }}>Description:</p>
+                    <p style={{ margin: '0.5rem 0 0 0', fontWeight: 400, color: '#555' }}>{incident?.description || 'No description provided'}</p>
                   </div>
                 </div>
                 {/* Right 50% - Stacked form cards */}
