@@ -1,8 +1,14 @@
 import { createContext, useState, useEffect } from 'react';
-import { lguProfileData as initialProfileData } from '../API/lgu/lguProfileData';
 import { checkSession } from '../API/authService';
 
 export const LguProfileContext = createContext();
+
+const initialProfileData = {
+  username: 'LGU User',
+  role: 'STAFF',
+  contactNo: '',
+  email: '',
+};
 
 export const LguProfileProvider = ({ children }) => {
   const storedUser = JSON.parse(localStorage.getItem('user')) || {};
@@ -10,7 +16,8 @@ export const LguProfileProvider = ({ children }) => {
     ...initialProfileData,
     username: storedUser.username || initialProfileData.username,
     role: storedUser.role || initialProfileData.role,
-    contactNo: storedUser.contactNumber || initialProfileData.contactNo,
+    contactNo: storedUser.contactNumber?.trim() || initialProfileData.contactNo,
+    email: storedUser.email?.trim() || initialProfileData.email,
   });
 
   useEffect(() => {
@@ -23,6 +30,7 @@ export const LguProfileProvider = ({ children }) => {
           username: userData.username || prev.username,
           role: userData.role || prev.role,
           contactNo: userData.contactNumber || prev.contactNo,
+          email: userData.email || prev.email,
         }));
         // Update localStorage with fresh data
         localStorage.setItem('user', JSON.stringify(userData));
@@ -45,6 +53,7 @@ export const LguProfileProvider = ({ children }) => {
         username: storedUser.username || prev.username,
         role: storedUser.role || prev.role,
         contactNo: storedUser.contactNumber || prev.contactNo,
+        email: storedUser.email || prev.email,
       }));
     };
 

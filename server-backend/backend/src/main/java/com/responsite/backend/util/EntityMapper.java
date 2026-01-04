@@ -41,6 +41,7 @@ public class EntityMapper {
         dto.setFullName(user.getFullName());
         dto.setRole(user.getRole());
         dto.setContactNumber(user.getContactNumber());
+        dto.setEmail(user.getEmail());
         dto.setAddress(user.getAddress());
         dto.setZone(user.getZone());
         return dto;

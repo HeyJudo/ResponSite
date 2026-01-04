@@ -6,7 +6,6 @@ import '../../styles/admin/admResourceManagement.css';
 import { useInfraProjectsFilters } from '../../features/admin/useInfraProjectsFilters';
 import Modal from '../../components/Modal';
 import Button from '../../components/Button';
-import infraProj from '../../API/resident/infraProj';
 import FilterDropdown from '../../components/FilterDropdown';
 import SortDropdown from '../../components/SortDropdown';
 import SearchBar from '../../components/SearchBar';
@@ -24,7 +23,7 @@ const normalizeStatus = (status) => {
 
 const LguInfraProjects = () => {
   const navigate = useNavigate();
-  const [projects, setProjects] = useState(infraProj);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [formData, setFormData] = useState({

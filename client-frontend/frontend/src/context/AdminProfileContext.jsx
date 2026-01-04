@@ -1,8 +1,14 @@
 import { createContext, useState, useEffect } from 'react';
-import { adminProfileData as initialProfileData } from '../API/admin/adminProfileData';
 import { checkSession } from '../API/authService';
 
 export const AdminProfileContext = createContext();
+
+const initialProfileData = {
+  username: 'Admin User',
+  role: 'ADMIN',
+  contactNo: '',
+  email: '',
+};
 
 export const AdminProfileProvider = ({ children }) => {
   const storedUser = JSON.parse(localStorage.getItem('user')) || {};
@@ -10,7 +16,8 @@ export const AdminProfileProvider = ({ children }) => {
     ...initialProfileData,
     username: storedUser.username || initialProfileData.username,
     role: storedUser.role || initialProfileData.role,
-    contactNo: storedUser.contactNumber || initialProfileData.contactNo,
+    contactNo: storedUser.contactNumber?.trim() || initialProfileData.contactNo,
+    email: storedUser.email?.trim() || initialProfileData.email,
   });
 
   useEffect(() => {
@@ -22,7 +29,8 @@ export const AdminProfileProvider = ({ children }) => {
           ...prev,
           username: userData.username || prev.username,
           role: userData.role || prev.role,
-          contactNo: userData.contactNumber || prev.contactNo,
+          contactNo: userData.contactNumber?.trim() || initialProfileData.contactNo,
+          email: userData.email?.trim() || initialProfileData.email,
         }));
         // Update localStorage with fresh data
         localStorage.setItem('user', JSON.stringify(userData));
@@ -44,7 +52,8 @@ export const AdminProfileProvider = ({ children }) => {
         ...prev,
         username: storedUser.username || prev.username,
         role: storedUser.role || prev.role,
-        contactNo: storedUser.contactNumber || prev.contactNo,
+        contactNo: storedUser.contactNumber?.trim() || initialProfileData.contactNo,
+        email: storedUser.email?.trim() || initialProfileData.email,
       }));
     };
 

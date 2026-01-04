@@ -9,7 +9,6 @@ import SortDropdown from '../../components/SortDropdown';
 import SortDirectionCard from '../../components/SortDirectionCard';
 import SearchBar from '../../components/SearchBar';
 
-import infraProj from '../../API/resident/infraProj';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllProjects } from '../../API/projectService';
@@ -34,8 +33,8 @@ const normalizeStatus = (status) => {
 const ResidentInfraProjects = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
-  const [filtered, setFiltered] = useState(infraProj);
-  const [projects, setProjects] = useState(infraProj);
+  const [filtered, setFiltered] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Fetch projects on component mount

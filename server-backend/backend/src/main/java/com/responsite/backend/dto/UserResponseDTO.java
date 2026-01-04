@@ -9,6 +9,7 @@ public class UserResponseDTO {
     private String fullName;
     private String role;
     private String contactNumber;
+    private String email;
     private String address;
     private String zone;
 }

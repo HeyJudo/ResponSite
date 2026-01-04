@@ -9,17 +9,16 @@ import '../../styles/admin/admIncidentReportsDet.css';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import reportedBySample from '../../API/admin/reportedBySample';
 
 const AdmIncidentReportsDet = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const incident = location.state?.incident;
-  // Use incident reporter data if available, otherwise use the sample
+  // Use incident reporter data if available, otherwise use default values
   const reporter = {
-    name: incident?.reporterName || reportedBySample.name,
-    phone: incident?.reporterPhone || reportedBySample.phone,
-    email: incident?.reporterEmail || reportedBySample.email,
+    name: incident?.reporterName || 'Unknown',
+    phone: incident?.reporterPhone || 'N/A',
+    email: incident?.reporterEmail || 'N/A',
   };
 
   // Status phases state management

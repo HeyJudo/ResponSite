@@ -6,7 +6,6 @@ import '../../styles/admin/admInfraProjects.css';
 import '../../styles/admin/admResourceManagement.css';
 import { useInfraProjectsFilters } from '../../features/admin/useInfraProjectsFilters';
 import InfraProjectsFilterSort from '../../features/admin/InfraProjectsFilterSort';
-import infraProj from '../../API/resident/infraProj';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllProjects, createProject } from '../../API/projectService';
@@ -21,7 +20,7 @@ const normalizeStatus = (status) => {
 const admInfraProjects = () => {
   const navigate = useNavigate();
   const [showAddModal, setShowAddModal] = useState(false);
-  const [projectsData, setProjectsData] = useState(infraProj);
+  const [projectsData, setProjectsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -36,8 +35,8 @@ const admInfraProjects = () => {
       } catch (err) {
         console.error('Failed to fetch projects:', err);
         setError(err.message);
-        // Keep mock data as fallback
-        setProjectsData(infraProj);
+        // Keep empty array as fallback
+        setProjectsData([]);
       } finally {
         setLoading(false);
       }
