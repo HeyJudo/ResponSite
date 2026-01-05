@@ -1,10 +1,10 @@
 /**
  * RESPONSITE API ENDPOINTS
- * Backend Base URL: http://localhost:8080
+ * Backend Base URL: Uses environment variable or localhost fallback
  * All endpoints require proper authentication via session cookies
  */
 
-const BASE_URL = "http://localhost:8080/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
 
 // ==================== AUTHENTICATION ====================
 export const AUTH_ENDPOINTS = {

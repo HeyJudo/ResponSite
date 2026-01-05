@@ -52,9 +52,15 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); 
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        // Allow both localhost (dev) and Railway (prod)
+        config.setAllowedOrigins(List.of(
+            "http://localhost:5173",
+            "https://responsite-frontend.up.railway.app",  // Update with your actual Railway URL
+            System.getenv("FRONTEND_URL") != null ? System.getenv("FRONTEND_URL") : "http://localhost:5173"
+        ));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setExposedHeaders(List.of("Set-Cookie"));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

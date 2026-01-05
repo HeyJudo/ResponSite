@@ -1,0 +1,12 @@
+[build]
+builder = "nixpacks"
+
+[build.nixpacks]
+javaVersion = "17"
+
+[deploy]
+startCommand = "java -jar target/*.jar"
+healthcheckPath = "/api/auth/check"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
