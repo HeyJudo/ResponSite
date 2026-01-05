@@ -2,6 +2,9 @@ package com.responsite.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -9,9 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +32,9 @@ public class SecurityConfig {
             
             // 3. Authorization Rules
             .authorizeHttpRequests(auth -> auth
+                // Allow ALL OPTIONS requests (CORS preflight)
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                
                 // Swagger / OpenAPI Documentation (Public Access)
                 .requestMatchers(
                     "/v3/api-docs/**",
@@ -56,22 +62,28 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         
-        // Allow both localhost (dev) and Railway (prod)
-        String frontendUrl = System.getenv("FRONTEND_URL");
+        // Allow specific origins
         config.setAllowedOrigins(Arrays.asList(
             "http://localhost:5173",
             "http://localhost:3000",
-            "https://delightful-heart-production-0f12.up.railway.app",
-            frontendUrl != null ? frontendUrl : "http://localhost:5173"
+            "http://localhost:8080",
+            "https://delightful-heart-production-0f12.up.railway.app"
         ));
         
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
         config.setExposedHeaders(Arrays.asList("Set-Cookie", "Authorization"));
-        config.setMaxAge(3600L); // Cache preflight for 1 hour
+        config.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
+    }
+    
+    // High-priority CORS filter that runs before Spring Security
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    public CorsFilter corsFilter() {
+        return new CorsFilter(corsConfigurationSource());
     }
 }
