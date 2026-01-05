@@ -8,9 +8,9 @@ COPY src src
 RUN chmod +x ./mvnw
 RUN ./mvnw clean package -DskipTests
 
-# Runtime stage
+# Runtime stage  
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/*.jar /app/app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]
+CMD ["java", "-jar", "/app/app.jar"]
