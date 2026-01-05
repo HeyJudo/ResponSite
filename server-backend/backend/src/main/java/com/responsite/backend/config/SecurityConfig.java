@@ -7,9 +7,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -20,10 +21,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Disable CSRF (Required for REST API / Postman / Thunder Client testing)
+            // 1. Enable CORS with our configuration
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            
+            // 2. Disable CSRF (Required for REST API)
             .csrf(csrf -> csrf.disable())
             
-            // 2. Authorization Rules
+            // 3. Authorization Rules
             .authorizeHttpRequests(auth -> auth
                 // Swagger / OpenAPI Documentation (Public Access)
                 .requestMatchers(
@@ -39,30 +43,35 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
             )
             
-            // 3. Disable default login forms
+            // 4. Disable default login forms
             .httpBasic(basic -> basic.disable())
             .formLogin(login -> login.disable());
 
         return http.build();
     }
 
-    // 4. CORS Configuration (Required for React Frontend)
+    // CORS Configuration Source (Integrated with Spring Security)
     @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true); 
+        config.setAllowCredentials(true);
+        
         // Allow both localhost (dev) and Railway (prod)
         String frontendUrl = System.getenv("FRONTEND_URL");
-        config.setAllowedOrigins(List.of(
+        config.setAllowedOrigins(Arrays.asList(
             "http://localhost:5173",
+            "http://localhost:3000",
             "https://delightful-heart-production-0f12.up.railway.app",
             frontendUrl != null ? frontendUrl : "http://localhost:5173"
         ));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
+        
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setExposedHeaders(Arrays.asList("Set-Cookie", "Authorization"));
+        config.setMaxAge(3600L); // Cache preflight for 1 hour
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        return source;
     }
 }
