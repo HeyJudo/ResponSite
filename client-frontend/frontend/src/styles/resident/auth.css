@@ -112,7 +112,8 @@ body {
 }
 
 .auth-right .inner-card {
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 32px;
 }
 
 .inner-card::-webkit-scrollbar {
