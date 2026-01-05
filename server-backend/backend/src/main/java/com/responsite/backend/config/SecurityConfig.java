@@ -53,14 +53,15 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); 
         // Allow both localhost (dev) and Railway (prod)
+        String frontendUrl = System.getenv("FRONTEND_URL");
         config.setAllowedOrigins(List.of(
             "http://localhost:5173",
-            "https://responsite-frontend.up.railway.app",  // Update with your actual Railway URL
-            System.getenv("FRONTEND_URL") != null ? System.getenv("FRONTEND_URL") : "http://localhost:5173"
+            "https://delightful-heart-production-0f12.up.railway.app",
+            frontendUrl != null ? frontendUrl : "http://localhost:5173"
         ));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setExposedHeaders(List.of("Set-Cookie"));
+        config.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
