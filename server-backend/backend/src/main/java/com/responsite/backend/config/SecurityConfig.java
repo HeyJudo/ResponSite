@@ -67,7 +67,7 @@ public class SecurityConfig {
             "http://localhost:5173",
             "http://localhost:3000",
             "http://localhost:8080",
-            "https://delightful-heart-production-0f12.up.railway.app"
+            "https://responsite.up.railway.app"
         ));
         
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
