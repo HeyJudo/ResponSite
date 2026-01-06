@@ -77,9 +77,7 @@ const Dashboard = () => {
     <div className="dashboard-root">
       <ResidentHeader />
       <div className="dashboard-body-row">
-        <div className="dashboard-left">
-          <ResidentSidebar />
-        </div>
+        <ResidentSidebar />
         <div className="dashboard-right">
           <main className="right-panel">
             <IncidentCard count={incidentCount} onViewClick={handleViewClick} />

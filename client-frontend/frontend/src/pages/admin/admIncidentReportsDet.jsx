@@ -145,9 +145,7 @@ const AdmIncidentReportsDet = () => {
       {loading && <LoadingScreen />}
       <AdminHeader />
       <div className="dashboard-body-row">
-        <div className="dashboard-left">
-          <AdminSidebar />
-        </div>
+        <AdminSidebar />
         <div className="dashboard-right">
           <main className="right-panel">
             <div className="resource-form-card">

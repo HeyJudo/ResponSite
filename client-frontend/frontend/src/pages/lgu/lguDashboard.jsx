@@ -10,9 +10,7 @@ const LguDashboard = () => {
     <div className="dashboard-root">
       <LguHeader />
       <div className="dashboard-body-row">
-        <div className="dashboard-left">
-          <LguSidebar />
-        </div>
+        <LguSidebar />
         <div className="dashboard-right">
           <main className="right-panel">
             <div className="admin-forms-stack">

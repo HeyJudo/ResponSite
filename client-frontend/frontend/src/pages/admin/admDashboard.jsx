@@ -12,9 +12,7 @@ const AdmDashboard = () => {
     <div className="dashboard-root">
       <AdminHeader />
       <div className="dashboard-body-row">
-        <div className="dashboard-left">
-          <AdminSidebar />
-        </div>
+        <AdminSidebar />
         <div className="dashboard-right">
           <main className="right-panel">
             <div className="admin-forms-stack">

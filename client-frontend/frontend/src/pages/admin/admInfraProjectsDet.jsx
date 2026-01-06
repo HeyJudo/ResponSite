@@ -193,9 +193,7 @@ const AdmInfraProjectsDet = () => {
       <div className="dashboard-root">
         <AdminHeader />
         <div className="dashboard-body-row">
-          <div className="dashboard-left">
-            <AdminSidebar />
-          </div>
+          <AdminSidebar />
           <div className="dashboard-right">
             <main className="right-panel">
               <div style={{ padding: '2rem' }}>
@@ -221,9 +219,7 @@ const AdmInfraProjectsDet = () => {
     <div className="dashboard-root">
       <AdminHeader />
       <div className="dashboard-body-row">
-        <div className="dashboard-left">
-          <AdminSidebar />
-        </div>
+        <AdminSidebar />
         <div className="dashboard-right">
           <main className="right-panel">
             <div className="resource-form-card" style={{ width: 'calc(100% - 20px)', margin: '10px 10px 0 10px' }}>

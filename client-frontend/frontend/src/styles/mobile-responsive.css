@@ -1,0 +1,406 @@
+/* =====================================================
+   MOBILE RESPONSIVE STYLES - ResponSite
+   This file contains all mobile-specific overrides
+   ===================================================== */
+
+/* ==================== HAMBURGER MENU ==================== */
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+}
+
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hamburger-icon span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #01189B;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Mobile Overlay */
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.mobile-overlay.active {
+  display: block;
+}
+
+/* ==================== TABLET BREAKPOINT (1024px) ==================== */
+@media (max-width: 1024px) {
+  /* Dashboard layout adjustments */
+  .dashboard-body-row {
+    flex-direction: column;
+  }
+
+  .dashboard-left {
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    margin: 0;
+    border-radius: 0;
+    position: relative;
+  }
+
+  .dashboard-right {
+    margin: 0;
+    border-radius: 0 0 10px 10px;
+  }
+
+  /* Table improvements */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .data-table {
+    min-width: 600px;
+  }
+
+  /* Cards stack vertically */
+  .cards-row,
+  .stats-row,
+  .quick-buttons-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* ==================== MOBILE BREAKPOINT (768px) ==================== */
+@media (max-width: 768px) {
+  /* Show hamburger button */
+  .hamburger-btn {
+    display: flex;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Hide sidebar by default on mobile */
+  .dashboard-left,
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    background: #E8EDF5;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    padding-top: 60px;
+  }
+
+  .dashboard-left.mobile-open,
+  .sidebar.mobile-open {
+    left: 0;
+  }
+
+  /* Dashboard right takes full width */
+  .dashboard-right {
+    width: 100%;
+    margin: 0;
+    padding: 15px;
+    margin-left: 0;
+  }
+
+  /* Sidebar navigation stacks vertically on mobile */
+  .sidebar-nav {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    margin-top: 0;
+  }
+
+  .nav-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 1rem;
+  }
+
+  /* Header adjustments */
+  .dashboard-header {
+    padding: 10px 15px 10px 60px;
+    justify-content: flex-end;
+  }
+
+  .user-info {
+    gap: 8px;
+  }
+
+  .user-info span {
+    font-size: 0.9rem;
+  }
+
+  /* Logo adjustments */
+  .sidebar-logo {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    margin: 15px;
+    padding: 10px;
+  }
+
+  .sidebar-title {
+    font-size: 1.5rem;
+  }
+
+  /* Auth page improvements */
+  .auth-content {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .auth-left,
+  .auth-right {
+    flex: none;
+    width: 100%;
+    height: auto;
+  }
+
+  .outer-card {
+    height: auto;
+    min-height: auto;
+  }
+
+  .inner-card {
+    height: auto;
+    overflow-y: visible;
+  }
+
+  /* Form improvements */
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px !important; /* Prevents iOS zoom */
+  }
+
+  /* Table scrollable */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 500px;
+  }
+
+  /* Modal full width on mobile */
+  .modal-window {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    min-width: unset !important;
+    max-height: 85vh;
+    margin: 10px;
+  }
+
+  .modal-content {
+    padding: 15px;
+  }
+
+  /* Cards full width */
+  .card,
+  .stat-card,
+  .incident-card,
+  .quick-btn-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Filter and sort section */
+  .filter-sort-row,
+  .search-filter-row {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  /* Infrastructure projects page */
+  .infra-projects-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  /* Incident details */
+  .incident-reported-by-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Admin/LGU specific */
+  .admin-content,
+  .lgu-content {
+    padding: 10px;
+  }
+
+  /* Stats cards */
+  .stats-container,
+  .dashboard-stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stat-card {
+    width: 100%;
+  }
+}
+
+/* ==================== SMALL MOBILE BREAKPOINT (480px) ==================== */
+@media (max-width: 480px) {
+  .hamburger-btn {
+    top: 10px;
+    left: 10px;
+  }
+
+  .dashboard-header {
+    padding: 8px 10px 8px 50px;
+    height: 50px;
+  }
+
+  .user-info span {
+    display: none; /* Hide username on very small screens */
+  }
+
+  .user-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .sidebar-logo img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .sidebar-title {
+    font-size: 1.2rem;
+  }
+
+  .nav-btn {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  /* Form fields */
+  .form-group label {
+    font-size: 12px;
+  }
+
+  .form-title {
+    font-size: 20px;
+  }
+
+  /* Buttons */
+  .register-btn,
+  .login-btn,
+  .submit-btn,
+  .primary-btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  /* Modal even smaller padding */
+  .modal-window {
+    padding: 12px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.1rem;
+  }
+
+  /* Table cells */
+  td, th {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+
+  /* About card on auth pages */
+  .description-card {
+    padding: 15px;
+  }
+
+  .description-card p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .about-title {
+    font-size: 22px;
+  }
+}
+
+/* ==================== LANDSCAPE PHONE ==================== */
+@media (max-width: 768px) and (orientation: landscape) {
+  .dashboard-left.mobile-open,
+  .sidebar.mobile-open {
+    width: 250px;
+  }
+
+  .modal-window {
+    max-height: 90vh;
+  }
+
+  .auth-container {
+    min-height: auto;
+  }
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+}
+
+/* Hide scrollbar on mobile sidebar */
+@media (max-width: 768px) {
+  .dashboard-left::-webkit-scrollbar,
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dashboard-left,
+  .sidebar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

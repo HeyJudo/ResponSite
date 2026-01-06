@@ -34,9 +34,7 @@ const ResidentMyReports = () => {
     <div className="dashboard-root">
       <ResidentHeader />
       <div className="dashboard-body-row">
-        <div className="dashboard-left">
-          <ResidentSidebar />
-        </div>
+        <ResidentSidebar />
         <div className="dashboard-right">
           <main className="right-panel">
             <div className="resource-form-card">
