@@ -13,4 +13,7 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar /app/app.jar
 EXPOSE 8080
-CMD ["java", "-jar", "/app/app.jar"]
+
+# JVM memory settings for Railway's limited memory
+ENV JAVA_OPTS="-Xms128m -Xmx256m -XX:+UseG1GC -XX:MaxGCPauseMillis=100"
+CMD ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
