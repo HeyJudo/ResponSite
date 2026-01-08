@@ -23,6 +23,18 @@ export const incidentStatusColors = {
   "Cancelled": "status-cancelled"
 };
 
+// Severity colors for incidents
+export const severityColors = {
+  "Critical": "severity-critical",
+  "CRITICAL": "severity-critical",
+  "High": "severity-high",
+  "HIGH": "severity-high",
+  "Medium": "severity-medium",
+  "MEDIUM": "severity-medium",
+  "Low": "severity-low",
+  "LOW": "severity-low"
+};
+
 export const typeOptions = ['Bridge', 'Building', 'Drainage', 'Road', 'Other'];
 export const zoneOptions = ['Zone 1', 'Zone 2', 'Zone 3'];
 export const statusOptions = ['Planned', 'In Progress', 'Completed', 'Delayed'];

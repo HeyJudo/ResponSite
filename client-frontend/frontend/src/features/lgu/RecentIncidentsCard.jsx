@@ -1,6 +1,6 @@
 import Table from '../../components/Table';
 import { getAllIncidents } from '../../API/incidentService';
-import { incidentStatusColors } from '../../features/admin/admInfraProjects.constants';
+import { incidentStatusColors, severityColors } from '../../features/admin/admInfraProjects.constants';
 import { useState, useEffect } from 'react';
 
 const RecentIncidentsCard = () => {
@@ -38,7 +38,11 @@ const RecentIncidentsCard = () => {
               { key: 'id', header: 'Incident ID' },
               { key: 'type', header: 'Type' },
               { key: 'zone', header: 'Zone' },
-              { key: 'severity', header: 'Severity' },
+              { key: 'severity', header: 'Severity', render: (value) => (
+                <span className={`severity-chip ${severityColors[value] || ""}`}>
+                  {value}
+                </span>
+              ) },
               { key: 'status', header: 'Status', render: (value) => (
                 <span className={`status-chip ${incidentStatusColors[value] || ""}`}>
                   {value}

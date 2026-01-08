@@ -6,7 +6,7 @@ import { SkeletonTable } from '../../components/SkeletonLoader';
 import EmptyState from '../../components/EmptyState';
 import { useToast } from '../../components/Toast';
 import { getAllIncidents } from '../../API/incidentService';
-import { incidentStatusColors } from '../../features/admin/admInfraProjects.constants';
+import { incidentStatusColors, severityColors } from '../../features/admin/admInfraProjects.constants';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admIncidentReports.css';
 import { useState, useEffect } from 'react';
@@ -88,7 +88,11 @@ const AdmIncidentReports = () => {
                       { key: 'type', header: 'Type' },
                       { key: 'zone', header: 'Zone' },
                       { key: 'location', header: 'Location' },
-                      { key: 'severity', header: 'Severity' },
+                      { key: 'severity', header: 'Severity', render: (value) => (
+                        <span className={`severity-chip ${severityColors[value] || ""}`}>
+                          {value}
+                        </span>
+                      ) },
                       { key: 'status', header: 'Status', render: (value) => (
                         <span className={`status-chip ${incidentStatusColors[value] || ""}`}>
                           {value}

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ResidentSidebar from '../../features/resident/ResidentSidebar';
 import ResidentHeader from '../../features/resident/ResidentHeader';
 import { getMyIncidents } from '../../API/incidentService';
-import { incidentStatusColors } from '../../features/admin/admInfraProjects.constants';
+import { incidentStatusColors, severityColors } from '../../features/admin/admInfraProjects.constants';
 import Table from '../../components/Table';
 import { SkeletonTable } from '../../components/SkeletonLoader';
 import EmptyState from '../../components/EmptyState';
@@ -58,7 +58,11 @@ const ResidentMyReports = () => {
                       { key: 'type', header: 'Type' },
                       { key: 'zone', header: 'Zone' },
                       { key: 'location', header: 'Location' },
-                      { key: 'severity', header: 'Severity' },
+                      { key: 'severity', header: 'Severity', render: (value) => (
+                        <span className={`severity-chip ${severityColors[value] || ""}`}>
+                          {value}
+                        </span>
+                      ) },
                       { key: 'status', header: 'Status', render: (value) => (
                         <span className={`status-chip ${incidentStatusColors[value] || ""}`}>
                           {value}

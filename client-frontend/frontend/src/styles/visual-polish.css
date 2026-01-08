@@ -1,0 +1,495 @@
+/* Visual Polish Styles - Global Enhancements */
+
+/* ============================================
+   SEVERITY BADGES - Incident Severity Colors
+   ============================================ */
+.severity-critical {
+  background: linear-gradient(135deg, #ff4757 0%, #c0392b 100%);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+}
+
+.severity-high {
+  background: linear-gradient(135deg, #ff9f43 0%, #e67e22 100%);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(255, 159, 67, 0.3);
+}
+
+.severity-medium {
+  background: linear-gradient(135deg, #feca57 0%, #f39c12 100%);
+  color: #333333;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(254, 202, 87, 0.3);
+}
+
+.severity-low {
+  background: linear-gradient(135deg, #26de81 0%, #20bf6b 100%);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(38, 222, 129, 0.3);
+}
+
+/* Severity chip base styling */
+.severity-chip {
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+}
+
+.severity-chip:hover {
+  transform: scale(1.05);
+}
+
+/* ============================================
+   ENHANCED STATUS CHIPS
+   ============================================ */
+.status-chip {
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.status-chip:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Incident Status Colors - Enhanced */
+.status-pending {
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(116, 185, 255, 0.3);
+}
+
+.status-inprogress {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  color: #333333;
+  box-shadow: 0 2px 6px rgba(253, 203, 110, 0.3);
+}
+
+.status-resolved {
+  background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(85, 239, 196, 0.3);
+}
+
+.status-cancelled {
+  background: linear-gradient(135deg, #b2bec3 0%, #636e72 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(99, 110, 114, 0.3);
+}
+
+/* Project Status Colors - Enhanced */
+.status-planned {
+  background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(162, 155, 254, 0.3);
+}
+
+.status-completed {
+  background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(85, 239, 196, 0.3);
+}
+
+.status-delayed {
+  background: linear-gradient(135deg, #fab1a0 0%, #e17055 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(250, 177, 160, 0.3);
+}
+
+/* Resource Status Colors - Enhanced */
+.status-available {
+  background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(85, 239, 196, 0.3);
+}
+
+.status-lowstock {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  color: #333333;
+  box-shadow: 0 2px 6px rgba(253, 203, 110, 0.3);
+}
+
+.status-depleted {
+  background: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(255, 118, 117, 0.3);
+}
+
+/* ============================================
+   NAVIGATION ICONS
+   ============================================ */
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 16px;
+  transition: all 0.25s ease;
+}
+
+.nav-btn:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(1, 29, 156, 0.2);
+}
+
+.nav-btn.active {
+  box-shadow: 0 4px 12px rgba(1, 29, 156, 0.3);
+}
+
+/* ============================================
+   CARD HOVER EFFECTS
+   ============================================ */
+.admin-form-card,
+.resource-form-card,
+.incident-card,
+.user-form-card,
+.notif-list-card {
+  transition: all 0.3s ease;
+}
+
+.admin-form-card:hover,
+.incident-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Table row hover effects */
+.incident-table tbody tr,
+table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.incident-table tbody tr:hover,
+table tbody tr:hover {
+  background-color: rgba(1, 29, 156, 0.04);
+  transform: scale(1.002);
+}
+
+table tbody tr[style*="cursor: pointer"]:hover {
+  background-color: rgba(1, 29, 156, 0.08) !important;
+}
+
+/* ============================================
+   BUTTON ENHANCEMENTS
+   ============================================ */
+.view-btn,
+.quick-btn,
+.viewall-btn,
+.register-btn,
+.close-modal-btn,
+.submit-btn,
+.cancel-btn,
+.add-btn,
+.edit-btn,
+.delete-btn {
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.view-btn:hover,
+.quick-btn:hover,
+.viewall-btn:hover,
+.register-btn:hover,
+.close-modal-btn:hover,
+.submit-btn:hover,
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(1, 29, 156, 0.25);
+}
+
+.view-btn:active,
+.quick-btn:active,
+.viewall-btn:active,
+.register-btn:active,
+.close-modal-btn:active,
+.submit-btn:active,
+.add-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(1, 29, 156, 0.2);
+}
+
+/* Button ripple effect */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.btn-ripple:active::after {
+  width: 200px;
+  height: 200px;
+}
+
+/* ============================================
+   FORM CARD ENHANCEMENTS
+   ============================================ */
+.resource-form-card,
+.user-form-card {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.resource-form-card:hover,
+.user-form-card:hover {
+  border-color: rgba(1, 29, 156, 0.1);
+}
+
+.resource-form-header,
+.user-form-header {
+  position: relative;
+  overflow: hidden;
+}
+
+.resource-form-header::after,
+.user-form-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.resource-form-card:hover .resource-form-header::after,
+.user-form-card:hover .user-form-header::after {
+  left: 100%;
+}
+
+/* ============================================
+   INPUT FOCUS EFFECTS
+   ============================================ */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #01189B !important;
+  box-shadow: 0 0 0 3px rgba(1, 24, 155, 0.15) !important;
+  transition: all 0.2s ease;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+/* ============================================
+   LOADING & TRANSITION EFFECTS
+   ============================================ */
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================
+   CONSISTENT SPACING
+   ============================================ */
+.right-panel {
+  padding: 16px;
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-forms-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.resource-search-actions {
+  padding: 16px 20px;
+  gap: 16px;
+}
+
+.resource-table-container {
+  padding: 16px;
+}
+
+/* ============================================
+   MOBILE RESPONSIVENESS ENHANCEMENTS
+   ============================================ */
+@media (max-width: 768px) {
+  .severity-chip,
+  .status-chip {
+    padding: 3px 10px;
+    font-size: 0.75rem;
+  }
+
+  .nav-btn:hover {
+    transform: none;
+  }
+
+  .admin-form-card:hover,
+  .incident-card:hover {
+    transform: none;
+  }
+}
+
+/* ============================================
+   QUANTITY CONTROL ENHANCEMENT
+   ============================================ */
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #01189B;
+  background: #fff;
+  color: #01189B;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity-btn:hover {
+  background: #01189B;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.quantity-btn:active {
+  transform: scale(0.95);
+}
+
+.quantity-value {
+  min-width: 40px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* ============================================
+   ACTION BUTTONS STYLING
+   ============================================ */
+.resource-action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.resource-action-buttons button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+/* ============================================
+   HEADER PROFILE ENHANCEMENT
+   ============================================ */
+.user-info {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.user-info:hover {
+  background: rgba(1, 29, 156, 0.05);
+}
+
+.user-icon {
+  transition: transform 0.2s ease;
+}
+
+.user-info:hover .user-icon {
+  transform: scale(1.1);
+}
