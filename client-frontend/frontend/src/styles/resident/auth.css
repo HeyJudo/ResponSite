@@ -260,6 +260,63 @@ body {
   text-decoration: underline;
 }
 
+/* Form Validation Styles */
+.form-group label .required {
+  color: #e74c3c;
+  font-weight: 700;
+}
+
+.form-group input.input-error {
+  border-color: #e74c3c;
+  background-color: #fff5f5;
+}
+
+.form-group input.input-error:focus {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+}
+
+.form-group input.input-valid {
+  border-color: #27ae60;
+  background-color: #f0fff4;
+}
+
+.form-group input.input-valid:focus {
+  border-color: #27ae60;
+  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.15);
+}
+
+.field-error {
+  font-size: 12px;
+  color: #e74c3c;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: fadeIn 0.2s ease;
+}
+
+.form-error {
+  color: #e74c3c;
+  background-color: #fff5f5;
+  border: 1px solid #fde0dc;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 1024px) {
   .auth-content {
     flex-direction: column;

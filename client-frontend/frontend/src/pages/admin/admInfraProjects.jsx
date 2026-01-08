@@ -1,6 +1,9 @@
 import AdminSidebar from '../../features/admin/AdminSidebar';
 import AdminHeader from '../../features/admin/AdminHeader';
 import Modal from '../../components/Modal';
+import { SkeletonTable } from '../../components/SkeletonLoader';
+import EmptyState from '../../components/EmptyState';
+import { useToast } from '../../components/Toast';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admInfraProjects.css';
 import '../../styles/admin/admResourceManagement.css';
@@ -19,6 +22,7 @@ const normalizeStatus = (status) => {
 
 const admInfraProjects = () => {
   const navigate = useNavigate();
+  const toast = useToast();
   const [showAddModal, setShowAddModal] = useState(false);
   const [projectsData, setProjectsData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,6 +39,7 @@ const admInfraProjects = () => {
       } catch (err) {
         console.error('Failed to fetch projects:', err);
         setError(err.message);
+        toast.error('Failed to load projects');
         // Keep empty array as fallback
         setProjectsData([]);
       } finally {
@@ -91,6 +96,7 @@ const admInfraProjects = () => {
 
       const createdProject = await createProject(newProjectData);
       setProjectsData([...projectsData, createdProject]);
+      toast.success('Project created successfully!');
       setFormData({
         projectName: '',
         projectType: '',
@@ -108,6 +114,7 @@ const admInfraProjects = () => {
       setShowAddModal(false);
     } catch (err) {
       console.error('Failed to create project:', err);
+      toast.error('Failed to create project');
       setError(err.message);
     }
   };
@@ -123,9 +130,19 @@ const admInfraProjects = () => {
               <div className="resource-form-header">
                 Infrastructure Projects
               </div>
-              {loading && <p>Loading projects...</p>}
-              {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-              {!loading && (
+              {loading ? (
+                <SkeletonTable columns={9} rows={6} />
+              ) : error ? (
+                <EmptyState
+                  icon="⚠️"
+                  title="Failed to Load Projects"
+                  message={error}
+                  action={() => window.location.reload()}
+                  actionLabel="Try Again"
+                />
+              ) : filters.filtered.length === 0 ? (
+                <EmptyState preset="projects" action={handleAddProject} actionLabel="Add New Project" />
+              ) : (
                 <>
                   <InfraProjectsFilterSort filters={filters} onAddProject={handleAddProject} />
                   <div className="resource-table-container">

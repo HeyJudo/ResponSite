@@ -9,10 +9,17 @@ import '../../styles/admin/admResourceManagement.css';
 import Table from '../../components/Table';
 import SearchBar from './../../components/SearchBar';
 import Button from '../../components/Button';
+import { SkeletonTable } from '../../components/SkeletonLoader';
+import EmptyState from '../../components/EmptyState';
+import { useToast } from '../../components/Toast';
+import { useConfirm } from '../../components/ConfirmDialog';
 import { getAllResources, addResource, updateResource, deleteResource } from '../../API/resourceService';
 import { statusColors } from '../../features/admin/admInfraProjects.constants';
 
 const AdmResourceManagement = () => {
+  const toast = useToast();
+  const { confirmDelete } = useConfirm();
+  
   // Function to normalize status text to title case and replace underscores
   const normalizeStatus = (status) => {
     if (!status) return status;
@@ -37,6 +44,7 @@ const AdmResourceManagement = () => {
       } catch (err) {
         setError(err.message);
         setResources([]);
+        toast.error('Failed to load resources');
       } finally {
         setLoading(false);
       }
@@ -49,8 +57,10 @@ const AdmResourceManagement = () => {
     try {
       const newResource = await addResource(resourceData);
       setResources([...resources, newResource]);
+      toast.success('Resource added successfully');
     } catch (err) {
       setError(err.message);
+      toast.error('Failed to add resource');
     }
   };
 
@@ -61,18 +71,27 @@ const AdmResourceManagement = () => {
         resource.id === id ? updatedResource : resource
       ));
       setError(null);
+      toast.success('Resource updated successfully');
     } catch (err) {
       setError(err.message);
+      toast.error('Failed to update resource');
     }
   };
 
   const handleDeleteResource = async (id) => {
+    const resourceName = resources.find(r => r.id === id)?.name || 'this resource';
+    const confirmed = await confirmDelete(resourceName);
+    
+    if (!confirmed) return;
+    
     try {
       await deleteResource(id);
       setResources(resources.filter(resource => resource.id !== id));
       setError(null);
+      toast.success('Resource deleted successfully');
     } catch (err) {
       setError(err.message);
+      toast.error('Failed to delete resource');
     }
   };
 
@@ -90,9 +109,11 @@ const AdmResourceManagement = () => {
           resource.id === id ? updatedResource : resource
         ));
         setError(null);
+        toast.success('Stock updated successfully');
       }
     } catch (err) {
       setError(err.message);
+      toast.error('Failed to update stock');
     }
   };
 
@@ -185,8 +206,11 @@ const AdmResourceManagement = () => {
             <div className="resource-form-card">
               <div className="resource-form-header">Resources</div>
               {error && <p style={{ padding: '20px', color: 'red' }}>Error: {error}</p>}
-              {loading && <p style={{ padding: '20px', textAlign: 'center' }}>Loading...</p>}
-              {!loading && !error && (
+              {loading ? (
+                <div style={{ padding: '20px' }}>
+                  <SkeletonTable rows={5} columns={6} />
+                </div>
+              ) : (
                 <>
                   <div className="resource-search-actions">
                     <SearchBar
@@ -200,7 +224,15 @@ const AdmResourceManagement = () => {
                     </div>
                   </div>
                   <div className="resource-table-container">
-                    <Table columns={columns} data={filteredData} />
+                    {filteredData.length > 0 ? (
+                      <Table columns={columns} data={filteredData} />
+                    ) : (
+                      <EmptyState 
+                        preset="resources"
+                        action={() => setShowAddModal(true)}
+                        actionLabel="Add First Resource"
+                      />
+                    )}
                   </div>
                 </>
               )}

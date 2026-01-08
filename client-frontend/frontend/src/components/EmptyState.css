@@ -1,0 +1,151 @@
+/* =====================================================
+   EMPTY STATE STYLES
+   Friendly messages when there's no data to display
+   ===================================================== */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  color: #64748b;
+}
+
+/* Size variants */
+.empty-state-small {
+  padding: 24px 16px;
+}
+
+.empty-state-small .empty-state-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.empty-state-small .empty-state-title {
+  font-size: 1rem;
+}
+
+.empty-state-small .empty-state-message {
+  font-size: 0.85rem;
+}
+
+.empty-state-medium {
+  padding: 48px 24px;
+}
+
+.empty-state-large {
+  padding: 64px 32px;
+}
+
+.empty-state-large .empty-state-icon {
+  width: 96px;
+  height: 96px;
+}
+
+.empty-state-large .empty-state-title {
+  font-size: 1.5rem;
+}
+
+/* Icon */
+.empty-state-icon {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 20px;
+  color: #cbd5e1;
+  background: #f1f5f9;
+  border-radius: 50%;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Title */
+.empty-state-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #334155;
+  margin: 0 0 8px 0;
+  font-family: 'Space Grotesk', 'Inter', Arial, sans-serif;
+}
+
+/* Message */
+.empty-state-message {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+/* Action button */
+.empty-state-action {
+  margin-top: 20px;
+  padding: 10px 24px;
+  background: #01189B;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  font-family: 'Space Grotesk', 'Inter', Arial, sans-serif;
+}
+
+.empty-state-action:hover {
+  background: #0020c5;
+}
+
+.empty-state-action:active {
+  transform: scale(0.98);
+}
+
+/* Animation */
+@keyframes empty-state-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.empty-state {
+  animation: empty-state-fade-in 0.3s ease-out;
+}
+
+/* Dark mode support (future) */
+@media (prefers-color-scheme: dark) {
+  /* Can be enabled later */
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .empty-state {
+    padding: 32px 16px;
+  }
+
+  .empty-state-icon {
+    width: 56px;
+    height: 56px;
+    padding: 12px;
+  }
+
+  .empty-state-title {
+    font-size: 1.1rem;
+  }
+
+  .empty-state-message {
+    font-size: 0.9rem;
+  }
+}

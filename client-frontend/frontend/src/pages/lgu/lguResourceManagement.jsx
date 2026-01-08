@@ -4,6 +4,10 @@ import LguHeader from '../../features/lgu/LguHeader';
 import ResourceAddModal from '../../features/admin/ResourceAddModal';
 import ResourceEditModal from '../../features/admin/ResourceEditModal';
 import ResourceStockModal from '../../features/admin/ResourceStockModal';
+import { SkeletonTable } from '../../components/SkeletonLoader';
+import EmptyState from '../../components/EmptyState';
+import { useToast } from '../../components/Toast';
+import { useConfirm } from '../../components/ConfirmDialog';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admResourceManagement.css';
 import Table from '../../components/Table';
@@ -13,6 +17,8 @@ import { getAllResources, addResource, updateResource, deleteResource } from '..
 import { statusColors } from '../../features/admin/admInfraProjects.constants';
 
 const LguResourceManagement = () => {
+  const toast = useToast();
+  const confirm = useConfirm();
   // Function to normalize status text to title case and replace underscores
   const normalizeStatus = (status) => {
     if (!status) return status;
@@ -35,7 +41,9 @@ const LguResourceManagement = () => {
         setResources(data);
         setError(null);
       } catch (err) {
-        setError(err.message);
+        const errorMessage = err.message || 'Failed to load resources';
+        setError(errorMessage);
+        toast.error(errorMessage);
         setResources([]);
       } finally {
         setLoading(false);
@@ -49,7 +57,9 @@ const LguResourceManagement = () => {
     try {
       const newResource = await addResource(resourceData);
       setResources([...resources, newResource]);
+      toast.success('Resource added successfully!');
     } catch (err) {
+      toast.error(err.message || 'Failed to add resource');
       setError(err.message);
     }
   };
@@ -60,19 +70,28 @@ const LguResourceManagement = () => {
       setResources(resources.map(resource => 
         resource.id === id ? updatedResource : resource
       ));
+      toast.success('Resource updated successfully!');
       setError(null);
     } catch (err) {
+      toast.error(err.message || 'Failed to update resource');
       setError(err.message);
     }
   };
 
   const handleDeleteResource = async (id) => {
-    try {
-      await deleteResource(id);
-      setResources(resources.filter(resource => resource.id !== id));
-      setError(null);
-    } catch (err) {
-      setError(err.message);
+    const resourceToDelete = resources.find(r => r.id === id);
+    const confirmed = await confirm.confirmDelete(resourceToDelete?.name || 'this resource');
+    
+    if (confirmed) {
+      try {
+        await deleteResource(id);
+        setResources(resources.filter(resource => resource.id !== id));
+        toast.success('Resource deleted successfully!');
+        setError(null);
+      } catch (err) {
+        toast.error(err.message || 'Failed to delete resource');
+        setError(err.message);
+      }
     }
   };
 
@@ -89,9 +108,11 @@ const LguResourceManagement = () => {
         setResources(resources.map(resource => 
           resource.id === id ? updatedResource : resource
         ));
+        toast.success('Stock updated successfully!');
         setError(null);
       }
     } catch (err) {
+      toast.error(err.message || 'Failed to update stock');
       setError(err.message);
     }
   };
@@ -154,9 +175,21 @@ const LguResourceManagement = () => {
           <main className="right-panel">
             <div className="resource-form-card">
               <div className="resource-form-header">Resources</div>
-              {error && <p style={{ padding: '20px', color: 'red' }}>Error: {error}</p>}
-              {loading && <p style={{ padding: '20px', textAlign: 'center' }}>Loading...</p>}
-              {!loading && !error && (
+              {loading ? (
+                <SkeletonTable columns={6} rows={6} />
+              ) : error ? (
+                <EmptyState
+                  icon="⚠️"
+                  title="Failed to Load Resources"
+                  message={error}
+                  action={() => window.location.reload()}
+                  actionLabel="Try Again"
+                />
+              ) : filteredData.length === 0 && search ? (
+                <EmptyState preset="search" />
+              ) : resources.length === 0 ? (
+                <EmptyState preset="resources" action={() => setShowAddModal(true)} actionLabel="Add Resource" />
+              ) : (
                 <>
                   <div className="resource-search-actions">
                     <SearchBar

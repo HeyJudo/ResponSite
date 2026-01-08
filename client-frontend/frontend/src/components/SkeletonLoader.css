@@ -1,0 +1,144 @@
+/* =====================================================
+   SKELETON LOADER STYLES
+   Animated placeholder content for loading states
+   ===================================================== */
+
+/* Base skeleton animation */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-box {
+  background: linear-gradient(
+    90deg,
+    #e8edf5 25%,
+    #f0f4f9 50%,
+    #e8edf5 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+/* Text skeleton */
+.skeleton-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Table skeleton */
+.skeleton-table-container {
+  padding: 16px;
+}
+
+.skeleton-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.skeleton-table th,
+.skeleton-table td {
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.skeleton-table thead tr {
+  border-bottom: 2px solid #e8edf5;
+}
+
+.skeleton-table-row td {
+  border-bottom: 1px solid #f0f4f9;
+}
+
+/* Card skeleton */
+.skeleton-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.skeleton-card-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Stats card skeleton */
+.skeleton-stats-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  min-width: 200px;
+}
+
+.skeleton-stats-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Dashboard skeleton */
+.skeleton-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px;
+}
+
+.skeleton-stats-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.skeleton-stats-row > * {
+  flex: 1;
+  min-width: 200px;
+}
+
+.skeleton-content-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+/* Form skeleton */
+.skeleton-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.skeleton-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .skeleton-stats-row {
+    flex-direction: column;
+  }
+  
+  .skeleton-stats-card {
+    min-width: 100%;
+  }
+  
+  .skeleton-content-row {
+    grid-template-columns: 1fr;
+  }
+}

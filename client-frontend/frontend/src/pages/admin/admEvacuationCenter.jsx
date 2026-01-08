@@ -6,11 +6,17 @@ import SearchBar from '../../components/SearchBar';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import FormField from '../../components/FormField';
+import { SkeletonTable } from '../../components/SkeletonLoader';
+import EmptyState from '../../components/EmptyState';
+import { useToast } from '../../components/Toast';
+import { useConfirm } from '../../components/ConfirmDialog';
 import { getAllEvacuationCenters, addEvacuationCenter, updateEvacuationCenter, deleteEvacuationCenter } from '../../API/evacuationCenterService';
 import '../../styles/resident/global.css';
 import '../../styles/admin/admEvacuationCenter.css';
 
 const admEvacuationCenter = () => {
+  const toast = useToast();
+  const { confirmDelete } = useConfirm();
   const [centers, setCenters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -38,6 +44,7 @@ const admEvacuationCenter = () => {
       } catch (err) {
         setError(err.message);
         setCenters([]);
+        toast.error('Failed to load evacuation centers');
       } finally {
         setLoading(false);
       }
@@ -72,6 +79,7 @@ const admEvacuationCenter = () => {
         
         const createdCenter = await addEvacuationCenter(newCenterData);
         setCenters([...centers, createdCenter]);
+        toast.success('Evacuation center added successfully');
         
         // Reset form
         setFormData({
@@ -84,6 +92,7 @@ const admEvacuationCenter = () => {
         setShowAddModal(false);
       } catch (err) {
         setError(err.message);
+        toast.error('Failed to add evacuation center');
       }
     }
   };
@@ -126,21 +135,28 @@ const admEvacuationCenter = () => {
           capacity: ''
         });
         setShowEditModal(false);
+        toast.success('Evacuation center updated successfully');
       } catch (err) {
         setError(err.message);
+        toast.error('Failed to update evacuation center');
       }
     }
   };
 
   const handleDeleteCenter = async (centerId) => {
-    if (window.confirm('Are you sure you want to delete this evacuation center?')) {
-      try {
-        await deleteEvacuationCenter(centerId);
-        // Remove from local state
-        setCenters(centers.filter(center => center.id !== centerId));
-      } catch (err) {
-        setError(err.message);
-      }
+    const centerName = centers.find(c => c.id === centerId)?.name || 'this evacuation center';
+    const confirmed = await confirmDelete(centerName);
+    
+    if (!confirmed) return;
+    
+    try {
+      await deleteEvacuationCenter(centerId);
+      // Remove from local state
+      setCenters(centers.filter(center => center.id !== centerId));
+      toast.success('Evacuation center deleted successfully');
+    } catch (err) {
+      setError(err.message);
+      toast.error('Failed to delete evacuation center');
     }
   };
 
@@ -190,8 +206,11 @@ const admEvacuationCenter = () => {
             <div className="resource-form-card">
               <div className="resource-form-header">Evacuation Centers</div>
               {error && <p style={{ padding: '20px', color: 'red' }}>Error: {error}</p>}
-              {loading && <p style={{ padding: '20px', textAlign: 'center' }}>Loading...</p>}
-              {!loading && !error && (
+              {loading ? (
+                <div style={{ padding: '20px' }}>
+                  <SkeletonTable rows={5} columns={4} />
+                </div>
+              ) : (
                 <>
                   <div className="resource-search-actions">
                     <SearchBar
@@ -205,17 +224,25 @@ const admEvacuationCenter = () => {
                     </div>
                   </div>
                   <div className="resource-table-container">
-                    <Table
-                      columns={[
-                        { key: 'name', header: 'Name' },
-                        { key: 'location', header: 'Location' },
-                        { key: 'status', header: 'Status', render: (value) => (
-                          <span className={`evac-status ${value.toLowerCase()}`}>{value}</span>
-                        ) },
-                        { key: 'capacity', header: 'Capacity' },
-                      ]}
-                      data={filteredCenters}
-                    />
+                    {filteredCenters.length > 0 ? (
+                      <Table
+                        columns={[
+                          { key: 'name', header: 'Name' },
+                          { key: 'location', header: 'Location' },
+                          { key: 'status', header: 'Status', render: (value) => (
+                            <span className={`evac-status ${value.toLowerCase()}`}>{value}</span>
+                          ) },
+                          { key: 'capacity', header: 'Capacity' },
+                        ]}
+                        data={filteredCenters}
+                      />
+                    ) : (
+                      <EmptyState 
+                        preset={search ? 'search' : 'evacuationCenters'}
+                        action={() => setShowAddModal(true)}
+                        actionLabel="Add First Center"
+                      />
+                    )}
                   </div>
                 </>
               )}

@@ -2,6 +2,9 @@ import LguSidebar from '../../features/lgu/LguSidebar';
 import LguHeader from '../../features/lgu/LguHeader';
 import Table from '../../components/Table';
 import SearchBar from '../../components/SearchBar';
+import { SkeletonTable } from '../../components/SkeletonLoader';
+import EmptyState from '../../components/EmptyState';
+import { useToast } from '../../components/Toast';
 import { getAllIncidents } from '../../API/incidentService';
 import { incidentStatusColors } from '../../features/admin/admInfraProjects.constants';
 import '../../styles/resident/global.css';
@@ -10,6 +13,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const LguIncidentReports = () => {
+  const toast = useToast();
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -25,7 +29,9 @@ const LguIncidentReports = () => {
         setAllIncidents(data);
         setFiltered(data);
       } catch (err) {
-        setError(err.message || 'Failed to load incidents');
+        const errorMessage = err.message || 'Failed to load incidents';
+        setError(errorMessage);
+        toast.error(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -52,6 +58,67 @@ const LguIncidentReports = () => {
     navigate(`/lguIncidentReportsDet/${row.id}`, { state: { incident: row } });
   };
 
+  const renderContent = () => {
+    if (loading) {
+      return <SkeletonTable columns={8} rows={6} />;
+    }
+
+    if (error) {
+      return (
+        <EmptyState
+          icon="⚠️"
+          title="Failed to Load Incidents"
+          message={error}
+          action={() => window.location.reload()}
+          actionLabel="Try Again"
+        />
+      );
+    }
+
+    if (filtered.length === 0 && search) {
+      return <EmptyState preset="search" />;
+    }
+
+    if (allIncidents.length === 0) {
+      return <EmptyState preset="incidents" />;
+    }
+
+    return (
+      <>
+        <div className="resource-search-actions">
+          <SearchBar
+            placeholder="Search"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="resource-table-container">
+          <Table
+            columns={[
+              { key: 'id', header: 'Incident ID' },
+              { key: 'type', header: 'Type' },
+              { key: 'zone', header: 'Zone' },
+              { key: 'location', header: 'Location' },
+              { key: 'severity', header: 'Severity' },
+              { key: 'status', header: 'Status', render: (value) => (
+                <span className={`status-chip ${incidentStatusColors[value] || ""}`}>
+                  {value}
+                </span>
+              ) },
+              { key: 'reporterName', header: 'Reported By' },
+              { key: 'timestamp', header: 'Date Reported', render: (value) => {
+                if (!value) return 'N/A';
+                return new Date(value).toLocaleDateString();
+              } },
+            ]}
+            data={filtered}
+            onRowClick={handleRowClick}
+          />
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className="dashboard-root">
       <LguHeader />
@@ -61,43 +128,7 @@ const LguIncidentReports = () => {
           <main className="right-panel">
             <div className="resource-form-card">
               <div className="resource-form-header">Incident Reports</div>
-              {error && <div style={{ color: 'red', padding: '10px', marginBottom: '10px' }}>{error}</div>}
-              {loading ? (
-                <div style={{ textAlign: 'center', padding: '20px' }}>Loading incidents...</div>
-              ) : (
-              <>
-              <div className="resource-search-actions">
-                <SearchBar
-                  placeholder="Search"
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                />
-              </div>
-              <div className="resource-table-container">
-                <Table
-                  columns={[
-                    { key: 'id', header: 'Incident ID' },
-                    { key: 'type', header: 'Type' },
-                    { key: 'zone', header: 'Zone' },
-                    { key: 'location', header: 'Location' },
-                    { key: 'severity', header: 'Severity' },
-                    { key: 'status', header: 'Status', render: (value) => (
-                      <span className={`status-chip ${incidentStatusColors[value] || ""}`}>
-                        {value}
-                      </span>
-                    ) },
-                    { key: 'reporterName', header: 'Reported By' },
-                    { key: 'timestamp', header: 'Date Reported', render: (value) => {
-                      if (!value) return 'N/A';
-                      return new Date(value).toLocaleDateString();
-                    } },
-                  ]}
-                  data={filtered}
-                  onRowClick={handleRowClick}
-                />
-              </div>
-              </>
-              )}
+              {renderContent()}
             </div>
           </main>
         </div>
