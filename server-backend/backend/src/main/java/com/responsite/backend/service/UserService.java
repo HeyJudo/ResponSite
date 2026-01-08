@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.responsite.backend.Repository.UserRepository;
@@ -17,6 +18,9 @@ import com.responsite.backend.util.EntityMapper;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Logic: Register a new user
     public UserResponseDTO registerUser(RegisterRequestDTO registerDTO) {
@@ -27,14 +31,17 @@ public class UserService {
 
         // 2. Convert DTO to Entity
         User user = EntityMapper.toEntity(registerDTO);
+        
+        // 3. Hash the password with BCrypt before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // 3. Default role is RESIDENT if not specified
+        // 4. Default role is RESIDENT if not specified
         user.setRole("RESIDENT");
 
-        // 4. Save to Database
+        // 5. Save to Database
         User savedUser = userRepository.save(user);
 
-        // 5. Return DTO (without password)
+        // 6. Return DTO (without password)
         return EntityMapper.toDto(savedUser);
     }
 
@@ -44,8 +51,8 @@ public class UserService {
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            // Compare Passwords (Simple String comparison for MVP)
-            if (user.getPassword().equals(password)) {
+            // Compare Passwords using BCrypt (secure comparison)
+            if (passwordEncoder.matches(password, user.getPassword())) {
                 return user; // Success: Return the user entity (for session)
             }
         }
