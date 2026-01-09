@@ -96,26 +96,96 @@
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 10px;
   }
 
   /* Hide sidebar by default on mobile */
-  .dashboard-left,
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 280px;
-    height: 100vh;
-    z-index: 1000;
-    transition: left 0.3s ease;
-    background: #E8EDF5;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    padding-top: 60px;
+  .dashboard-left {
+    position: fixed !important;
+    top: 0 !important;
+    left: -300px !important;
+    width: 270px !important;
+    height: 100vh !important;
+    z-index: 1000 !important;
+    transition: left 0.3s ease !important;
+    background: linear-gradient(180deg, #1a2b5f 0%, #0d1a3d 100%) !important;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3) !important;
+    padding: 20px 15px !important;
+    overflow-y: auto !important;
   }
 
-  .dashboard-left.mobile-open,
-  .sidebar.mobile-open {
-    left: 0;
+  .dashboard-left.mobile-open {
+    left: 0 !important;
+  }
+
+  /* Sidebar logo styling */
+  .sidebar-logo {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin-bottom: 20px !important;
+    padding-bottom: 15px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .sidebar-logo img,
+  .sidebar-logo-img {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .sidebar-title {
+    color: #ffffff !important;
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+  }
+
+  /* Sidebar and nav positioning */
+  .sidebar {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Sidebar navigation stacks vertically on mobile */
+  .sidebar-nav {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Navigation buttons - VISIBLE with proper styling */
+  .nav-btn {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    text-align: left !important;
+    padding: 14px 16px !important;
+    font-size: 1rem !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .nav-btn.active {
+    background: rgba(255, 255, 255, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+  }
+
+  /* Nav icons */
+  .nav-icon {
+    width: 20px !important;
+    height: 20px !important;
+    margin-right: 12px !important;
+    fill: #ffffff !important;
   }
 
   /* Dashboard right takes full width */
@@ -124,21 +194,7 @@
     margin: 0;
     padding: 15px;
     margin-left: 0;
-  }
-
-  /* Sidebar navigation stacks vertically on mobile */
-  .sidebar-nav {
-    flex-direction: column;
-    gap: 10px;
-    padding: 15px;
-    margin-top: 0;
-  }
-
-  .nav-btn {
-    width: 100%;
-    text-align: left;
-    padding: 12px 16px;
-    font-size: 1rem;
+    margin-top: 60px;
   }
 
   /* Header adjustments */
