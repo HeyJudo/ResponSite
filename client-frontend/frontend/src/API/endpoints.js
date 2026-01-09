@@ -28,6 +28,7 @@ export const INCIDENT_ENDPOINTS = {
   ASSIGN_RESPONDENT: (id) => `${BASE_URL}/incidents/${id}/assign`,
   CANCEL: (id) => `${BASE_URL}/incidents/${id}/cancel`,
   DELETE: (id) => `${BASE_URL}/incidents/${id}`,
+  RESOLVE: (id) => `${BASE_URL}/incidents/${id}/resolve`,
 };
 
 // ==================== RESOURCES ====================

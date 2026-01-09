@@ -198,7 +198,7 @@ export const deleteIncident = async (id) => {
  */
 export const resolveIncidentWithNotes = async (id, resolutionNotes) => {
   try {
-    const response = await fetch(`http://localhost:8080/api/incidents/${id}/resolve`, {
+    const response = await fetch(INCIDENT_ENDPOINTS.RESOLVE(id), {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
