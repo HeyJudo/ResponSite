@@ -94,11 +94,11 @@ const ResidentSidebar = () => {
       />
 
       <div className={`dashboard-left ${isMobileOpen ? 'mobile-open' : ''}`}>
-        <div className="sidebar-logo" style={{ position: 'absolute', top: -15, left: -20, zIndex: 10 }}>
-          <img src={logoImg} alt="Logo" style={{ width: '60px', height: '60px' }} />
+        <div className="sidebar-logo">
+          <img src={logoImg} alt="Logo" className="sidebar-logo-img" />
           <span className="sidebar-title">RESPONSITE</span>
         </div>
-        <aside className="sidebar" style={{ marginTop: 80 }}>
+        <aside className="sidebar">
           <nav className="sidebar-nav">
             {RESIDENT_NAV_CONFIG.map((item, idx) => {
               const IconComponent = item.icon;
